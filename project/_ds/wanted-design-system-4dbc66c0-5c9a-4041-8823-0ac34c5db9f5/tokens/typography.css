@@ -1,0 +1,52 @@
+/* Wanted Design System — Typography
+   The Wanted type ramp: Display → Title → Heading → Headline → Body → Label → Caption.
+   Each step has a fixed size, line-height and letter-spacing (optical, tightening as
+   size grows). Pretendard is the UI face; weights run 400 / 500 / 600 / 700.
+   Tokens below double as CSS classes (.wds-title-1, …) and custom properties. */
+
+:root {
+  /* Font sizes */
+  --font-size-display-1: 56px;
+  --font-size-display-2: 40px;
+  --font-size-display-3: 36px;
+  --font-size-title-1: 32px;
+  --font-size-title-2: 28px;
+  --font-size-title-3: 24px;
+  --font-size-heading-1: 22px;
+  --font-size-heading-2: 20px;
+  --font-size-headline-1: 18px;
+  --font-size-headline-2: 17px;
+  --font-size-body-1: 16px;
+  --font-size-body-2: 15px;
+  --font-size-label-1: 14px;
+  --font-size-label-2: 13px;
+  --font-size-caption-1: 12px;
+  --font-size-caption-2: 11px;
+
+  /* Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+}
+
+/* Type ramp classes — pair with a weight (default 500 medium for body, 600/700 for headings). */
+.wds-display-1 { font-family: var(--font-sans); font-size: 56px; line-height: 72px; letter-spacing: -0.0319em; font-weight: 700; }
+.wds-display-2 { font-family: var(--font-sans); font-size: 40px; line-height: 52px; letter-spacing: -0.0282em; font-weight: 700; }
+.wds-display-3 { font-family: var(--font-sans); font-size: 36px; line-height: 48px; letter-spacing: -0.027em;  font-weight: 700; }
+.wds-title-1   { font-family: var(--font-sans); font-size: 32px; line-height: 44px; letter-spacing: -0.0253em; font-weight: 700; }
+.wds-title-2   { font-family: var(--font-sans); font-size: 28px; line-height: 38px; letter-spacing: -0.0236em; font-weight: 700; }
+.wds-title-3   { font-family: var(--font-sans); font-size: 24px; line-height: 32px; letter-spacing: -0.023em;  font-weight: 700; }
+.wds-heading-1 { font-family: var(--font-sans); font-size: 22px; line-height: 30px; letter-spacing: -0.0194em; font-weight: 600; }
+.wds-heading-2 { font-family: var(--font-sans); font-size: 20px; line-height: 28px; letter-spacing: -0.012em;  font-weight: 600; }
+.wds-headline-1{ font-family: var(--font-sans); font-size: 18px; line-height: 26px; letter-spacing: -0.002em;  font-weight: 600; }
+.wds-headline-2{ font-family: var(--font-sans); font-size: 17px; line-height: 24px; letter-spacing: 0em;       font-weight: 600; }
+.wds-body-1    { font-family: var(--font-sans); font-size: 16px; line-height: 24px; letter-spacing: 0.0057em;  font-weight: 400; }
+.wds-body-1-reading { font-family: var(--font-sans); font-size: 16px; line-height: 26px; letter-spacing: 0.0057em; font-weight: 400; }
+.wds-body-2    { font-family: var(--font-sans); font-size: 15px; line-height: 22px; letter-spacing: 0.0096em;  font-weight: 400; }
+.wds-body-2-reading { font-family: var(--font-sans); font-size: 15px; line-height: 24px; letter-spacing: 0.0096em; font-weight: 400; }
+.wds-label-1   { font-family: var(--font-sans); font-size: 14px; line-height: 20px; letter-spacing: 0.0145em;  font-weight: 500; }
+.wds-label-1-reading { font-family: var(--font-sans); font-size: 14px; line-height: 22px; letter-spacing: 0.0145em; font-weight: 500; }
+.wds-label-2   { font-family: var(--font-sans); font-size: 13px; line-height: 18px; letter-spacing: 0.0194em;  font-weight: 500; }
+.wds-caption-1 { font-family: var(--font-sans); font-size: 12px; line-height: 16px; letter-spacing: 0.0252em;  font-weight: 500; }
+.wds-caption-2 { font-family: var(--font-sans); font-size: 11px; line-height: 14px; letter-spacing: 0.0311em;  font-weight: 500; }

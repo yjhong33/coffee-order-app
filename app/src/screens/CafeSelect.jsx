@@ -1,0 +1,56 @@
+import { ChevronLeft, SearchIcon, StarIcon, HeartIcon } from '../icons'
+
+export default function CafeSelect({ cafes, favs, onBack, onGoMap, onOpenCafe, onToggleFav }) {
+  return (
+    <div style={{ padding: '0 0 40px', animation: 'cc-fade .2s ease' }}>
+      <div style={{ position: 'sticky', top: 0, zIndex: 5, background: 'var(--cc-cream)', padding: '54px 20px 8px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div onClick={onBack} style={{ width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', marginLeft: -8 }}>
+            <ChevronLeft />
+          </div>
+          <div style={{ fontSize: 19, fontWeight: 700, letterSpacing: '-.4px' }}>카페 선택</div>
+        </div>
+        <div style={{ marginTop: 12, background: '#fff', border: '1px solid var(--cc-line)', borderRadius: 13, height: 46, display: 'flex', alignItems: 'center', gap: 10, padding: '0 14px' }}>
+          <SearchIcon size={19} />
+          <span style={{ fontSize: 14, color: 'var(--cc-ink3)' }}>카페 검색</span>
+        </div>
+        <div style={{ display: 'flex', background: 'var(--cc-band)', borderRadius: 11, padding: 4, marginTop: 12 }}>
+          <div style={{ flex: 1, textAlign: 'center', fontSize: 13, fontWeight: 700, padding: 8, borderRadius: 8, cursor: 'pointer', background: '#fff', color: 'var(--cc-green)', boxShadow: '0 1px 3px rgba(0,0,0,.08)' }}>목록</div>
+          <div onClick={onGoMap} style={{ flex: 1, textAlign: 'center', fontSize: 13, fontWeight: 700, padding: 8, borderRadius: 8, cursor: 'pointer', color: 'var(--cc-ink3)' }}>지도</div>
+        </div>
+      </div>
+      <div style={{ padding: '6px 20px 0' }}>
+        {cafes.map((cafe) => {
+          const isFav = !!favs[cafe.id]
+          return (
+            <div key={cafe.id} onClick={() => onOpenCafe(cafe.id)} style={{ background: 'var(--cc-card)', border: '1px solid var(--cc-line)', borderRadius: 16, padding: 14, display: 'flex', alignItems: 'center', gap: 14, cursor: 'pointer', marginBottom: 11 }}>
+              <div style={{ width: 52, height: 52, borderRadius: 15, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, fontWeight: 800, flex: 'none', background: cafe.color, color: cafe.fg }}>{cafe.initial}</div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 15, fontWeight: 700, letterSpacing: '-.3px' }}>{cafe.name}</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 5, fontSize: 12, color: 'var(--cc-ink2)' }}>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, color: 'var(--cc-gold)', fontWeight: 700 }}>
+                    <StarIcon />
+                    {cafe.rating}
+                  </span>
+                  <span style={{ width: 3, height: 3, borderRadius: '50%', background: 'var(--cc-line)' }}></span>
+                  <span>{cafe.dist}</span>
+                  <span style={{ width: 3, height: 3, borderRadius: '50%', background: 'var(--cc-line)' }}></span>
+                  <span style={{ color: 'var(--cc-green)', fontWeight: 600 }}>대기 {cafe.wait}</span>
+                </div>
+              </div>
+              <div
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onToggleFav(cafe.id)
+                }}
+                style={{ width: 38, height: 38, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flex: 'none' }}
+              >
+                <HeartIcon filled={isFav} />
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}

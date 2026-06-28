@@ -1,0 +1,50 @@
+/* Wanted Design System — curated semantic color aliases.
+   fig-tokens.css already carries the full variable set (Primary/*, Label/*,
+   Background/*, Fill/*, Line/*, Status/*) with light + dark modes. This file
+   adds short, memorable aliases used throughout the components and cards, so
+   authors write var(--wds-primary) rather than var(--primary-normal). */
+
+:root {
+  /* Brand / primary — Wanted blue */
+  --wds-primary: var(--primary-normal-4);      /* #0066FF */
+  --wds-primary-strong: var(--primary-strong); /* hover/pressed */
+  --wds-primary-heavy: var(--primary-heavy);
+  --wds-primary-bg: var(--blue-95);            /* tinted surface */
+
+  /* Text / labels */
+  --wds-label-strong: var(--label-strong);     /* pure black — strongest */
+  --wds-label: var(--label-normal);            /* default body text */
+  --wds-label-neutral: var(--label-neutral);   /* 88% */
+  --wds-label-alt: var(--label-alternative);   /* 61% — secondary */
+  --wds-label-assistive: var(--label-assistive); /* 28% — placeholder */
+  --wds-label-disable: var(--label-disable);   /* 16% — disabled */
+
+  /* Surfaces */
+  --wds-bg: var(--background-normal-normal);            /* page */
+  --wds-bg-alt: var(--background-normal-alternative);   /* #F7F7F8 grey field */
+  --wds-bg-elevated: var(--background-elevated-normal); /* cards/sheets */
+
+  /* Fills (translucent neutral) */
+  --wds-fill: var(--fill-normal);              /* 8% */
+  --wds-fill-strong: var(--fill-strong);       /* 16% */
+  --wds-fill-alt: var(--fill-alternative);     /* 5% */
+
+  /* Lines / borders */
+  --wds-line: var(--line-normal-normal);       /* 22% hairline */
+  --wds-line-neutral: var(--line-normal-neutral);
+  --wds-line-alt: var(--line-normal-alternative);
+  --wds-line-strong: var(--line-normal-strong);
+
+  /* Status */
+  --wds-positive: var(--status-positive);      /* green #00BF40 */
+  --wds-negative: var(--status-negative);      /* red #FF4242 */
+  --wds-cautionary: var(--status-cautionary);  /* orange #FF9200 */
+
+  /* Inverse (dark chips, tooltips, toasts) */
+  --wds-inverse-bg: var(--inverse-background);
+  --wds-inverse-label: var(--inverse-label);
+
+  /* Static */
+  --wds-white: var(--static-white);
+  --wds-black: var(--static-black);
+}
