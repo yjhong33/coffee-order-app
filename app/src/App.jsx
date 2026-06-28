@@ -12,6 +12,7 @@ import {
   CAP_PEOPLE,
 } from './data'
 import { computeTotals } from './selectors'
+import { parseVoiceOrder } from './voiceParser'
 import Home from './screens/Home'
 import CafeSelect from './screens/CafeSelect'
 import Menu from './screens/Menu'
@@ -25,8 +26,8 @@ import BottomNav from './components/BottomNav'
 import Toast from './components/Toast'
 
 const TABBED_SCREENS = ['home', 'map', 'collect', 'my']
-const VOICE_FULL_TEXT = '아이스 아메리카노 한 잔이요'
 const CAP_PEOPLE_COLORS = ['#E8A13C', '#6A8CC7', '#1F6E50', '#C77B9E']
+const SpeechRecognitionAPI = typeof window !== 'undefined' ? window.SpeechRecognition || window.webkitSpeechRecognition : null
 
 let idSeq = 0
 function makeId(prefix) {
@@ -63,7 +64,10 @@ export default function App() {
   const [screen, setScreen] = useState('home')
   const [overlay, setOverlay] = useState(null)
   const [voicePhase, setVoicePhase] = useState('listening')
-  const [voiceTyped, setVoiceTyped] = useState('')
+  const [voiceTranscript, setVoiceTranscript] = useState('')
+  const [voiceOrder, setVoiceOrder] = useState(null)
+  const [voiceName, setVoiceName] = useState('')
+  const [voiceError, setVoiceError] = useState('')
   const [capStep, setCapStep] = useState('upload')
   const [analyzeIdx, setAnalyzeIdx] = useState(0)
   const [menuCat, setMenuCat] = useState(0)
@@ -76,7 +80,7 @@ export default function App() {
   const [toast, setToast] = useState('')
 
   const scrollRef = useRef(null)
-  const voiceTimerRef = useRef(null)
+  const recognitionRef = useRef(null)
   const capTimerRef = useRef(null)
   const toastTimerRef = useRef(null)
 
@@ -87,8 +91,8 @@ export default function App() {
   useEffect(() => {
     return () => {
       clearTimeout(toastTimerRef.current)
-      clearInterval(voiceTimerRef.current)
       clearInterval(capTimerRef.current)
+      recognitionRef.current?.stop()
     }
   }, [])
 
@@ -110,30 +114,69 @@ export default function App() {
 
   // ---- voice overlay ----
   function openVoice() {
-    clearInterval(voiceTimerRef.current)
     setOverlay('voice')
-    setVoicePhase('listening')
-    setVoiceTyped('')
-    let i = 0
-    voiceTimerRef.current = setInterval(() => {
-      i++
-      setVoiceTyped(VOICE_FULL_TEXT.slice(0, i))
-      if (i >= VOICE_FULL_TEXT.length) {
-        clearInterval(voiceTimerRef.current)
-        setTimeout(() => setVoicePhase('done'), 500)
+    setVoiceTranscript('')
+    setVoiceOrder(null)
+    setVoiceError('')
+    setVoiceName('나')
+
+    if (!SpeechRecognitionAPI) {
+      setVoicePhase('listening')
+      return
+    }
+
+    recognitionRef.current?.stop()
+    const recognition = new SpeechRecognitionAPI()
+    recognition.lang = 'ko-KR'
+    recognition.interimResults = true
+    recognition.maxAlternatives = 1
+    recognitionRef.current = recognition
+
+    recognition.onresult = (event) => {
+      let text = ''
+      let isFinal = false
+      for (let i = 0; i < event.results.length; i++) {
+        text += event.results[i][0].transcript
+        if (event.results[i].isFinal) isFinal = true
       }
-    }, 90)
+      setVoiceTranscript(text)
+      if (isFinal) {
+        const parsed = parseVoiceOrder(text, MENUS)
+        if (parsed.matched) {
+          setVoiceOrder(parsed)
+          setVoicePhase('done')
+        } else {
+          setVoiceError('메뉴를 인식하지 못했어요')
+          setVoicePhase('failed')
+        }
+      }
+    }
+    recognition.onerror = () => {
+      setVoiceError('음성을 인식하지 못했어요')
+      setVoicePhase('failed')
+    }
+    recognition.onend = () => {
+      setVoicePhase((prev) => (prev === 'listening' ? 'failed' : prev))
+    }
+
+    setVoicePhase('listening')
+    recognition.start()
+  }
+  function retryVoice() {
+    recognitionRef.current?.stop()
+    openVoice()
   }
   function approveVoice() {
+    if (!voiceOrder) return
     setPeople((prev) =>
       mergeItemIntoPeople(
         prev,
-        { id: makeId('p'), name: '정우성', isMe: false, color: '#5B8C7A', fg: '#fff' },
-        { name: '아메리카노', temp: 'ICE', qty: 1, price: 4500 },
+        { id: makeId('p'), name: voiceName || '나', isMe: voiceName === '나', color: '#5B8C7A', fg: '#fff' },
+        { name: voiceOrder.name, temp: voiceOrder.temp, qty: voiceOrder.qty, price: voiceOrder.price },
       ),
     )
     setOverlay(null)
-    showToast('정우성 님 주문이 추가됐어요 🎉')
+    showToast(`${voiceName || '나'} 님 주문이 추가됐어요 🎉`)
   }
 
   // ---- capture overlay ----
@@ -177,7 +220,7 @@ export default function App() {
     showToast('4명의 주문을 취합에 추가했어요 🎉')
   }
   function closeOverlay() {
-    clearInterval(voiceTimerRef.current)
+    recognitionRef.current?.stop()
     clearInterval(capTimerRef.current)
     setOverlay(null)
   }
@@ -317,7 +360,20 @@ export default function App() {
 
         {showTabs && <BottomNav screen={screen} onGo={go} />}
 
-        {overlay === 'voice' && <VoiceOverlay phase={voicePhase} typed={voiceTyped} onClose={closeOverlay} onApprove={approveVoice} />}
+        {overlay === 'voice' && (
+          <VoiceOverlay
+            phase={voicePhase}
+            transcript={voiceTranscript}
+            order={voiceOrder}
+            name={voiceName}
+            onNameChange={setVoiceName}
+            onClose={closeOverlay}
+            onApprove={approveVoice}
+            onRetry={retryVoice}
+            supported={!!SpeechRecognitionAPI}
+            error={voiceError}
+          />
+        )}
         {overlay === 'capture' && <CaptureOverlay step={capStep} analyzeIdx={analyzeIdx} onClose={closeOverlay} onStart={startCapture} onApprove={approveCapture} />}
 
         {toast && <Toast message={toast} />}
