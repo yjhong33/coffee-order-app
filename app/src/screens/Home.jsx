@@ -132,30 +132,36 @@ export default function Home({
           </div>
         </div>
         <div className="cc-scroll" style={{ display: 'flex', gap: 12, overflowX: 'auto', padding: '14px 20px 4px' }}>
-          {favCafes.map((cafe) => (
-            <div key={cafe.id} onClick={() => onOpenCafe(cafe.id)} style={{ flex: 'none', width: 78, textAlign: 'center', cursor: 'pointer' }}>
-              <div
-                style={{
-                  width: 64,
-                  height: 64,
-                  borderRadius: 20,
-                  margin: '0 auto',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: 23,
-                  fontWeight: 800,
-                  boxShadow: '0 4px 12px rgba(40,30,15,.10)',
-                  background: cafe.color,
-                  color: cafe.fg,
-                }}
-              >
-                {cafe.initial}
+          {favCafes.map((cafe) => {
+            const nameParts = cafe.name.split(' ')
+            const brand = nameParts.length > 1 ? nameParts.slice(0, -1).join(' ') : cafe.name
+            const branch = nameParts.length > 1 ? nameParts[nameParts.length - 1] : ''
+            return (
+              <div key={cafe.id} onClick={() => onOpenCafe(cafe.id)} style={{ flex: 'none', width: 86, textAlign: 'center', cursor: 'pointer' }}>
+                <div
+                  style={{
+                    width: 64,
+                    height: 64,
+                    borderRadius: 20,
+                    margin: '0 auto',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: 23,
+                    fontWeight: 800,
+                    boxShadow: '0 4px 12px rgba(40,30,15,.10)',
+                    background: cafe.color,
+                    color: cafe.fg,
+                  }}
+                >
+                  {cafe.initial}
+                </div>
+                <div style={{ fontSize: 12, fontWeight: 600, marginTop: 8, letterSpacing: '-.3px', lineHeight: 1.3, overflow: 'hidden', textOverflow: 'ellipsis' }}>{brand}</div>
+                {branch && <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--cc-ink2)', letterSpacing: '-.2px', lineHeight: 1.3, overflow: 'hidden', textOverflow: 'ellipsis' }}>{branch}</div>}
+                <div style={{ fontSize: 11, color: 'var(--cc-ink3)', marginTop: 2 }}>{cafe.dist}</div>
               </div>
-              <div style={{ fontSize: 12, fontWeight: 600, marginTop: 8, letterSpacing: '-.3px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{cafe.name}</div>
-              <div style={{ fontSize: 11, color: 'var(--cc-ink3)' }}>{cafe.dist}</div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       </div>
 
