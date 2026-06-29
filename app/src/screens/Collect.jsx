@@ -1,7 +1,7 @@
 import { ChevronLeft, ChevronRight, MicIcon, CaptureIcon, MinusIcon, PlusIcon, CloseIcon, CupIcon, GridIcon, LinkIcon } from '../icons'
 import { won } from '../data'
 
-export default function Collect({ people, totalQty, totalPrice, memoMode, onBack, onOpenVoice, onOpenCapture, onOpenManual, onChangeQty, onRemoveItem, onFinish, onGoShare }) {
+export default function Collect({ people, totalQty, totalPrice, memoMode, onBack, onOpenVoice, onOpenCapture, onOpenManual, onChangeQty, onRemoveItem, onChangeNote, onFinish, onGoShare }) {
   const hasOrders = people.length > 0
 
   return (
@@ -69,33 +69,53 @@ export default function Collect({ people, totalQty, totalPrice, memoMode, onBack
                     <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--cc-ink3)' }}>{qty}잔</span>
                   </div>
                   {p.items.map((it) => (
-                    <div key={it.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 0', borderTop: '1px solid var(--cc-line)' }}>
-                      <span
-                        style={{
-                          fontSize: 11,
-                          fontWeight: 800,
-                          padding: '3px 7px',
-                          borderRadius: 6,
-                          flex: 'none',
-                          background: it.temp === 'HOT' ? 'var(--cc-hot-bg)' : 'var(--cc-ice-bg)',
-                          color: it.temp === 'HOT' ? 'var(--cc-hot)' : 'var(--cc-ice)',
-                        }}
-                      >
-                        {it.temp}
-                      </span>
-                      <span style={{ flex: 1, fontSize: 14, fontWeight: 600, letterSpacing: '-.3px' }}>{it.name}</span>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'var(--cc-band)', borderRadius: 10, padding: 4 }}>
-                        <div onClick={() => onChangeQty(p.id, it.id, -1)} style={{ width: 26, height: 26, borderRadius: 8, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                          <MinusIcon />
+                    <div key={it.id} style={{ padding: '9px 0', borderTop: '1px solid var(--cc-line)' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                        <span
+                          style={{
+                            fontSize: 11,
+                            fontWeight: 800,
+                            padding: '3px 7px',
+                            borderRadius: 6,
+                            flex: 'none',
+                            background: it.temp === 'HOT' ? 'var(--cc-hot-bg)' : 'var(--cc-ice-bg)',
+                            color: it.temp === 'HOT' ? 'var(--cc-hot)' : 'var(--cc-ice)',
+                          }}
+                        >
+                          {it.temp}
+                        </span>
+                        <span style={{ flex: 1, fontSize: 14, fontWeight: 600, letterSpacing: '-.3px' }}>{it.name}</span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'var(--cc-band)', borderRadius: 10, padding: 4 }}>
+                          <div onClick={() => onChangeQty(p.id, it.id, -1)} style={{ width: 26, height: 26, borderRadius: 8, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                            <MinusIcon />
+                          </div>
+                          <span style={{ fontSize: 14, fontWeight: 800, minWidth: 14, textAlign: 'center' }}>{it.qty}</span>
+                          <div onClick={() => onChangeQty(p.id, it.id, 1)} style={{ width: 26, height: 26, borderRadius: 8, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                            <PlusIcon color="#1F6E50" size={16} strokeWidth="2.6" />
+                          </div>
                         </div>
-                        <span style={{ fontSize: 14, fontWeight: 800, minWidth: 14, textAlign: 'center' }}>{it.qty}</span>
-                        <div onClick={() => onChangeQty(p.id, it.id, 1)} style={{ width: 26, height: 26, borderRadius: 8, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                          <PlusIcon color="#1F6E50" size={16} strokeWidth="2.6" />
+                        <div onClick={() => onRemoveItem(p.id, it.id)} style={{ width: 30, height: 30, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flex: 'none' }}>
+                          <CloseIcon color="#C9BFB0" size={18} />
                         </div>
                       </div>
-                      <div onClick={() => onRemoveItem(p.id, it.id)} style={{ width: 30, height: 30, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flex: 'none' }}>
-                        <CloseIcon color="#C9BFB0" size={18} />
-                      </div>
+                      {onChangeNote && (
+                        <input
+                          value={it.note || ''}
+                          onChange={(e) => onChangeNote(p.id, it.id, e.target.value)}
+                          placeholder="+ 메모 추가 (예: 샷 추가, 휘핑 없이)"
+                          style={{
+                            marginTop: 6,
+                            marginLeft: 36,
+                            width: 'calc(100% - 36px)',
+                            fontSize: 12,
+                            color: it.note ? 'var(--cc-gold)' : 'var(--cc-ink3)',
+                            background: 'transparent',
+                            border: 'none',
+                            outline: 'none',
+                            padding: 0,
+                          }}
+                        />
+                      )}
                     </div>
                   ))}
                 </div>

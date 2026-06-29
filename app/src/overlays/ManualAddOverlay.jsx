@@ -1,6 +1,6 @@
 import { CloseIcon, MinusIcon, PlusIcon } from '../icons'
 
-export default function ManualAddOverlay({ name, onNameChange, menu, onMenuChange, temp, onSetTemp, qty, onInc, onDec, onClose, onAdd }) {
+export default function ManualAddOverlay({ name, onNameChange, menu, onMenuChange, note, onNoteChange, temp, onSetTemp, qty, onInc, onDec, onClose, onAdd }) {
   const hot = temp === 'HOT'
   const ice = temp === 'ICE'
 
@@ -26,6 +26,12 @@ export default function ManualAddOverlay({ name, onNameChange, menu, onMenuChang
             value={menu}
             onChange={(e) => onMenuChange(e.target.value)}
             placeholder="메뉴를 입력하세요"
+            style={{ width: '100%', height: 46, borderRadius: 13, border: '1px solid var(--cc-line)', background: '#fff', padding: '0 14px', fontSize: 14, outline: 'none', boxSizing: 'border-box', marginBottom: 10 }}
+          />
+          <input
+            value={note}
+            onChange={(e) => onNoteChange(e.target.value)}
+            placeholder="메모 (선택, 예: 샷 추가·휘핑 없이)"
             style={{ width: '100%', height: 46, borderRadius: 13, border: '1px solid var(--cc-line)', background: '#fff', padding: '0 14px', fontSize: 14, outline: 'none', boxSizing: 'border-box' }}
           />
 

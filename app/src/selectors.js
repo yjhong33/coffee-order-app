@@ -18,7 +18,7 @@ export function computeTotals(people) {
 
 export function buildNamedFor(people) {
   const lines = people.map((p) => {
-    const itemLines = p.items.map((it) => `  ${it.temp} ${it.name} ${it.qty}잔`).join('\n')
+    const itemLines = p.items.map((it) => `  ${it.temp} ${it.name} ${it.qty}잔${it.note ? ` (${it.note})` : ''}`).join('\n')
     return `${p.name}:\n${itemLines}`
   })
   const { totalQty, totalPrice } = computeTotals(people)
@@ -29,7 +29,7 @@ export function buildPlainFor(people) {
   const agg = {}
   people.forEach((p) =>
     p.items.forEach((it) => {
-      const key = `${it.temp} ${it.name}`
+      const key = `${it.temp} ${it.name}${it.note ? ` (${it.note})` : ''}`
       agg[key] = (agg[key] || 0) + it.qty
     }),
   )

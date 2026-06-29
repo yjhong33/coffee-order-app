@@ -49,7 +49,7 @@ function mergeItemIntoPeople(people, personInfo, item) {
     return [...people, { ...personInfo, items: [{ ...item, id: makeId('it') }] }]
   }
   const target = people[idx]
-  const itemIdx = target.items.findIndex((it) => it.name === item.name && it.temp === item.temp)
+  const itemIdx = target.items.findIndex((it) => it.name === item.name && it.temp === item.temp && (it.note || '') === (item.note || ''))
   let items
   if (itemIdx === -1) {
     items = [...target.items, { ...item, id: makeId('it') }]
@@ -97,6 +97,7 @@ export default function App() {
   const [historyView, setHistoryViewMap] = useState({})
   const [manualName, setManualName] = useState('')
   const [manualMenu, setManualMenu] = useState('')
+  const [manualNote, setManualNote] = useState('')
   const [manualTemp, setManualTemp] = useState('ICE')
   const [manualQty, setManualQty] = useState(1)
   const [pName, setPName] = useState('박지후')
@@ -107,6 +108,8 @@ export default function App() {
   const [cafeSearchFocus, setCafeSearchFocus] = useState(false)
   const [menuQuery, setMenuQuery] = useState('')
   const [participants, setParticipants] = useState(PARTICIPANT_STATUS)
+  const [frameScale, setFrameScale] = useState(1)
+  const [frameOffsetX, setFrameOffsetX] = useState(0)
 
   const scrollRef = useRef(null)
   const recognitionRef = useRef(null)
@@ -120,6 +123,18 @@ export default function App() {
   useEffect(() => {
     scrollRef.current?.scrollTo(0, 0)
   }, [screen])
+
+  // ---- scale the 480px design frame to fit narrower mobile viewports ----
+  useEffect(() => {
+    function updateScale() {
+      const s = Math.min(1, window.innerWidth / 480)
+      setFrameScale(s)
+      setFrameOffsetX((window.innerWidth - 480 * s) / 2)
+    }
+    updateScale()
+    window.addEventListener('resize', updateScale)
+    return () => window.removeEventListener('resize', updateScale)
+  }, [])
 
   // ---- initial load / resume restore ----
   useEffect(() => {
@@ -438,12 +453,17 @@ export default function App() {
     }
     const colors = ['#5B8C7A', '#C98A33', '#7B6FB0', '#6A8CC7', '#C77B9E', '#E8A13C']
     const color = colors[people.length % colors.length]
+    const note = manualNote.trim()
     setPeople((prev) => [
       ...prev,
-      { id: makeId('mn'), name, color, fg: '#fff', items: [{ id: makeId('mi'), name: menuName, temp: manualTemp, qty: manualQty, price: 4500 }] },
+      { id: makeId('mn'), name, color, fg: '#fff', items: [{ id: makeId('mi'), name: menuName, temp: manualTemp, qty: manualQty, price: 4500, note }] },
     ])
     setOverlay(null)
+    setManualNote('')
     showToast(`${name} 님 주문을 추가했어요`)
+  }
+  function changeNote(personId, itemId, note) {
+    setPeople((prev) => prev.map((p) => (p.id !== personId ? p : { ...p, items: p.items.map((it) => (it.id === itemId ? { ...it, note } : it)) })))
   }
 
   // ---- participant ----
@@ -532,15 +552,25 @@ export default function App() {
   const showTabs = TABBED_SCREENS.includes(screen) && !overlay && !loading
 
   return (
-    <div style={{ minHeight: '100dvh', display: 'flex', justifyContent: 'center', alignItems: 'stretch', background: '#E7E1D6' }}>
+    <div
+      style={{
+        minHeight: '100dvh',
+        height: '100dvh',
+        position: 'relative',
+        overflow: 'hidden',
+        background: '#E7E1D6',
+      }}
+    >
       <div
         style={{
           width: 480,
-          maxWidth: '100%',
-          minHeight: '100dvh',
-          height: '100dvh',
+          height: frameScale < 1 ? `calc(100dvh / ${frameScale})` : '100dvh',
           background: 'var(--cc-cream)',
-          position: 'relative',
+          position: 'absolute',
+          top: 0,
+          left: frameOffsetX,
+          transform: `scale(${frameScale})`,
+          transformOrigin: 'top left',
           overflow: 'hidden',
           display: 'flex',
           flexDirection: 'column',
@@ -618,6 +648,7 @@ export default function App() {
               onOpenManual={openManual}
               onChangeQty={changeQty}
               onRemoveItem={removeItem}
+              onChangeNote={changeNote}
               onFinish={finish}
               onGoShare={() => go('share')}
             />
@@ -715,6 +746,8 @@ export default function App() {
             onNameChange={setManualName}
             menu={manualMenu}
             onMenuChange={setManualMenu}
+            note={manualNote}
+            onNoteChange={setManualNote}
             temp={manualTemp}
             onSetTemp={setManualTemp}
             qty={manualQty}
