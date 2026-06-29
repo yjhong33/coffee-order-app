@@ -37,6 +37,8 @@ body {
   margin: 0;
   padding: 0;
   background: #e7e1d6;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
