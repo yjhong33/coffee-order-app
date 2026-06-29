@@ -1,6 +1,13 @@
+import { useEffect, useRef } from 'react'
 import { ChevronLeft, SearchIcon, StarIcon, HeartIcon } from '../icons'
 
-export default function CafeSelect({ cafes, favs, cafeQuery, onCafeQueryChange, onBack, onGoMap, onOpenCafe, onToggleFav }) {
+export default function CafeSelect({ cafes, favs, cafeQuery, onCafeQueryChange, onBack, onGoMap, onOpenCafe, onToggleFav, autoFocusSearch }) {
+  const inputRef = useRef(null)
+
+  useEffect(() => {
+    if (autoFocusSearch) inputRef.current?.focus()
+  }, [autoFocusSearch])
+
   return (
     <div style={{ padding: '0 0 40px', animation: 'cc-fade .2s ease' }}>
       <div style={{ position: 'sticky', top: 0, zIndex: 5, background: 'var(--cc-cream)', padding: '54px 20px 8px' }}>
@@ -13,6 +20,7 @@ export default function CafeSelect({ cafes, favs, cafeQuery, onCafeQueryChange, 
         <div style={{ marginTop: 12, background: '#fff', border: '1px solid var(--cc-line)', borderRadius: 13, height: 46, display: 'flex', alignItems: 'center', gap: 10, padding: '0 14px' }}>
           <SearchIcon size={19} />
           <input
+            ref={inputRef}
             value={cafeQuery}
             onChange={(e) => onCafeQueryChange(e.target.value)}
             placeholder="카페 검색"

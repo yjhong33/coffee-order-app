@@ -105,6 +105,7 @@ export default function App() {
   const [pTemp, setPTemp] = useState('ICE')
   const [partDone, setPartDone] = useState({ 나: true, 김민준: true, 이서연: false, 박지후: false })
   const [cafeQuery, setCafeQuery] = useState('')
+  const [cafeSearchFocus, setCafeSearchFocus] = useState(false)
   const [menuQuery, setMenuQuery] = useState('')
 
   const scrollRef = useRef(null)
@@ -481,7 +482,14 @@ export default function App() {
               hasOrders={hasOrders}
               totalQty={totalQty}
               onGoMy={() => go('my')}
-              onGoCafe={() => go('cafe')}
+              onGoCafe={() => {
+                setCafeSearchFocus(false)
+                go('cafe')
+              }}
+              onGoCafeSearch={() => {
+                setCafeSearchFocus(true)
+                go('cafe')
+              }}
               onOpenVoice={openVoice}
               onOpenCapture={openCapture}
               onGoCollect={() => go('collect')}
@@ -496,7 +504,11 @@ export default function App() {
               favs={favs}
               cafeQuery={cafeQuery}
               onCafeQueryChange={setCafeQuery}
-              onBack={() => go('home')}
+              autoFocusSearch={cafeSearchFocus}
+              onBack={() => {
+                setCafeSearchFocus(false)
+                go('home')
+              }}
               onGoMap={() => go('map')}
               onOpenCafe={openCafe}
               onToggleFav={toggleFav}

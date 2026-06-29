@@ -7,6 +7,7 @@ export default function Home({
   totalQty,
   onGoMy,
   onGoCafe,
+  onGoCafeSearch,
   onOpenVoice,
   onOpenCapture,
   onGoCollect,
@@ -40,7 +41,7 @@ export default function Home({
             <PersonIcon />
           </div>
         </div>
-        <div onClick={onGoCafe} style={{ marginTop: 18, background: '#fff', borderRadius: 14, height: 48, display: 'flex', alignItems: 'center', gap: 10, padding: '0 14px', cursor: 'pointer', boxShadow: '0 6px 16px rgba(10,40,28,.18)' }}>
+        <div onClick={onGoCafeSearch} style={{ marginTop: 18, background: '#fff', borderRadius: 14, height: 48, display: 'flex', alignItems: 'center', gap: 10, padding: '0 14px', cursor: 'pointer', boxShadow: '0 6px 16px rgba(10,40,28,.18)' }}>
           <SearchIcon />
           <span style={{ fontSize: 15, color: 'var(--cc-ink3)', fontWeight: 500 }}>카페 이름이나 메뉴를 검색해 보세요</span>
         </div>
