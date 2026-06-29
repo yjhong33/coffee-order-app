@@ -1,7 +1,7 @@
 import { ChevronLeft, PastryIcon, PlusIcon, CupIcon, SearchIcon, MicIcon } from '../icons'
 import { won } from '../data'
 
-export default function Menu({ cafe, categories, menuCat, onSelectCat, menus, menuQuery, onMenuQueryChange, menuTemp, onSetTemp, cartCount, cartTotal, onAddCart, onBack, onGoCollect, onOpenVoice }) {
+export default function Menu({ cafe, categories, menuCat, onSelectCat, menus, menuQuery, onMenuQueryChange, menuTemp, onSetTemp, menuNote, onMenuNoteChange, cartCount, cartTotal, onAddCart, onBack, onGoCollect, onOpenVoice }) {
   return (
     <div style={{ padding: '0 0 150px', animation: 'cc-fade .2s ease' }}>
       <div style={{ position: 'sticky', top: 0, zIndex: 5, background: 'var(--cc-cream)', padding: '54px 20px 0' }}>
@@ -100,6 +100,22 @@ export default function Menu({ cafe, categories, menuCat, onSelectCat, menus, me
                     <PlusIcon />
                   </div>
                 </div>
+                <input
+                  value={menuNote?.[m.id] || ''}
+                  onChange={(e) => onMenuNoteChange(m.id, e.target.value)}
+                  placeholder="+ 메모 추가 (예: 샷 추가, 휘핑 없이)"
+                  style={{
+                    marginTop: 8,
+                    width: '100%',
+                    fontSize: 13,
+                    color: menuNote?.[m.id] ? 'var(--cc-gold)' : 'var(--cc-ink3)',
+                    background: 'transparent',
+                    border: 'none',
+                    borderTop: '1px solid var(--cc-line)',
+                    outline: 'none',
+                    padding: '7px 0 0',
+                  }}
+                />
               </div>
             </div>
           )

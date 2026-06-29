@@ -1,6 +1,20 @@
+import { useState } from 'react'
 import { PersonIcon } from '../icons'
 
-export default function My({ recentOrders, prefs, prefSel, onSelectPref, onReorder }) {
+export default function My({ recentOrders, prefs, prefSel, onSelectPref, onReorder, myName, onChangeMyName }) {
+  const [editing, setEditing] = useState(false)
+  const [draft, setDraft] = useState(myName)
+
+  function startEdit() {
+    setDraft(myName)
+    setEditing(true)
+  }
+  function commitEdit() {
+    const next = draft.trim()
+    if (next) onChangeMyName(next)
+    setEditing(false)
+  }
+
   return (
     <div style={{ padding: '54px 0 96px', animation: 'cc-fade .2s ease' }}>
       <div style={{ padding: '0 20px' }}>
@@ -9,8 +23,26 @@ export default function My({ recentOrders, prefs, prefSel, onSelectPref, onReord
           <div style={{ width: 54, height: 54, borderRadius: 18, background: 'var(--cc-green-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none' }}>
             <PersonIcon color="#1F6E50" size={28} />
           </div>
-          <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 17, fontWeight: 700 }}>취합 담당자님</div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            {editing ? (
+              <input
+                autoFocus
+                value={draft}
+                onChange={(e) => setDraft(e.target.value)}
+                onBlur={commitEdit}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') commitEdit()
+                  if (e.key === 'Escape') setEditing(false)
+                }}
+                placeholder="이름을 입력하세요"
+                style={{ fontSize: 17, fontWeight: 700, border: 'none', borderBottom: '1.5px solid var(--cc-green)', background: 'transparent', outline: 'none', padding: '0 0 2px', width: '100%' }}
+              />
+            ) : (
+              <div onClick={startEdit} style={{ fontSize: 17, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer' }}>
+                {myName}님
+                <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--cc-ink3)' }}>수정</span>
+              </div>
+            )}
             <div style={{ fontSize: 13, color: 'var(--cc-ink2)', marginTop: 3 }}>익명 세션 · 지금까지 12번 취합했어요</div>
           </div>
         </div>

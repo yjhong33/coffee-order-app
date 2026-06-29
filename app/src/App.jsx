@@ -86,6 +86,7 @@ export default function App() {
   const [capFlagTemp, setCapFlagTemp] = useState(null)
   const [menuCat, setMenuCat] = useState(0)
   const [menuTemp, setMenuTemp] = useState({})
+  const [menuNote, setMenuNote] = useState({})
   const [cart, setCart] = useState({})
   const [favs, setFavs] = useState({ starbucks: true, mega: true, twosome: false, ediya: true, compose: false, paik: false })
   const [selectedCafeId, setSelectedCafeId] = useState('starbucks')
@@ -109,6 +110,7 @@ export default function App() {
   const [pMenu, setPMenu] = useState(() => (joinId ? '' : '바닐라 라떼'))
   const [pTemp, setPTemp] = useState('ICE')
   const [partDone, setPartDone] = useState({ 나: true, 김민준: true, 이서연: false, 박지후: false })
+  const [myName, setMyName] = useState('취합 담당자')
   const [cafeQuery, setCafeQuery] = useState('')
   const [cafeSearchFocus, setCafeSearchFocus] = useState(false)
   const [menuQuery, setMenuQuery] = useState('')
@@ -169,6 +171,7 @@ export default function App() {
         if (Array.isArray(saved.people) && saved.people.length) setPeople(saved.people)
         if (Array.isArray(saved.history)) setHistory(saved.history)
         if (saved.selectedCafeId) setSelectedCafeId(saved.selectedCafeId)
+        if (saved.myName) setMyName(saved.myName)
         setMemoMode(!!saved.memoMode)
       }
       const rs = lastDeepRef.current && DEEP_SCREENS.includes(lastDeepRef.current) ? lastDeepRef.current : null
@@ -205,12 +208,13 @@ export default function App() {
           memoMode,
           selectedCafeId,
           history,
+          myName,
         }),
       )
     } catch {
       // storage unavailable — skip persistence silently
     }
-  }, [loading, screen, people, memoMode, selectedCafeId, history, joinId])
+  }, [loading, screen, people, memoMode, selectedCafeId, history, myName, joinId])
 
   // ---- host: push local order state to the shared session whenever it changes ----
   useEffect(() => {
@@ -392,16 +396,12 @@ export default function App() {
       voiceListeningRef.current = false
     }
     recognition.onend = () => {
-      if (voiceListeningRef.current && recognitionRef.current === recognition) {
-        setTimeout(() => {
-          if (voiceListeningRef.current && recognitionRef.current === recognition) {
-            try {
-              recognition.start()
-            } catch {
-              /* already running */
-            }
-          }
-        }, 250)
+      // continuous:true keeps this single session alive through pauses; if the
+      // browser ends it anyway, we don't auto-restart (that re-triggers the mic
+      // permission prompt on some mobile browsers). Whatever was captured so far
+      // stays available for "다 말했어요, 정리하기".
+      if (recognitionRef.current === recognition) {
+        voiceListeningRef.current = false
       }
     }
 
@@ -602,11 +602,16 @@ export default function App() {
   function setTemp(menuId, temp) {
     setMenuTemp((prev) => ({ ...prev, [menuId]: temp }))
   }
+  function setMenuNoteFor(menuId, note) {
+    setMenuNote((prev) => ({ ...prev, [menuId]: note }))
+  }
   function addCart(menu, temp) {
+    const note = (menuNote[menu.id] || '').trim()
     setCart((prev) => ({ ...prev, [menu.id]: (prev[menu.id] || 0) + 1 }))
     setPeople((prev) =>
-      mergeItemIntoPeople(prev, { id: 'me', name: '나', isMe: true, color: '#1F6E50', fg: '#fff' }, { name: menu.name, temp, qty: 1, price: menu.price }),
+      mergeItemIntoPeople(prev, { id: 'me', name: '나', isMe: true, color: '#1F6E50', fg: '#fff' }, { name: menu.name, temp, qty: 1, price: menu.price, note }),
     )
+    setMenuNote((prev) => ({ ...prev, [menu.id]: '' }))
     showToast(`${menu.name} 담았어요 🎉`)
   }
 
@@ -737,6 +742,8 @@ export default function App() {
               onMenuQueryChange={setMenuQuery}
               menuTemp={menuTemp}
               onSetTemp={setTemp}
+              menuNote={menuNote}
+              onMenuNoteChange={setMenuNoteFor}
               cartCount={cartCount}
               cartTotal={cartTotal}
               onAddCart={addCart}
@@ -830,7 +837,9 @@ export default function App() {
               onOpenCafe={openCafe}
             />
           )}
-          {screen === 'my' && <My recentOrders={RECENT_ORDERS} prefs={PREFS} prefSel={prefSel} onSelectPref={selectPref} onReorder={openCafe} />}
+          {screen === 'my' && (
+            <My recentOrders={RECENT_ORDERS} prefs={PREFS} prefSel={prefSel} onSelectPref={selectPref} onReorder={openCafe} myName={myName} onChangeMyName={setMyName} />
+          )}
         </div>
 
         {showTabs && <BottomNav screen={screen} onGo={go} />}
