@@ -771,7 +771,7 @@ export default function App() {
               cartCount={cartCount}
               cartTotal={cartTotal}
               onAddCart={addCart}
-              onBack={() => go('cafe')}
+              onBack={() => go('map')}
               onGoCollect={() => go('collect')}
               onOpenVoice={openVoice}
             />

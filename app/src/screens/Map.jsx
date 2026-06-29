@@ -53,7 +53,8 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
   const [nearbyCafes, setNearbyCafes] = useState([])
   const [searchCenter, setSearchCenter] = useState(null)
   const [mapMoved, setMapMoved] = useState(false)
-  const [selectedPlace, setSelectedPlace] = useState(null)
+  const [selectedPlace, setSelectedPlace] = useState(null)  // unregistered cafe sheet
+  const [selectedCafeInfo, setSelectedCafeInfo] = useState(null)  // registered cafe sheet
 
   function searchNearby(center) {
     if (!window.kakao?.maps?.services) return
@@ -191,7 +192,7 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
           el.textContent = cafe.initial
         }
       }
-      el.onclick = () => (isUnregistered ? setSelectedPlace(cafe) : onOpenCafe(cafe.id))
+      el.onclick = () => (isUnregistered ? setSelectedPlace(cafe) : setSelectedCafeInfo(cafe))
       const overlay = new kakao.maps.CustomOverlay({ position, content: el, yAnchor: 1 })
       overlay.setMap(mapRef.current)
       overlaysRef.current.push(overlay)
@@ -254,6 +255,15 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
 
 
         {!showFallback && <div ref={mapDivRef} style={{ position: 'absolute', inset: 0 }}></div>}
+
+        {/* location-loading overlay — hides until real position is known */}
+        {!showFallback && !userPos && !locationDenied && (
+          <div style={{ position: 'absolute', inset: 0, zIndex: 5, background: 'rgba(255,255,255,.82)', backdropFilter: 'blur(4px)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+            <div style={{ width: 48, height: 48, borderRadius: '50%', border: '4px solid var(--cc-green)', borderTopColor: 'transparent', animation: 'cc-spin 0.8s linear infinite' }}></div>
+            <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--cc-ink2)' }}>내 위치 확인 중...</div>
+            <div style={{ fontSize: 13, color: 'var(--cc-ink3)' }}>위치 권한을 허용해 주세요</div>
+          </div>
+        )}
 
         {!showFallback && mapMoved && (
           <div
@@ -350,7 +360,7 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
           return (
             <div
               key={cafe.id}
-              onClick={() => (isUnregistered ? setSelectedPlace(cafe) : onOpenCafe(cafe.id))}
+              onClick={() => (isUnregistered ? setSelectedPlace(cafe) : setSelectedCafeInfo(cafe))}
               style={{ background: 'var(--cc-card)', border: '1px solid var(--cc-line)', borderRadius: 15, padding: 12, display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer', marginBottom: 10 }}
             >
               <div style={{ width: 44, height: 44, borderRadius: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 800, flex: 'none', overflow: 'hidden', background: isUnregistered ? 'transparent' : cafe.logo ? '#fff' : cafe.color, color: cafe.fg, border: cafe.logo ? '1px solid var(--cc-line)' : 'none' }}>
@@ -365,6 +375,42 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
           )
         })}
       </div>
+
+      {/* ── registered cafe info sheet ── */}
+      {selectedCafeInfo && (
+        <div
+          style={{ position: 'fixed', inset: 0, zIndex: 30, background: 'rgba(20,16,10,.35)', display: 'flex', alignItems: 'flex-end' }}
+          onClick={() => setSelectedCafeInfo(null)}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{ width: '100%', maxWidth: 480, margin: '0 auto', background: '#fff', borderRadius: '20px 20px 0 0', padding: '20px 20px 28px', boxShadow: '0 -8px 24px rgba(0,0,0,.18)', animation: 'cc-fade .18s ease' }}
+          >
+            <div style={{ width: 36, height: 4, borderRadius: 3, background: 'var(--cc-line)', margin: '0 auto 18px' }}></div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 16 }}>
+              <div style={{ width: 56, height: 56, borderRadius: 16, flex: 'none', overflow: 'hidden', background: selectedCafeInfo.logo ? '#fff' : selectedCafeInfo.color, border: '1px solid var(--cc-line)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, fontWeight: 800, color: selectedCafeInfo.fg }}>
+                {selectedCafeInfo.logo
+                  ? <img src={selectedCafeInfo.logo} alt={selectedCafeInfo.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  : selectedCafeInfo.initial}
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 18, fontWeight: 800, letterSpacing: '-.3px', marginBottom: 4 }}>{selectedCafeInfo.name}</div>
+                <div style={{ fontSize: 13, color: 'var(--cc-ink3)', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                  {selectedCafeInfo.dist && <span>📍 {selectedCafeInfo.dist}</span>}
+                  {selectedCafeInfo.wait && <span>⏱ 대기 {selectedCafeInfo.wait}</span>}
+                </div>
+              </div>
+              <div onClick={() => setSelectedCafeInfo(null)} style={{ fontSize: 22, color: 'var(--cc-ink3)', cursor: 'pointer', padding: '0 4px', lineHeight: 1 }}>×</div>
+            </div>
+            <div
+              onClick={() => { setSelectedCafeInfo(null); onOpenCafe(selectedCafeInfo.id) }}
+              style={{ width: '100%', height: 52, borderRadius: 14, background: 'var(--cc-green)', color: '#fff', fontSize: 16, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 8px 20px rgba(31,110,80,.28)' }}
+            >
+              메뉴 보기
+            </div>
+          </div>
+        </div>
+      )}
 
       {selectedPlace && (
         <div
