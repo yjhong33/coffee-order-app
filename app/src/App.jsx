@@ -862,8 +862,7 @@ export default function App() {
               mapPins={filteredMapPins}
               cafeQuery={cafeQuery}
               onQueryChange={setCafeQuery}
-              onBack={() => go('cafe')}
-              onGoList={() => go('cafe')}
+              onBack={() => go('home')}
               onOpenCafe={openCafe}
               onEnterMemo={enterMemo}
             />

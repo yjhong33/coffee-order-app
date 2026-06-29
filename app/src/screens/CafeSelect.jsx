@@ -19,10 +19,6 @@ export default function CafeSelect({ cafes, favs, cafeQuery, onCafeQueryChange, 
             style={{ flex: 1, fontSize: 15, color: 'var(--cc-ink)', border: 'none', outline: 'none', background: 'transparent' }}
           />
         </div>
-        <div style={{ display: 'flex', background: 'var(--cc-band)', borderRadius: 11, padding: 4, marginTop: 12 }}>
-          <div style={{ flex: 1, textAlign: 'center', fontSize: 14, fontWeight: 700, padding: 8, borderRadius: 8, cursor: 'pointer', background: '#fff', color: 'var(--cc-green)', boxShadow: '0 1px 3px rgba(0,0,0,.08)' }}>목록</div>
-          <div onClick={onGoMap} style={{ flex: 1, textAlign: 'center', fontSize: 14, fontWeight: 700, padding: 8, borderRadius: 8, cursor: 'pointer', color: 'var(--cc-ink3)' }}>지도</div>
-        </div>
       </div>
       <div style={{ padding: '6px 20px 0' }}>
         {cafes.map((cafe) => {
