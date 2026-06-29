@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { ChevronLeft, ChevronRight, MapLines, LocateIcon } from '../icons'
 import { loadKakaoMaps } from '../kakaoMap'
 
@@ -7,10 +7,23 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
   const mapRef = useRef(null)
   const overlaysRef = useRef([])
   const meOverlayRef = useRef(null)
+  const recenteredRef = useRef(false)
   const [mapReady, setMapReady] = useState(false)
   const [mapFailed, setMapFailed] = useState(false)
   const [locating, setLocating] = useState(false)
   const [locateError, setLocateError] = useState('')
+  const [userPos, setUserPos] = useState(null)
+
+  const baseLat = cafes[0]?.lat
+  const baseLng = cafes[0]?.lng
+  const displayCafes = useMemo(() => {
+    if (!userPos || baseLat == null || baseLng == null) return cafes
+    return cafes.map((cafe) =>
+      cafe.lat == null || cafe.lng == null
+        ? cafe
+        : { ...cafe, lat: userPos.lat + (cafe.lat - baseLat), lng: userPos.lng + (cafe.lng - baseLng) },
+    )
+  }, [cafes, userPos, baseLat, baseLng])
 
   useEffect(() => {
     let cancelled = false
@@ -29,12 +42,29 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
     }
   }, [])
 
+  // auto-detect the user's real position so the demo cafe cluster relocates near them
+  useEffect(() => {
+    if (!navigator.geolocation) return
+    navigator.geolocation.getCurrentPosition(
+      (pos) => setUserPos({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+      () => {},
+      { enableHighAccuracy: true, timeout: 8000 },
+    )
+  }, [])
+
+  useEffect(() => {
+    if (!mapReady || !userPos || !mapRef.current || recenteredRef.current) return
+    const kakao = window.kakao
+    mapRef.current.setCenter(new kakao.maps.LatLng(userPos.lat, userPos.lng))
+    recenteredRef.current = true
+  }, [mapReady, userPos])
+
   useEffect(() => {
     if (!mapReady || !window.kakao || !mapRef.current) return
     const kakao = window.kakao
     overlaysRef.current.forEach((ov) => ov.setMap(null))
     overlaysRef.current = []
-    cafes.forEach((cafe) => {
+    displayCafes.forEach((cafe) => {
       if (cafe.lat == null || cafe.lng == null) return
       const position = new kakao.maps.LatLng(cafe.lat, cafe.lng)
       const el = document.createElement('div')
@@ -56,7 +86,7 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
       overlay.setMap(mapRef.current)
       overlaysRef.current.push(overlay)
     })
-  }, [mapReady, cafes, onOpenCafe])
+  }, [mapReady, displayCafes, onOpenCafe])
 
   function locateMe() {
     if (mapFailed) {
@@ -75,6 +105,7 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
         setLocating(false)
         const kakao = window.kakao
         if (!kakao || !mapRef.current) return
+        setUserPos({ lat: pos.coords.latitude, lng: pos.coords.longitude })
         const position = new kakao.maps.LatLng(pos.coords.latitude, pos.coords.longitude)
         mapRef.current.panTo(position)
         if (meOverlayRef.current) meOverlayRef.current.setMap(null)
