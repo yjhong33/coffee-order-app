@@ -6,12 +6,12 @@ import logoCompose from './assets/logos/compose.png'
 import logoPaik from './assets/logos/paik.png'
 
 export const CAFES = [
-  { id: 'starbucks', name: '스타벅스 강남R점', initial: 'S', color: '#00704A', fg: '#fff', rating: '4.8', dist: '120m', wait: '5분', logo: logoStarbucks },
-  { id: 'mega', name: '메가커피 역삼점', initial: 'M', color: '#FFC400', fg: '#3A2E00', rating: '4.6', dist: '80m', wait: '3분', logo: logoMega },
-  { id: 'twosome', name: '투썸플레이스 선릉점', initial: 'T', color: '#C8102E', fg: '#fff', rating: '4.7', dist: '200m', wait: '8분', logo: logoTwosome },
-  { id: 'ediya', name: '이디야커피 강남점', initial: 'E', color: '#1A4FA0', fg: '#fff', rating: '4.5', dist: '150m', wait: '6분', logo: logoEdiya },
-  { id: 'compose', name: '컴포즈커피 테헤란점', initial: 'C', color: '#122C4B', fg: '#fff', rating: '4.6', dist: '90m', wait: '4분', logo: logoCompose },
-  { id: 'paik', name: '빽다방 강남대로점', initial: '빽', color: '#FFE000', fg: '#1A1A1A', rating: '4.4', dist: '240m', wait: '7분', logo: logoPaik },
+  { id: 'starbucks', name: '스타벅스 강남R점', initial: 'S', color: '#00704A', fg: '#fff', rating: '4.8', dist: '120m', wait: '5분', logo: logoStarbucks, lat: 37.4979, lng: 127.0276 },
+  { id: 'mega', name: '메가커피 역삼점', initial: 'M', color: '#FFC400', fg: '#3A2E00', rating: '4.6', dist: '80m', wait: '3분', logo: logoMega, lat: 37.5006, lng: 127.0364 },
+  { id: 'twosome', name: '투썸플레이스 선릉점', initial: 'T', color: '#C8102E', fg: '#fff', rating: '4.7', dist: '200m', wait: '8분', logo: logoTwosome, lat: 37.5045, lng: 127.0490 },
+  { id: 'ediya', name: '이디야커피 강남점', initial: 'E', color: '#1A4FA0', fg: '#fff', rating: '4.5', dist: '150m', wait: '6분', logo: logoEdiya, lat: 37.4969, lng: 127.0258 },
+  { id: 'compose', name: '컴포즈커피 테헤란점', initial: 'C', color: '#122C4B', fg: '#fff', rating: '4.6', dist: '90m', wait: '4분', logo: logoCompose, lat: 37.5012, lng: 127.0396 },
+  { id: 'paik', name: '빽다방 강남대로점', initial: '빽', color: '#FFE000', fg: '#1A1A1A', rating: '4.4', dist: '240m', wait: '7분', logo: logoPaik, lat: 37.4956, lng: 127.0286 },
 ]
 
 export const MAP_POS = [
