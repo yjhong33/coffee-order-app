@@ -12,8 +12,6 @@ export default function Home({
   onGoCollect,
   onOpenCafe,
   onReorder,
-  resumeScreen,
-  onResume,
   onEnterMemo,
 }) {
   return (
@@ -48,20 +46,20 @@ export default function Home({
         </div>
       </div>
 
-      {resumeScreen && (
+      {hasOrders && (
         <div style={{ padding: '14px 20px 0' }}>
-          <div onClick={onResume} style={{ background: 'var(--cc-green-deep)', borderRadius: 16, padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 13, cursor: 'pointer', boxShadow: '0 8px 20px rgba(18,63,45,.22)' }}>
-            <div style={{ width: 38, height: 38, borderRadius: '50%', background: 'rgba(255,255,255,.14)', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none', position: 'relative' }}>
+          <div onClick={onGoCollect} style={{ background: 'var(--cc-green-deep)', borderRadius: 18, padding: '15px 16px', display: 'flex', alignItems: 'center', gap: 13, cursor: 'pointer' }}>
+            <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'rgba(255,255,255,.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none', position: 'relative' }}>
               <span style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: '#37C77C', animation: 'cc-ping 1.8s ease-out infinite', opacity: 0.5 }}></span>
               <span style={{ position: 'relative' }}>
                 <CupIcon />
               </span>
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: '#8FE3B6', letterSpacing: '.2px' }}>정리하던 주문이 있어요</div>
-              <div style={{ fontSize: 15, fontWeight: 700, color: '#fff', marginTop: 2, letterSpacing: '-.3px' }}>이어서 정리하기</div>
+              <div style={{ fontSize: 11, fontWeight: 700, color: '#8FE3B6', letterSpacing: '.2px' }}>진행 중인 그룹 주문</div>
+              <div style={{ fontSize: 15, fontWeight: 700, color: '#fff', marginTop: 2, letterSpacing: '-.3px' }}>스타벅스 강남R점 · 총 {totalQty}잔</div>
             </div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: '#fff', background: 'rgba(255,255,255,.16)', padding: '8px 13px', borderRadius: 10, flex: 'none' }}>이어하기</div>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#fff', background: 'rgba(255,255,255,.16)', padding: '7px 11px', borderRadius: 9 }}>이어서 정리</div>
           </div>
         </div>
       )}
@@ -124,24 +122,6 @@ export default function Home({
           </div>
         </div>
       </div>
-
-      {hasOrders && (
-        <div style={{ padding: '18px 20px 0' }}>
-          <div onClick={onGoCollect} style={{ background: 'var(--cc-green-deep)', borderRadius: 18, padding: '15px 16px', display: 'flex', alignItems: 'center', gap: 13, cursor: 'pointer' }}>
-            <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'rgba(255,255,255,.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none', position: 'relative' }}>
-              <span style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: '#37C77C', animation: 'cc-ping 1.8s ease-out infinite', opacity: 0.5 }}></span>
-              <span style={{ position: 'relative' }}>
-                <CupIcon />
-              </span>
-            </div>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: '#8FE3B6', letterSpacing: '.2px' }}>진행 중인 그룹 주문</div>
-              <div style={{ fontSize: 15, fontWeight: 700, color: '#fff', marginTop: 2, letterSpacing: '-.3px' }}>스타벅스 강남R점 · 총 {totalQty}잔</div>
-            </div>
-            <div style={{ fontSize: 12, fontWeight: 700, color: '#fff', background: 'rgba(255,255,255,.16)', padding: '7px 11px', borderRadius: 9 }}>이어서 정리</div>
-          </div>
-        </div>
-      )}
 
       <div style={{ padding: '24px 0 0' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', padding: '0 20px' }}>

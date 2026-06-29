@@ -487,8 +487,6 @@ export default function App() {
               onGoCollect={() => go('collect')}
               onOpenCafe={openCafe}
               onReorder={openCafe}
-              resumeScreen={resumeScreen}
-              onResume={resume}
               onEnterMemo={enterMemo}
             />
           )}
