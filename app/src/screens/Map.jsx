@@ -239,7 +239,7 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
 
   return (
     <div style={{ animation: 'cc-fade .2s ease', height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <div style={{ position: 'relative', height: '62vh', flex: 'none', background: 'linear-gradient(160deg,#E5EAE0,#D8E0D2)', overflow: 'hidden' }}>
+      <div style={{ position: 'relative', height: '72vh', flex: 'none', background: 'linear-gradient(160deg,#E5EAE0,#D8E0D2)', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: 54, left: 20, right: 20, zIndex: 3, display: 'flex', alignItems: 'center', gap: 10 }}>
           <div onClick={onBack} style={{ width: 40, height: 40, borderRadius: 13, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 4px 12px rgba(40,30,15,.12)' }}>
             <ChevronLeft />
