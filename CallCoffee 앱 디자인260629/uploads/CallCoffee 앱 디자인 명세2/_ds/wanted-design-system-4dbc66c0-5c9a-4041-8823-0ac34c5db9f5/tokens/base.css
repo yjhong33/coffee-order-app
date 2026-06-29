@@ -1,0 +1,26 @@
+/* Wanted Design System — base reset & body defaults.
+   Light-touch: normalize box model, set the UI typeface, sane defaults. */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-body-1);
+  line-height: 1.5;
+  letter-spacing: 0.0057em;
+  color: var(--wds-label);
+  background: var(--wds-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6, p, figure { margin: 0; }
+
+a { color: inherit; text-decoration: none; }
+
+button, input, select, textarea { font-family: inherit; }
+
+::selection { background: var(--blue-90); }

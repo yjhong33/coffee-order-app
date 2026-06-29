@@ -1,0 +1,11 @@
+/* ============================================================
+   Wanted Design System — global stylesheet entry point.
+   Consumers link THIS file. It is an @import manifest only.
+   ============================================================ */
+
+@import "./tokens/fonts.css";
+@import "./tokens/fig-tokens.css";      /* Figma variables: full color + dimension token set, light/dark/breakpoint modes */
+@import "./tokens/colors.css";          /* curated semantic color aliases on top of fig-tokens */
+@import "./tokens/typography.css";      /* type ramp: sizes, weights, .wds-* classes */
+@import "./tokens/spacing.css";         /* spacing scale, radius, elevation */
+@import "./tokens/base.css";            /* light reset + body defaults */

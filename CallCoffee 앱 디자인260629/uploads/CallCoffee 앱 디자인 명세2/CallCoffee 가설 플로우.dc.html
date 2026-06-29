@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="_ds/wanted-design-system-4dbc66c0-5c9a-4041-8823-0ac34c5db9f5/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/wanted-design-system-4dbc66c0-5c9a-4041-8823-0ac34c5db9f5/tokens/fig-tokens.css">
+<link rel="stylesheet" href="_ds/wanted-design-system-4dbc66c0-5c9a-4041-8823-0ac34c5db9f5/tokens/colors.css">
+<link rel="stylesheet" href="_ds/wanted-design-system-4dbc66c0-5c9a-4041-8823-0ac34c5db9f5/tokens/typography.css">
+<link rel="stylesheet" href="_ds/wanted-design-system-4dbc66c0-5c9a-4041-8823-0ac34c5db9f5/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/wanted-design-system-4dbc66c0-5c9a-4041-8823-0ac34c5db9f5/tokens/base.css">
+<link rel="stylesheet" href="_ds/wanted-design-system-4dbc66c0-5c9a-4041-8823-0ac34c5db9f5/styles.css">
+<script src="_ds/wanted-design-system-4dbc66c0-5c9a-4041-8823-0ac34c5db9f5/_ds_bundle.js"></script>
+<style>
+*{box-sizing:border-box;}
+.cc{font-family:'Pretendard',-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;color:#2A2520;}
+.ph{position:relative;width:240px;height:436px;background:#FBF7EF;border:1px solid #EAE3D6;border-radius:22px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 2px 8px rgba(40,30,15,.10);}
+.cap{margin-top:11px;font-weight:600;font-size:11.5px;line-height:1.5;color:#5A5248;letter-spacing:-.2px;}
+.cap b{color:#1B6249;font-weight:800;}
+.lbl{position:absolute;top:-25px;left:2px;font-weight:800;font-size:12px;letter-spacing:-.2px;}
+.hbar{padding:13px 14px 12px;color:#fff;}
+.row{display:flex;}
+.chip{font-size:9px;font-weight:800;padding:2px 6px;border-radius:6px;flex:none;}
+.hot{background:#FBEAE5;color:#D9533B;} .ice{background:#E7F0F8;color:#3B82C4;}
+.av{border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;flex:none;}
+.card{background:#fff;border:1px solid #EAE3D6;border-radius:13px;}
+</style>
+</helmet>
+
+<!-- ===== TITLE ===== -->
+<div class="cc" style="position:absolute;left:80px;top:46px;width:1040px;">
+  <div style="display:inline-flex;align-items:center;gap:8px;background:#1B6249;color:#fff;font-size:12px;font-weight:800;padding:6px 13px;border-radius:20px;letter-spacing:-.2px;">CALLCOFFEE · 가설 검증용 플로우</div>
+  <div style="font-size:30px;font-weight:800;letter-spacing:-.7px;margin-top:16px;line-height:1.25;">PRD에서 뽑은 3개의 제품 가설과<br>각 가설을 검증하는 5단계 플로우</div>
+  <div style="font-size:14px;line-height:1.6;color:#6E665C;margin-top:12px;max-width:760px;">핵심 문제는 “비정형 입력(말·카톡)을 정형 데이터로 바꾸고, 그 변환을 <b style="color:#2A2520;">믿게</b> 만드는 것”이에요. 같은 문제를 푸는 서로 다른 3가지 베팅을 가설로 세웠습니다. 각 행이 하나의 가설이고, 오른쪽으로 5개 화면이 그 가설의 플로우예요. 팀과 함께 “어떤 가설부터 검증할지” 논의하는 용도입니다.</div>
+</div>
+
+<div class="cc" style="position:absolute;left:1180px;top:60px;width:240px;">
+  <div style="background:#FEF4A8;padding:14px 15px;font-size:12px;line-height:1.55;box-shadow:0 2px 8px rgba(0,0,0,.10);transform:rotate(-1.2deg);border-radius:2px;color:#4A4330;">
+    <b>논의 포인트</b><br>· 세 가설은 배타적이지 않아요. 한 제품에 공존 가능.<br>· 먼저 검증할 1순위를 골라요.<br>· 화면은 방향성 스케치 — 카피/디테일은 열려 있어요.
+  </div>
+</div>
+
+<!-- ===================================================== -->
+<!-- ===================== H1 신뢰 ======================= -->
+<!-- ===================================================== -->
+<div class="cc" style="position:absolute;left:80px;top:320px;width:320px;">
+  <div data-drags-parent="1" class="lbl" style="color:#1B6249;">가설 1 · 신뢰 (Trust)</div>
+  <div style="height:436px;border-radius:22px;background:linear-gradient(165deg,#21795A,#185940);color:#fff;padding:22px 20px;overflow:hidden;position:relative;box-shadow:0 8px 24px rgba(20,60,40,.22);">
+    <div style="position:absolute;right:-30px;top:-30px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.07);"></div>
+    <div style="font-size:12px;font-weight:800;color:#8FE3B6;letter-spacing:.3px;">HYPOTHESIS 1</div>
+    <div style="font-size:21px;font-weight:800;line-height:1.34;margin-top:12px;letter-spacing:-.5px;">“원본과 나란히” 보여주면<br>검증 없이 믿고 바로 쓴다</div>
+    <div style="font-size:12.5px;line-height:1.6;color:rgba(255,255,255,.86);margin-top:14px;">자동 인식 결과를 원본 캡처와 좌우로 비교하고 인식 근거까지 드러내면, 사용자는 일일이 확인하지 않아도 신뢰하고 취합을 확정한다.</div>
+    <div style="margin-top:18px;background:rgba(255,255,255,.12);border-radius:12px;padding:12px 13px;">
+      <div style="font-size:10.5px;font-weight:800;color:#8FE3B6;">무엇을 검증하나</div>
+      <div style="font-size:12px;line-height:1.5;margin-top:4px;">검증 UX가 ‘이거 맞나?’ 불안을 실제로 없애는가</div>
+    </div>
+    <div style="margin-top:10px;background:rgba(255,255,255,.12);border-radius:12px;padding:12px 13px;">
+      <div style="font-size:10.5px;font-weight:800;color:#8FE3B6;">성공 신호</div>
+      <div style="font-size:12px;line-height:1.5;margin-top:4px;">결과 화면에서 수정 없이 ‘추가’하는 비율 ↑, 추가 후 재수정율 ↓</div>
+    </div>
+  </div>
+</div>
+
+<!-- H1-S1 홈 -->
+<div class="cc" style="position:absolute;left:460px;top:320px;width:240px;">
+  <div data-drags-parent="1" class="lbl" style="color:#1B6249;">①</div>
+  <div class="ph">
+    <div class="hbar" style="background:linear-gradient(160deg,#21795A,#185940);">
+      <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.72);">반가워요, 커피 한 잔 ☕</div>
+      <div style="font-size:16px;font-weight:800;margin-top:4px;line-height:1.3;">누구 주문부터<br>정리해 드릴까요?</div>
+      <div style="margin-top:11px;background:#fff;border-radius:10px;height:34px;display:flex;align-items:center;padding:0 11px;font-size:11px;color:#A89E90;">카페·메뉴 검색</div>
+    </div>
+    <div style="padding:13px;display:flex;flex-direction:column;gap:10px;">
+      <div style="background:linear-gradient(135deg,#B98B3E,#A9762C);border-radius:13px;padding:13px;color:#fff;">
+        <div style="font-size:13px;font-weight:800;">주변 카페 찾기</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.85);margin-top:2px;">가까운 카페부터</div>
+      </div>
+      <div class="row" style="gap:9px;">
+        <div class="card" style="flex:1;padding:11px;opacity:.55;">
+          <div style="width:26px;height:26px;border-radius:9px;background:#E9F1EC;"></div>
+          <div style="font-size:12px;font-weight:800;margin-top:8px;">음성으로</div>
+        </div>
+        <div style="flex:1;background:#fff;border:2px solid #1F6E50;border-radius:13px;padding:10px;box-shadow:0 6px 14px rgba(31,110,80,.18);position:relative;">
+          <div style="position:absolute;top:-9px;right:8px;background:#1F6E50;color:#fff;font-size:8px;font-weight:800;padding:2px 6px;border-radius:6px;">추천</div>
+          <div style="width:26px;height:26px;border-radius:9px;background:#F3E9D4;"></div>
+          <div style="font-size:12px;font-weight:800;margin-top:8px;color:#1B6249;">캡처로 분석</div>
+          <div style="font-size:9.5px;color:#6E665C;margin-top:2px;line-height:1.4;">카톡 캡처 → 사람별 추출</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="cap"><b>홈</b> — 캡처 분석을 최상단에 노출, 1탭 진입</div>
+</div>
+
+<!-- H1-S2 업로드 -->
+<div class="cc" style="position:absolute;left:712px;top:320px;width:240px;">
+  <div data-drags-parent="1" class="lbl" style="color:#1B6249;">②</div>
+  <div class="ph">
+    <div style="padding:14px;display:flex;align-items:center;gap:9px;border-bottom:1px solid #EAE3D6;">
+      <div style="font-size:16px;color:#2A2520;">‹</div>
+      <div style="font-size:14px;font-weight:800;">캡처 이미지 분석</div>
+    </div>
+    <div style="padding:13px;">
+      <div style="font-size:11px;color:#6E665C;line-height:1.5;">카카오톡 단체방 주문 대화를 캡처해 올려주세요.</div>
+      <div style="background:#9DB7C9;border-radius:12px;padding:11px;margin-top:11px;">
+        <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,.9);text-align:center;margin-bottom:7px;">이런 캡처면 돼요</div>
+        <div class="row" style="margin-bottom:5px;"><div style="background:#fff;border-radius:8px;padding:4px 8px;font-size:10px;">저 아아요 ☕</div></div>
+        <div class="row" style="margin-bottom:5px;"><div style="background:#fff;border-radius:8px;padding:4px 8px;font-size:10px;">나는 돌체라떼 핫</div></div>
+        <div class="row" style="justify-content:flex-end;"><div style="background:#FEE500;border-radius:8px;padding:4px 8px;font-size:10px;">아아 두 잔이요!</div></div>
+      </div>
+      <div class="row" style="gap:8px;margin-top:13px;">
+        <div style="flex:1;background:#F3EDE1;border-radius:11px;padding:12px;text-align:center;font-size:11px;font-weight:800;color:#6E665C;">카메라</div>
+        <div style="flex:1;background:#1F6E50;border-radius:11px;padding:12px;text-align:center;font-size:11px;font-weight:800;color:#fff;">갤러리</div>
+      </div>
+    </div>
+  </div>
+  <div class="cap"><b>업로드</b> — ‘이런 캡처면 돼요’ 예시로 실패를 예방</div>
+</div>
+
+<!-- H1-S3 분석중 -->
+<div class="cc" style="position:absolute;left:964px;top:320px;width:240px;">
+  <div data-drags-parent="1" class="lbl" style="color:#1B6249;">③</div>
+  <div class="ph">
+    <div style="padding:14px;border-bottom:1px solid #EAE3D6;font-size:14px;font-weight:800;">분석 중</div>
+    <div style="padding:24px 16px;text-align:center;">
+      <div style="width:54px;height:54px;border-radius:50%;border:6px solid #E9F1EC;border-top-color:#1F6E50;margin:0 auto;"></div>
+      <div style="font-size:14px;font-weight:800;margin-top:16px;">대화를 분석하고 있어요</div>
+      <div style="font-size:10.5px;color:#6E665C;margin-top:5px;">사람별 메뉴를 정리하는 중이에요</div>
+      <div class="card" style="text-align:left;margin-top:18px;padding:4px 13px;">
+        <div style="display:flex;align-items:center;gap:9px;padding:10px 0;border-bottom:1px solid #EAE3D6;"><div style="width:18px;height:18px;border-radius:50%;background:#1F6E50;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;">✓</div><span style="font-size:11px;color:#2A2520;">메뉴 키워드 찾기</span></div>
+        <div style="display:flex;align-items:center;gap:9px;padding:10px 0;border-bottom:1px solid #EAE3D6;"><div style="width:18px;height:18px;border-radius:50%;background:#1F6E50;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;">✓</div><span style="font-size:11px;color:#2A2520;">온도(핫/아이스) 구분</span></div>
+        <div style="display:flex;align-items:center;gap:9px;padding:10px 0;"><div style="width:18px;height:18px;border-radius:50%;background:#B98B3E;"></div><span style="font-size:11px;color:#2A2520;font-weight:700;">사람별로 묶는 중…</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="cap"><b>처리</b> — 무엇을 하는지 단계로 투명하게 노출</div>
+</div>
+
+<!-- H1-S4 원본↔결과 비교 (검증 핵심) -->
+<div class="cc" style="position:absolute;left:1216px;top:320px;width:240px;">
+  <div data-drags-parent="1" class="lbl" style="color:#D9533B;">④ 검증 핵심</div>
+  <div class="ph" style="border:2px solid #1F6E50;">
+    <div style="padding:13px 14px;border-bottom:1px solid #EAE3D6;"><div style="font-size:13px;font-weight:800;">이렇게 인식했어요</div><div style="font-size:10px;color:#6E665C;margin-top:2px;">원본과 비교해 확인해 주세요</div></div>
+    <div class="row" style="gap:8px;padding:12px;">
+      <div style="flex:1;background:#9DB7C9;border-radius:10px;padding:8px;">
+        <div style="font-size:8px;font-weight:700;color:#fff;margin-bottom:6px;">원본</div>
+        <div style="background:#fff;border-radius:6px;padding:3px 6px;font-size:9px;margin-bottom:4px;"><u>아아</u> 두 잔</div>
+        <div style="background:#fff;border-radius:6px;padding:3px 6px;font-size:9px;margin-bottom:4px;">돌체라떼 <u>핫</u></div>
+        <div style="background:#fff;border-radius:6px;padding:3px 6px;font-size:9px;">바닐라 <u>아이스</u></div>
+      </div>
+      <div style="flex:1;background:#fff;border:1px solid #EAE3D6;border-radius:10px;padding:8px;">
+        <div style="font-size:8px;font-weight:800;color:#1F6E50;margin-bottom:6px;">결과</div>
+        <div style="display:flex;align-items:center;gap:4px;padding:3px 0;"><span class="chip ice">ICE</span><span style="font-size:9px;font-weight:700;">아메리카노×2</span></div>
+        <div style="display:flex;align-items:center;gap:4px;padding:3px 0;"><span class="chip hot">HOT</span><span style="font-size:9px;font-weight:700;">돌체 라떼</span></div>
+        <div style="display:flex;align-items:center;gap:4px;padding:3px 0;"><span class="chip ice">ICE</span><span style="font-size:9px;font-weight:700;">바닐라 라떼</span></div>
+      </div>
+    </div>
+    <div style="margin:0 12px;background:#FFF6DD;border:1px solid #F0DCA0;border-radius:9px;padding:8px 10px;display:flex;align-items:center;gap:7px;">
+      <span style="font-size:8px;font-weight:800;background:#E8A13C;color:#fff;padding:2px 5px;border-radius:5px;">확인 필요</span>
+      <span style="font-size:9.5px;color:#7A6320;">‘서연 라떼’ 온도가 불명확해요</span>
+    </div>
+    <div style="padding:12px;margin-top:auto;"><div style="background:#1F6E50;color:#fff;border-radius:11px;padding:11px;text-align:center;font-size:12px;font-weight:800;">확인했어요 · 추가하기</div></div>
+  </div>
+  <div class="cap"><b>검증</b> — 원본↔결과를 나란히, 애매한 항목은 ‘확인 필요’ (자동 확정 금지)</div>
+</div>
+
+<!-- H1-S5 확정 -->
+<div class="cc" style="position:absolute;left:1468px;top:320px;width:240px;">
+  <div data-drags-parent="1" class="lbl" style="color:#1B6249;">⑤</div>
+  <div class="ph">
+    <div style="padding:14px;border-bottom:1px solid #EAE3D6;font-size:14px;font-weight:800;">주문 취합</div>
+    <div style="padding:13px;">
+      <div style="background:#E9F1EC;border-radius:11px;padding:11px;display:flex;align-items:center;gap:8px;"><div style="width:22px;height:22px;border-radius:50%;background:#1F6E50;color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;">✓</div><div><div style="font-size:12px;font-weight:800;color:#185940;">4명 추가됐어요</div><div style="font-size:9.5px;color:#6E665C;">바로 수정할 수 있어요</div></div></div>
+      <div class="card" style="margin-top:11px;padding:10px;">
+        <div style="display:flex;align-items:center;gap:7px;"><div class="av" style="width:22px;height:22px;background:#E8A13C;font-size:10px;">민준</div><span style="font-size:11px;font-weight:700;">김민준</span><span class="chip hot" style="margin-left:auto;">HOT</span></div>
+        <div style="font-size:10px;color:#6E665C;margin-top:5px;">돌체 라떼 1잔</div>
+      </div>
+      <div class="card" style="margin-top:9px;padding:10px;">
+        <div style="display:flex;align-items:center;gap:7px;"><div class="av" style="width:22px;height:22px;background:#6A8CC7;font-size:10px;">서연</div><span style="font-size:11px;font-weight:700;">이서연</span><span class="chip ice" style="margin-left:auto;">ICE</span></div>
+        <div style="font-size:10px;color:#6E665C;margin-top:5px;">아메리카노 2잔</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:13px;padding:0 2px;"><span style="font-size:11px;color:#6E665C;">총 5잔</span><span style="font-size:15px;font-weight:800;">22,600원</span></div>
+    </div>
+  </div>
+  <div class="cap"><b>확정</b> — 사람별로 취합 완료, 그 자리에서 수정 가능</div>
+</div>
+
+<!-- ===================================================== -->
+<!-- ===================== H2 속도 ======================= -->
+<!-- ===================================================== -->
+<div class="cc" style="position:absolute;left:80px;top:920px;width:320px;">
+  <div data-drags-parent="1" class="lbl" style="color:#9A6F26;">가설 2 · 속도 (Speed)</div>
+  <div style="height:436px;border-radius:22px;background:linear-gradient(165deg,#C79A4A,#A9762C);color:#fff;padding:22px 20px;overflow:hidden;position:relative;box-shadow:0 8px 24px rgba(150,110,40,.22);">
+    <div style="position:absolute;right:-30px;top:-30px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.10);"></div>
+    <div style="font-size:12px;font-weight:800;color:#FFF0D0;letter-spacing:.3px;">HYPOTHESIS 2</div>
+    <div style="font-size:21px;font-weight:800;line-height:1.34;margin-top:12px;letter-spacing:-.5px;">‘연속 받아쓰기’가 메모보다<br>빠르고 안 빠뜨린다</div>
+    <div style="font-size:12.5px;line-height:1.6;color:rgba(255,255,255,.9);margin-top:14px;">마이크를 열어둔 채 한 명씩 말하면 카드가 실시간으로 쌓인다. 줄 서서 부르는 구술 취합을 받아적기 없이 음성만으로 끝낸다.</div>
+    <div style="margin-top:18px;background:rgba(255,255,255,.16);border-radius:12px;padding:12px 13px;">
+      <div style="font-size:10.5px;font-weight:800;color:#FFF0D0;">무엇을 검증하나</div>
+      <div style="font-size:12px;line-height:1.5;margin-top:4px;">구술 취합을 음성으로 대체할 때 속도·누락이 개선되는가</div>
+    </div>
+    <div style="margin-top:10px;background:rgba(255,255,255,.16);border-radius:12px;padding:12px 13px;">
+      <div style="font-size:10.5px;font-weight:800;color:#FFF0D0;">성공 신호</div>
+      <div style="font-size:12px;line-height:1.5;margin-top:4px;">1명당 입력 시간 ↓, 누락·중복 발생률 ↓</div>
+    </div>
+  </div>
+</div>
+
+<!-- H2-S1 홈 -->
+<div class="cc" style="position:absolute;left:460px;top:920px;width:240px;">
+  <div data-drags-parent="1" class="lbl" style="color:#9A6F26;">①</div>
+  <div class="ph">
+    <div class="hbar" style="background:linear-gradient(160deg,#21795A,#185940);">
+      <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.72);">점심시간, 다들 모였나요?</div>
+      <div style="font-size:16px;font-weight:800;margin-top:4px;line-height:1.3;">말로 부르면<br>받아적기 끝</div>
+    </div>
+    <div style="padding:13px;">
+      <div style="background:#fff;border:2px solid #1F6E50;border-radius:14px;padding:15px;box-shadow:0 8px 18px rgba(31,110,80,.18);position:relative;">
+        <div style="position:absolute;top:-9px;right:10px;background:#1F6E50;color:#fff;font-size:8px;font-weight:800;padding:2px 6px;border-radius:6px;">추천</div>
+        <div style="width:42px;height:42px;border-radius:50%;background:#1F6E50;display:flex;align-items:center;justify-content:center;">
+          <div style="width:13px;height:20px;border-radius:7px;background:#fff;"></div>
+        </div>
+        <div style="font-size:15px;font-weight:800;margin-top:11px;color:#1B6249;">음성으로 받기</div>
+        <div style="font-size:11px;color:#6E665C;margin-top:4px;line-height:1.45;">“저는 아이스 아메리카노요” 한 명씩 말하면 자동으로 쌓여요</div>
+      </div>
+      <div class="card" style="margin-top:11px;padding:12px;opacity:.5;"><div style="font-size:12px;font-weight:800;">캡처로 분석</div></div>
+    </div>
+  </div>
+  <div class="cap"><b>홈</b> — 음성으로 받기를 메인 액션으로 강조</div>
+</div>
+
+<!-- H2-S2 듣는중 -->
+<div class="cc" style="position:absolute;left:712px;top:920px;width:240px;">
+  <div data-drags-parent="1" class="lbl" style="color:#9A6F26;">②</div>
+  <div class="ph" style="background:linear-gradient(170deg,#1B6249,#123F2D);">
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;">
+      <div style="position:relative;width:84px;height:84px;display:flex;align-items:center;justify-content:center;">
+        <div style="position:absolute;inset:0;border-radius:50%;background:rgba(143,227,182,.25);"></div>
+        <div style="position:absolute;inset:14px;border-radius:50%;background:rgba(143,227,182,.4);"></div>
+        <div style="width:56px;height:56px;border-radius:50%;background:#37C77C;display:flex;align-items:center;justify-content:center;"><div style="width:15px;height:23px;border-radius:8px;background:#fff;"></div></div>
+      </div>
+      <div style="font-size:13px;font-weight:800;color:#8FE3B6;margin-top:22px;">듣고 있어요…</div>
+      <div style="font-size:15px;font-weight:700;color:#fff;margin-top:12px;text-align:center;line-height:1.5;">아이스 아메리카노<br>한 잔이요<span style="color:#8FE3B6;">|</span></div>
+    </div>
+    <div style="padding:14px;text-align:center;font-size:10px;color:rgba(255,255,255,.6);">또렷하게 ‘메뉴·온도·이름’을 말해 주세요</div>
+  </div>
+  <div class="cap"><b>듣는 중</b> — 실시간 타이핑으로 인식 과정을 보여줌</div>
+</div>
+
+<!-- H2-S3 다음사람 -->
+<div class="cc" style="position:absolute;left:964px;top:920px;width:240px;">
+  <div data-drags-parent="1" class="lbl" style="color:#9A6F26;">③</div>
+  <div class="ph">
+    <div style="padding:24px 16px;text-align:center;">
+      <div style="width:50px;height:50px;border-radius:50%;background:#E9F1EC;margin:0 auto;display:flex;align-items:center;justify-content:center;color:#1F6E50;font-size:24px;font-weight:800;">✓</div>
+      <div style="font-size:14px;font-weight:800;margin-top:13px;">정우성 님 추가됨</div>
+      <div style="background:#E7F0F8;border-radius:10px;padding:10px;margin-top:12px;display:inline-flex;align-items:center;gap:7px;"><span class="chip ice">ICE</span><span style="font-size:11px;font-weight:700;">아메리카노 1잔</span></div>
+    </div>
+    <div style="margin:8px 14px 0;border-top:1px dashed #EAE3D6;"></div>
+    <div style="padding:18px 16px;text-align:center;">
+      <div style="width:38px;height:38px;border-radius:50%;background:#1F6E50;margin:0 auto;display:flex;align-items:center;justify-content:center;position:relative;"><div style="position:absolute;inset:0;border-radius:50%;background:#37C77C;opacity:.4;"></div><div style="width:10px;height:16px;border-radius:5px;background:#fff;position:relative;"></div></div>
+      <div style="font-size:13px;font-weight:800;color:#1B6249;margin-top:12px;">다음 분, 말씀하세요</div>
+      <div style="font-size:10.5px;color:#6E665C;margin-top:5px;">마이크는 계속 켜져 있어요</div>
+    </div>
+    <div style="padding:0 14px 14px;margin-top:auto;"><div style="background:#F3EDE1;border-radius:11px;padding:11px;text-align:center;font-size:12px;font-weight:800;color:#6E665C;">다 받았어요 · 그만 듣기</div></div>
+  </div>
+  <div class="cap"><b>연속 모드</b> — 한 명 끝나면 자동으로 다음 사람 대기</div>
+</div>
+
+<!-- H2-S4 누적+수정 -->
+<div class="cc" style="position:absolute;left:1216px;top:920px;width:240px;">
+  <div data-drags-parent="1" class="lbl" style="color:#9A6F26;">④</div>
+  <div class="ph">
+    <div style="padding:13px 14px;border-bottom:1px solid #EAE3D6;display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-size:13px;font-weight:800;">실시간 취합 · 4명</div>
+      <div style="display:inline-flex;align-items:center;gap:5px;background:#FBEAE5;padding:4px 9px;border-radius:20px;"><div style="width:7px;height:7px;border-radius:50%;background:#D9533B;"></div><span style="font-size:9px;font-weight:800;color:#D9533B;">듣는 중</span></div>
+    </div>
+    <div style="padding:11px 13px;display:flex;flex-direction:column;gap:8px;">
+      <div class="card" style="padding:9px;display:flex;align-items:center;gap:7px;"><div class="av" style="width:20px;height:20px;background:#1F6E50;font-size:9px;">나</div><span style="font-size:11px;font-weight:700;flex:1;">아메리카노</span><span class="chip ice">ICE</span></div>
+      <div class="card" style="padding:9px;display:flex;align-items:center;gap:7px;"><div class="av" style="width:20px;height:20px;background:#E8A13C;font-size:9px;">민준</div><span style="font-size:11px;font-weight:700;flex:1;">돌체 라떼</span><span class="chip hot">HOT</span></div>
+      <div style="border:2px solid #1F6E50;border-radius:13px;padding:9px;background:#fff;"><div style="display:flex;align-items:center;gap:7px;"><div class="av" style="width:20px;height:20px;background:#6A8CC7;font-size:9px;">서연</div><span style="font-size:11px;font-weight:700;flex:1;">아메리카노</span></div><div class="row" style="gap:5px;margin-top:8px;"><div style="flex:1;text-align:center;font-size:9px;font-weight:800;padding:5px;border-radius:7px;background:#fff;border:1px solid #EAE3D6;color:#A89E90;">HOT</div><div style="flex:1;text-align:center;font-size:9px;font-weight:800;padding:5px;border-radius:7px;background:#E7F0F8;border:1px solid #3B82C4;color:#3B82C4;">ICE ✓</div><div style="width:46px;text-align:center;font-size:9px;font-weight:800;padding:5px;border-radius:7px;background:#F3EDE1;">2잔</div></div></div>
+      <div class="card" style="padding:9px;display:flex;align-items:center;gap:7px;"><div class="av" style="width:20px;height:20px;background:#C77B9E;font-size:9px;">지후</div><span style="font-size:11px;font-weight:700;flex:1;">바닐라 라떼</span><span class="chip ice">ICE</span></div>
+    </div>
+  </div>
+  <div class="cap"><b>누적</b> — 쌓이는 걸 실시간 확인, 온도·수량 그 자리에서 수정</div>
+</div>
+
+<!-- H2-S5 완료 -->
+<div class="cc" style="position:absolute;left:1468px;top:920px;width:240px;">
+  <div data-drags-parent="1" class="lbl" style="color:#9A6F26;">⑤</div>
+  <div class="ph">
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:22px;text-align:center;">
+      <div style="width:60px;height:60px;border-radius:50%;background:#E9F1EC;display:flex;align-items:center;justify-content:center;color:#1F6E50;font-size:30px;font-weight:800;">✓</div>
+      <div style="font-size:17px;font-weight:800;margin-top:16px;">총 5잔, 정리 끝!</div>
+      <div style="font-size:11px;color:#6E665C;margin-top:6px;line-height:1.5;">누락 없이 한 번에 받았어요.<br>이제 매장에 주문만 하면 돼요.</div>
+      <div class="card" style="margin-top:18px;width:100%;padding:11px;text-align:left;">
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:#6E665C;"><span>ICE 아메리카노</span><span style="font-weight:800;color:#2A2520;">3잔</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:#6E665C;margin-top:7px;"><span>HOT 돌체 라떼</span><span style="font-weight:800;color:#2A2520;">1잔</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:#6E665C;margin-top:7px;"><span>ICE 바닐라 라떼</span><span style="font-weight:800;color:#2A2520;">1잔</span></div>
+      </div>
+    </div>
+    <div style="padding:0 14px 14px;"><div style="background:#1F6E50;color:#fff;border-radius:11px;padding:12px;text-align:center;font-size:12px;font-weight:800;">공유하고 마무리</div></div>
+  </div>
+  <div class="cap"><b>완료</b> — 누락 없이 한 번에 마감</div>
+</div>
+
+<!-- ===================================================== -->
+<!-- =================== H3 분산 참여 ===================== -->
+<!-- ===================================================== -->
+<div class="cc" style="position:absolute;left:80px;top:1520px;width:320px;">
+  <div data-drags-parent="1" class="lbl" style="color:#1A4FA0;">가설 3 · 분산 참여 (Self-serve)</div>
+  <div style="height:436px;border-radius:22px;background:linear-gradient(165deg,#2C6BB0,#1A4FA0);color:#fff;padding:22px 20px;overflow:hidden;position:relative;box-shadow:0 8px 24px rgba(20,50,120,.22);">
+    <div style="position:absolute;right:-30px;top:-30px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.09);"></div>
+    <div style="font-size:12px;font-weight:800;color:#BBD4F2;letter-spacing:.3px;">HYPOTHESIS 3</div>
+    <div style="font-size:21px;font-weight:800;line-height:1.34;margin-top:12px;letter-spacing:-.5px;">각자 ‘셀프 등록’하면<br>담당자 부담↓ 정확도↑</div>
+    <div style="font-size:12.5px;line-height:1.6;color:rgba(255,255,255,.9);margin-top:14px;">담당자가 전부 받지 않고 링크를 뿌린다. 참여자가 자기 주문을 직접 등록하고, 담당자는 현황만 지켜본다.</div>
+    <div style="margin-top:18px;background:rgba(255,255,255,.16);border-radius:12px;padding:12px 13px;">
+      <div style="font-size:10.5px;font-weight:800;color:#BBD4F2;">무엇을 검증하나</div>
+      <div style="font-size:12px;line-height:1.5;margin-top:4px;">입력 주체를 참여자로 옮기면 단독 취합보다 나은가</div>
+    </div>
+    <div style="margin-top:10px;background:rgba(255,255,255,.16);border-radius:12px;padding:12px 13px;">
+      <div style="font-size:10.5px;font-weight:800;color:#BBD4F2;">성공 신호</div>
+      <div style="font-size:12px;line-height:1.5;margin-top:4px;">담당자 조작 수 ↓, 최종 오류율 ↓, 참여 완료율 ↑</div>
+    </div>
+  </div>
+</div>
+
+<!-- H3-S1 그룹 시작 -->
+<div class="cc" style="position:absolute;left:460px;top:1520px;width:240px;">
+  <div data-drags-parent="1" class="lbl" style="color:#1A4FA0;">①</div>
+  <div class="ph">
+    <div class="hbar" style="background:linear-gradient(160deg,#21795A,#185940);">
+      <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.72);">혼자 다 받지 마세요</div>
+      <div style="font-size:16px;font-weight:800;margin-top:4px;line-height:1.3;">다 같이 채우는<br>그룹 주문</div>
+    </div>
+    <div style="padding:13px;">
+      <div style="background:#fff;border:2px solid #1F6E50;border-radius:14px;padding:15px;box-shadow:0 8px 18px rgba(31,110,80,.16);">
+        <div style="display:flex;gap:-6px;">
+          <div class="av" style="width:26px;height:26px;border-radius:50%;background:#E8A13C;font-size:10px;border:2px solid #fff;">민</div>
+          <div class="av" style="width:26px;height:26px;border-radius:50%;background:#6A8CC7;font-size:10px;border:2px solid #fff;margin-left:-8px;">서</div>
+          <div class="av" style="width:26px;height:26px;border-radius:50%;background:#C77B9E;font-size:10px;border:2px solid #fff;margin-left:-8px;">지</div>
+          <div class="av" style="width:26px;height:26px;border-radius:50%;background:#EAE3D6;color:#6E665C;font-size:10px;border:2px solid #fff;margin-left:-8px;">+3</div>
+        </div>
+        <div style="font-size:14px;font-weight:800;margin-top:12px;color:#1B6249;">새 그룹 주문 시작</div>
+        <div style="font-size:11px;color:#6E665C;margin-top:4px;line-height:1.45;">카페만 고르면, 나머지는 각자 등록</div>
+      </div>
+      <div class="card" style="margin-top:11px;padding:12px;opacity:.5;"><div style="font-size:12px;font-weight:800;">내가 다 받기</div></div>
+    </div>
+  </div>
+  <div class="cap"><b>홈</b> — 담당자는 카페만 정하고 그룹 시작</div>
+</div>
+
+<!-- H3-S2 공유 -->
+<div class="cc" style="position:absolute;left:712px;top:1520px;width:240px;">
+  <div data-drags-parent="1" class="lbl" style="color:#1A4FA0;">②</div>
+  <div class="ph">
+    <div style="padding:13px 14px;border-bottom:1px solid #EAE3D6;font-size:14px;font-weight:800;">공유 및 참여</div>
+    <div style="padding:13px;">
+      <div class="card" style="padding:13px;text-align:center;">
+        <div style="font-size:9px;color:#6E665C;font-weight:700;">참여 코드</div>
+        <div style="font-size:24px;font-weight:800;letter-spacing:4px;color:#1F6E50;margin-top:2px;">C4F9</div>
+        <div style="width:74px;height:74px;margin:9px auto 0;border-radius:10px;border:1px solid #EAE3D6;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,1fr);gap:2px;padding:8px;">
+          <div style="background:#1F1A14;"></div><div></div><div style="background:#1F1A14;"></div><div style="background:#1F1A14;"></div><div></div>
+          <div></div><div style="background:#1F6E50;"></div><div></div><div style="background:#1F1A14;"></div><div style="background:#1F6E50;"></div>
+          <div style="background:#1F1A14;"></div><div></div><div style="background:#1F6E50;"></div><div></div><div style="background:#1F1A14;"></div>
+          <div style="background:#1F1A14;"></div><div style="background:#1F6E50;"></div><div></div><div style="background:#1F6E50;"></div><div></div>
+          <div></div><div style="background:#1F1A14;"></div><div style="background:#1F1A14;"></div><div></div><div style="background:#1F1A14;"></div>
+        </div>
+      </div>
+      <div class="row" style="gap:7px;margin-top:11px;">
+        <div style="flex:1;background:#fff;border:1px solid #EAE3D6;border-radius:10px;padding:9px;text-align:center;font-size:10px;font-weight:800;color:#1B6249;">링크</div>
+        <div style="flex:1;background:#FEE500;border-radius:10px;padding:9px;text-align:center;font-size:10px;font-weight:800;color:#3C1E1E;">카카오톡</div>
+        <div style="flex:1;background:#fff;border:1px solid #EAE3D6;border-radius:10px;padding:9px;text-align:center;font-size:10px;font-weight:800;color:#1B6249;">코드</div>
+      </div>
+      <div style="background:#A6C3D6;border-radius:11px;padding:9px;margin-top:11px;display:flex;gap:6px;">
+        <div style="width:22px;height:22px;border-radius:7px;background:#1F6E50;color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none;">C</div>
+        <div style="background:#fff;border-radius:3px 9px 9px 9px;padding:7px 9px;"><div style="font-size:10px;font-weight:800;">함께 커피 주문해요 ☕</div><div style="font-size:9px;color:#6E665C;margin-top:2px;">버튼 눌러 내 메뉴 추가</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="cap"><b>공유</b> — 카톡·QR·링크, 전송 전 미리보기 제공</div>
+</div>
+
+<!-- H3-S3 참여자 셀프등록 -->
+<div class="cc" style="position:absolute;left:964px;top:1520px;width:240px;">
+  <div data-drags-parent="1" class="lbl" style="color:#1A4FA0;">③ 참여자 화면</div>
+  <div class="ph" style="border:2px solid #2C6BB0;">
+    <div class="hbar" style="background:linear-gradient(160deg,#2C6BB0,#1A4FA0);">
+      <div style="display:inline-block;background:rgba(255,255,255,.2);font-size:8px;font-weight:800;padding:2px 7px;border-radius:6px;">참여자</div>
+      <div style="font-size:14px;font-weight:800;margin-top:8px;">스타벅스 강남R점</div>
+      <div style="font-size:10px;color:rgba(255,255,255,.85);margin-top:2px;">내 주문을 등록해 주세요</div>
+    </div>
+    <div style="padding:13px;display:flex;flex-direction:column;gap:9px;">
+      <div><div style="font-size:9.5px;font-weight:800;color:#6E665C;margin-bottom:4px;">이름</div><div class="card" style="padding:9px 11px;font-size:11px;color:#2A2520;">박지후</div></div>
+      <div><div style="font-size:9.5px;font-weight:800;color:#6E665C;margin-bottom:4px;">메뉴</div><div class="card" style="padding:9px 11px;font-size:11px;color:#2A2520;display:flex;justify-content:space-between;">바닐라 라떼 <span style="color:#A89E90;">▾</span></div></div>
+      <div><div style="font-size:9.5px;font-weight:800;color:#6E665C;margin-bottom:4px;">온도</div><div class="row" style="gap:7px;"><div style="flex:1;text-align:center;font-size:10px;font-weight:800;padding:9px;border-radius:9px;background:#fff;border:1px solid #EAE3D6;color:#A89E90;">HOT</div><div style="flex:1;text-align:center;font-size:10px;font-weight:800;padding:9px;border-radius:9px;background:#E7F0F8;border:1.5px solid #3B82C4;color:#3B82C4;">ICE ✓</div></div></div>
+      <div style="background:#2C6BB0;color:#fff;border-radius:11px;padding:11px;text-align:center;font-size:12px;font-weight:800;margin-top:3px;">내 주문 등록하기</div>
+    </div>
+  </div>
+  <div class="cap"><b>참여자</b> — 링크 열고 본인 주문을 직접 등록</div>
+</div>
+
+<!-- H3-S4 담당자 현황 -->
+<div class="cc" style="position:absolute;left:1216px;top:1520px;width:240px;">
+  <div data-drags-parent="1" class="lbl" style="color:#1A4FA0;">④ 담당자 화면</div>
+  <div class="ph">
+    <div style="padding:13px 14px;border-bottom:1px solid #EAE3D6;display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-size:13px;font-weight:800;">참여 현황</div>
+      <div style="font-size:10px;font-weight:800;color:#1F6E50;background:#E9F1EC;padding:4px 9px;border-radius:8px;">4 / 6 등록</div>
+    </div>
+    <div style="padding:11px 13px;display:flex;flex-direction:column;gap:7px;">
+      <div class="card" style="padding:9px;display:flex;align-items:center;gap:7px;"><div class="av" style="width:20px;height:20px;background:#1F6E50;font-size:9px;">나</div><div style="flex:1;"><div style="font-size:11px;font-weight:700;">나</div><div style="font-size:9px;color:#6E665C;">ICE 아메리카노</div></div><span style="font-size:9px;font-weight:800;color:#1F6E50;">● 완료</span></div>
+      <div class="card" style="padding:9px;display:flex;align-items:center;gap:7px;"><div class="av" style="width:20px;height:20px;background:#E8A13C;font-size:9px;">민준</div><div style="flex:1;"><div style="font-size:11px;font-weight:700;">김민준</div><div style="font-size:9px;color:#6E665C;">HOT 돌체 라떼</div></div><span style="font-size:9px;font-weight:800;color:#1F6E50;">● 완료</span></div>
+      <div class="card" style="padding:9px;display:flex;align-items:center;gap:7px;"><div class="av" style="width:20px;height:20px;background:#C77B9E;font-size:9px;">지후</div><div style="flex:1;"><div style="font-size:11px;font-weight:700;">박지후</div><div style="font-size:9px;color:#6E665C;">ICE 바닐라 라떼</div></div><span style="font-size:9px;font-weight:800;color:#1F6E50;">● 완료</span></div>
+      <div style="background:#FBF7EF;border:1px dashed #D9CDB8;border-radius:13px;padding:9px;display:flex;align-items:center;gap:7px;"><div class="av" style="width:20px;height:20px;background:#D9CDB8;color:#fff;font-size:9px;">준호</div><div style="flex:1;"><div style="font-size:11px;font-weight:700;color:#A89E90;">최준호</div><div style="font-size:9px;color:#B6AB9B;">아직 미등록</div></div><span style="font-size:9px;font-weight:800;color:#B6AB9B;">○ 대기</span></div>
+    </div>
+    <div style="padding:0 14px 14px;margin-top:auto;"><div style="background:#FEE500;border-radius:11px;padding:11px;text-align:center;font-size:11.5px;font-weight:800;color:#3C1E1E;">안 한 2명 콕 찌르기</div></div>
+  </div>
+  <div class="cap"><b>담당자</b> — 누가 등록/미등록인지 실시간, 리마인드 발송</div>
+</div>
+
+<!-- H3-S5 마감 -->
+<div class="cc" style="position:absolute;left:1468px;top:1520px;width:240px;">
+  <div data-drags-parent="1" class="lbl" style="color:#1A4FA0;">⑤</div>
+  <div class="ph">
+    <div style="padding:13px 14px;border-bottom:1px solid #EAE3D6;font-size:14px;font-weight:800;">최종 취합</div>
+    <div style="padding:13px;">
+      <div style="background:#E9F1EC;border-radius:11px;padding:11px;text-align:center;"><div style="font-size:12px;font-weight:800;color:#185940;">6명 모두 등록 완료 🎉</div><div style="font-size:9.5px;color:#6E665C;margin-top:2px;">담당자가 받아적은 건 0건</div></div>
+      <div class="card" style="margin-top:11px;padding:11px;">
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:#6E665C;padding:4px 0;"><span>ICE 아메리카노</span><span style="font-weight:800;color:#2A2520;">3잔</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:#6E665C;padding:4px 0;border-top:1px solid #F0EADD;"><span>HOT 돌체 라떼</span><span style="font-weight:800;color:#2A2520;">1잔</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:#6E665C;padding:4px 0;border-top:1px solid #F0EADD;"><span>ICE 바닐라 라떼</span><span style="font-weight:800;color:#2A2520;">2잔</span></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:13px;padding:0 2px;"><span style="font-size:11px;color:#6E665C;">총 6잔</span><span style="font-size:15px;font-weight:800;">27,100원</span></div>
+      <div style="background:#1F6E50;color:#fff;border-radius:11px;padding:12px;text-align:center;font-size:12px;font-weight:800;margin-top:13px;">마감하고 주문서 만들기</div>
+    </div>
+  </div>
+  <div class="cap"><b>마감</b> — 모인 주문을 한 번에 최종 취합</div>
+</div>
+</x-dc>
+</body>
+</html>

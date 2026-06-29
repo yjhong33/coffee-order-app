@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/wanted-design-system-4dbc66c0-5c9a-4041-8823-0ac34c5db9f5/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/wanted-design-system-4dbc66c0-5c9a-4041-8823-0ac34c5db9f5/tokens/fig-tokens.css">
+<link rel="stylesheet" href="_ds/wanted-design-system-4dbc66c0-5c9a-4041-8823-0ac34c5db9f5/tokens/colors.css">
+<link rel="stylesheet" href="_ds/wanted-design-system-4dbc66c0-5c9a-4041-8823-0ac34c5db9f5/tokens/typography.css">
+<link rel="stylesheet" href="_ds/wanted-design-system-4dbc66c0-5c9a-4041-8823-0ac34c5db9f5/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/wanted-design-system-4dbc66c0-5c9a-4041-8823-0ac34c5db9f5/tokens/base.css">
+<link rel="stylesheet" href="_ds/wanted-design-system-4dbc66c0-5c9a-4041-8823-0ac34c5db9f5/styles.css">
+<script src="_ds/wanted-design-system-4dbc66c0-5c9a-4041-8823-0ac34c5db9f5/_ds_bundle.js"></script>
+<style>
+:root{
+  --primary-normal:#1F6E50; --primary-strong:#185940; --primary-heavy:#123F2D;
+  --cc-green:#1F6E50; --cc-green-strong:#185940; --cc-green-soft:#E9F1EC; --cc-green-deep:#123F2D;
+  --cc-gold:#B98B3E; --cc-gold-soft:#F3E9D4; --cc-cream:#FBF7EF; --cc-band:#F3EDE1; --cc-card:#FFFFFF;
+  --cc-ink:#2A2520; --cc-ink2:#6E665C; --cc-ink3:#A89E90; --cc-line:#EAE3D6;
+  --cc-hot:#D9533B; --cc-hot-bg:#FBEAE5; --cc-ice:#3B82C4; --cc-ice-bg:#E7F0F8;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;background:#E7E1D6;}
+body{font-family:'Pretendard',-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;color:var(--cc-ink);}
+.cc-scroll::-webkit-scrollbar{width:0;height:0;}
+input{font-family:inherit;}
+@keyframes cc-spin{to{transform:rotate(360deg)}}
+@keyframes cc-blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+@keyframes cc-rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes cc-fade{from{opacity:0}to{opacity:1}}
+@keyframes cc-sheet{from{transform:translateY(100%)}to{transform:translateY(0)}}
+@keyframes cc-ping{0%{transform:scale(.85);opacity:.7}80%,100%{transform:scale(2.1);opacity:0}}
+@keyframes cc-toast{0%{opacity:0;transform:translate(-50%,12px)}12%{opacity:1;transform:translate(-50%,0)}88%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,-6px)}}
+</style>
+</helmet>
+<div style="min-height:100dvh;display:flex;justify-content:center;align-items:stretch;background:#E7E1D6;">
+<div style="width:480px;max-width:100%;min-height:100dvh;height:100dvh;background:var(--cc-cream);position:relative;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 0 0 1px rgba(0,0,0,.04),0 24px 60px rgba(40,30,15,.18);">
+
+<div class="cc-scroll" style="flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;">
+
+<!-- ====================== LOADING ====================== -->
+<sc-if value="{{ isLoading }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="Loading" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;background:linear-gradient(170deg,#21795A 0%,#1B6249 55%,#123F2D 100%);">
+  <div style="display:flex;flex-direction:column;align-items:center;gap:15px;animation:cc-fade .5s ease;">
+    <div style="width:88px;height:88px;border-radius:28px;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;">
+      <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9h11v4a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4Z"></path><path d="M16 10h2.2a2 2 0 0 1 0 4H16"></path><path d="M8 3v2M11 3v2"></path></svg>
+    </div>
+    <div style="font-size:25px;font-weight:800;color:#fff;letter-spacing:-.6px;">CallCoffee</div>
+    <div style="font-size:13px;color:rgba(255,255,255,.72);letter-spacing:-.2px;">커피 주문, 한 번에 모아서</div>
+  </div>
+  <div style="width:32px;height:32px;border-radius:50%;border:4px solid rgba(255,255,255,.22);border-top-color:#fff;animation:cc-spin .9s linear infinite;"></div>
+</div>
+</sc-if>
+
+<!-- ====================== HOME ====================== -->
+<sc-if value="{{ isHome }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Home" style="padding:0 0 96px;animation:cc-fade .25s ease;">
+  <div style="padding:60px 20px 20px;background:linear-gradient(160deg,#21795A 0%,#1B6249 60%,#185940 100%);border-radius:0 0 26px 26px;position:relative;overflow:hidden;">
+    <div style="position:absolute;right:-30px;top:-30px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.06);"></div>
+    <div style="position:absolute;right:40px;top:70px;width:90px;height:90px;border-radius:50%;background:rgba(255,255,255,.05);"></div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;position:relative;">
+      <div>
+        <div style="font-size:13px;font-weight:600;color:rgba(255,255,255,.7);letter-spacing:-.2px;">반가워요, 오늘도 커피 한 잔 ☕</div>
+        <div style="font-size:24px;font-weight:700;color:#fff;letter-spacing:-.6px;margin-top:6px;line-height:1.28;">오늘 커피,<br>한 번에 모아볼까요?</div>
+      </div>
+      <div onClick="{{ goMy }}" style="width:42px;height:42px;border-radius:14px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="8.5" r="3.6"></circle><path d="M5 19c.7-3.4 3.4-5 7-5s6.3 1.6 7 5"></path></svg>
+      </div>
+    </div>
+    <div onClick="{{ goCafe }}" style="margin-top:18px;background:#fff;border-radius:14px;height:48px;display:flex;align-items:center;gap:10px;padding:0 14px;cursor:pointer;box-shadow:0 6px 16px rgba(10,40,28,.18);">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A9082" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+      <span style="font-size:15px;color:var(--cc-ink3);font-weight:500;">카페 이름이나 메뉴를 검색해 보세요</span>
+    </div>
+  </div>
+
+  <!-- 이어하기 (백그라운드 이어서 정리) -->
+  <sc-if value="{{ hasResume }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ resume }}" style="margin:14px 20px 0;background:var(--cc-green-deep);border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:13px;cursor:pointer;box-shadow:0 8px 20px rgba(18,63,45,.22);">
+    <div style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;flex:none;position:relative;">
+      <span style="position:absolute;inset:0;border-radius:50%;background:#37C77C;animation:cc-ping 1.8s ease-out infinite;opacity:.5;"></span>
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="position:relative;"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path><path d="M3 4v4h4"></path></svg>
+    </div>
+    <div style="flex:1;min-width:0;">
+      <div style="font-size:11px;font-weight:700;color:#8FE3B6;letter-spacing:.2px;">정리하던 주문이 있어요</div>
+      <div style="font-size:15px;font-weight:700;color:#fff;margin-top:2px;letter-spacing:-.3px;">{{ resumeLabel }}</div>
+    </div>
+    <div style="font-size:13px;font-weight:700;color:#fff;background:rgba(255,255,255,.16);padding:8px 13px;border-radius:10px;flex:none;">이어하기</div>
+  </div>
+  </sc-if>
+
+  <!-- 두 갈래 루트 -->
+  <div style="padding:18px 20px 0;">
+    <div style="font-size:12px;font-weight:800;color:var(--cc-ink3);letter-spacing:.2px;margin-bottom:11px;">어떻게 시작할까요?</div>
+    <div onClick="{{ goCafe }}" style="background:linear-gradient(135deg,#B98B3E,#A9762C);border-radius:20px;padding:20px;display:flex;align-items:center;gap:16px;cursor:pointer;box-shadow:0 10px 24px rgba(150,110,40,.22);position:relative;overflow:hidden;">
+      <div style="position:absolute;right:-20px;bottom:-30px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.10);"></div>
+      <div style="width:52px;height:52px;border-radius:16px;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;flex:none;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.2-7-10.5A7 7 0 0 1 12 3a7 7 0 0 1 7 7.5C19 15.8 12 21 12 21Z"></path><circle cx="12" cy="10.5" r="2.4"></circle></svg>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:17px;font-weight:700;color:#fff;letter-spacing:-.4px;">주변 카페 찾기</div>
+        <div style="font-size:13px;color:rgba(255,255,255,.85);margin-top:3px;line-height:1.4;">카페를 정하고 메뉴까지 골라 주문해요</div>
+      </div>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+    </div>
+
+    <div onClick="{{ enterMemo }}" style="margin-top:12px;background:#fff;border:1.5px solid var(--cc-green);border-radius:20px;padding:18px 18px 16px;cursor:pointer;box-shadow:0 6px 16px rgba(31,110,80,.10);position:relative;overflow:hidden;">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div style="width:52px;height:52px;border-radius:16px;background:var(--cc-green-soft);display:flex;align-items:center;justify-content:center;flex:none;">
+          <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="#1F6E50" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"></path><path d="M8.5 11h7M8.5 15h5"></path></svg>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:17px;font-weight:700;color:var(--cc-green-strong);letter-spacing:-.4px;">간단하게 주문 메모하기</div>
+          <div style="font-size:13px;color:var(--cc-ink2);margin-top:3px;line-height:1.4;">카페 선택 없이 메뉴만 빠르게 기록해요</div>
+        </div>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1F6E50" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:14px;">
+        <div onClick="{{ memoVoice }}" style="flex:1;background:var(--cc-green-soft);border-radius:12px;padding:11px;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#1F6E50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M6 11a6 6 0 0 0 12 0M12 17v3"></path></svg>
+          <span style="font-size:13px;font-weight:700;color:var(--cc-green-strong);">음성으로</span>
+        </div>
+        <div onClick="{{ memoCapture }}" style="flex:1;background:var(--cc-gold-soft);border-radius:12px;padding:11px;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#B98B3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8a2 2 0 0 1 2-2h1.2l1-1.6A1 1 0 0 1 9 4h6a1 1 0 0 1 .8.4L16.8 6H18a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"></path><circle cx="12" cy="12.5" r="3.2"></circle></svg>
+          <span style="font-size:13px;font-weight:700;color:#9A6F26;">캡처로</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:24px 0 0;">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;padding:0 20px;">
+      <div style="font-size:17px;font-weight:700;letter-spacing:-.4px;">즐겨찾는 카페</div>
+      <div onClick="{{ goCafe }}" style="font-size:13px;color:var(--cc-ink3);font-weight:600;cursor:pointer;">전체보기</div>
+    </div>
+    <div class="cc-scroll" style="display:flex;gap:12px;overflow-x:auto;padding:14px 20px 4px;">
+      <sc-for list="{{ favCafes }}" as="cafe" hint-placeholder-count="4">
+        <div onClick="{{ cafe.open }}" style="flex:none;width:78px;text-align:center;cursor:pointer;">
+          <div style="width:64px;height:64px;border-radius:20px;margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:23px;font-weight:800;box-shadow:0 4px 12px rgba(40,30,15,.10);background:{{ cafe.color }};color:{{ cafe.fg }};">{{ cafe.initial }}</div>
+          <div style="font-size:12px;font-weight:600;margin-top:8px;letter-spacing:-.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ cafe.name }}</div>
+          <div style="font-size:11px;color:var(--cc-ink3);">{{ cafe.dist }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="padding:18px 20px 0;">
+    <div style="font-size:17px;font-weight:700;letter-spacing:-.4px;margin-bottom:12px;">최근 주문</div>
+    <sc-for list="{{ recentOrders }}" as="ro" hint-placeholder-count="2">
+      <div onClick="{{ ro.reorder }}" style="background:var(--cc-card);border:1px solid var(--cc-line);border-radius:16px;padding:14px;display:flex;align-items:center;gap:13px;cursor:pointer;margin-bottom:10px;">
+        <div style="width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:800;flex:none;background:{{ ro.color }};color:{{ ro.fg }};">{{ ro.initial }}</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:14px;font-weight:700;letter-spacing:-.3px;">{{ ro.name }}</div>
+          <div style="font-size:12px;color:var(--cc-ink2);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ ro.summary }}</div>
+        </div>
+        <div style="text-align:right;flex:none;">
+          <div style="font-size:11px;color:var(--cc-ink3);">{{ ro.date }}</div>
+          <div style="font-size:12px;font-weight:700;color:var(--cc-green);margin-top:6px;border:1px solid var(--cc-green-soft);background:var(--cc-green-soft);padding:5px 10px;border-radius:9px;">재주문</div>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</sc-if>
+
+<!-- ====================== MEMO (간단 메모) ====================== -->
+<sc-if value="{{ isMemo }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Memo" style="padding:0 0 168px;animation:cc-fade .2s ease;">
+  <div style="position:sticky;top:0;z-index:5;background:var(--cc-cream);padding:54px 20px 12px;">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div onClick="{{ goHome }}" style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-left:-8px;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2A2520" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"></path></svg>
+      </div>
+      <div style="font-size:19px;font-weight:700;letter-spacing:-.4px;">간단하게 주문 메모하기</div>
+    </div>
+    <div style="margin-top:12px;background:var(--cc-green-soft);border-radius:13px;padding:12px 14px;display:flex;align-items:center;gap:10px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1F6E50" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="flex:none;"><path d="M5 4h11l3 3v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"></path><path d="M8.5 11h7M8.5 15h5"></path></svg>
+      <span style="font-size:12.5px;font-weight:700;color:var(--cc-green-strong);line-height:1.45;">카페 선택 없이 메뉴만 빠르게 기록해요</span>
+    </div>
+  </div>
+
+  <div style="padding:4px 20px 0;">
+    <div style="background:#fff;border:1px solid var(--cc-line);border-radius:13px;height:46px;display:flex;align-items:center;gap:10px;padding:0 14px;margin-bottom:14px;">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#9A9082" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+      <input value="{{ memoQuery }}" onChange="{{ onMemoQuery }}" placeholder="커피 메뉴 검색해서 추가" style="border:none;outline:none;background:transparent;font-size:14px;flex:1;color:var(--cc-ink);"/>
+    </div>
+
+    <sc-if value="{{ memoSearching }}" hint-placeholder-val="{{ false }}">
+    <div style="margin-bottom:14px;">
+      <sc-for list="{{ memoResults }}" as="r" hint-placeholder-count="2">
+        <div onClick="{{ r.add }}" style="background:var(--cc-card);border:1px solid var(--cc-line);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;margin-bottom:9px;">
+          <div style="width:40px;height:40px;border-radius:12px;flex:none;background:linear-gradient(150deg,#F3ECDD,#E7DCC4);display:flex;align-items:center;justify-content:center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B98B3E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9h11v4a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4Z"></path><path d="M16 10h2.2a2 2 0 0 1 0 4H16"></path><path d="M8 3v2M11 3v2"></path></svg></div>
+          <div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:700;letter-spacing:-.3px;">{{ r.name }}</div><div style="font-size:12px;color:var(--cc-ink3);margin-top:2px;">{{ r.priceText }}</div></div>
+          <div style="width:32px;height:32px;border-radius:10px;background:var(--cc-green);display:flex;align-items:center;justify-content:center;flex:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M12 6v12M6 12h12"></path></svg></div>
+        </div>
+      </sc-for>
+      <sc-if value="{{ memoNoResult }}" hint-placeholder-val="{{ false }}">
+        <div style="text-align:center;font-size:13px;color:var(--cc-ink3);padding:14px;line-height:1.5;">검색 결과가 없어요.<br>‘직접 입력’으로 메뉴를 적어 담을 수 있어요.</div>
+      </sc-if>
+    </div>
+    </sc-if>
+
+    <div style="font-size:12px;font-weight:800;color:var(--cc-ink3);letter-spacing:.2px;margin-bottom:10px;">자주 찾는 메뉴, 톡 눌러 담기</div>
+    <div class="cc-scroll" style="display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;">
+      <sc-for list="{{ quickMenus }}" as="qm" hint-placeholder-count="4">
+        <div onClick="{{ qm.add }}" style="flex:none;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--cc-line);border-radius:13px;padding:9px 13px;cursor:pointer;">
+          <div style="width:22px;height:22px;border-radius:8px;background:var(--cc-green);display:flex;align-items:center;justify-content:center;flex:none;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M12 6v12M6 12h12"></path></svg></div>
+          <div><div style="font-size:13px;font-weight:700;letter-spacing:-.3px;white-space:nowrap;">{{ qm.name }}</div><div style="font-size:10.5px;color:var(--cc-ink3);">{{ qm.priceText }}</div></div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="display:flex;gap:8px;margin:14px 0;">
+      <div onClick="{{ openManual }}" style="flex:1;background:var(--cc-green);border-radius:13px;padding:11px;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;box-shadow:0 6px 14px rgba(31,110,80,.24);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M12 6v12M6 12h12"></path></svg>
+        <span style="font-size:12.5px;font-weight:700;color:#fff;">직접 입력</span>
+      </div>
+      <div onClick="{{ openVoice }}" style="flex:1;background:var(--cc-green-soft);border-radius:13px;padding:11px;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1F6E50" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M6 11a6 6 0 0 0 12 0M12 17v3"></path></svg>
+        <span style="font-size:12.5px;font-weight:700;color:var(--cc-green-strong);">음성</span>
+      </div>
+      <div onClick="{{ openCapture }}" style="flex:1;background:var(--cc-gold-soft);border-radius:13px;padding:11px;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B98B3E" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8a2 2 0 0 1 2-2h1.2l1-1.6A1 1 0 0 1 9 4h6a1 1 0 0 1 .8.4L16.8 6H18a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"></path><circle cx="12" cy="12.5" r="3.2"></circle></svg>
+        <span style="font-size:12.5px;font-weight:700;color:#9A6F26;">캡처</span>
+      </div>
+    </div>
+
+    <sc-if value="{{ hasOrders }}" hint-placeholder-val="{{ true }}">
+    <div>
+    <sc-for list="{{ people }}" as="p" hint-placeholder-count="3">
+      <div style="background:var(--cc-card);border:1px solid {{ p.borderColor }};border-radius:18px;padding:14px;margin-bottom:12px;animation:cc-rise .25s ease;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+          <div style="width:34px;height:34px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex:none;background:{{ p.avatarBg }};color:{{ p.avatarFg }};">{{ p.avatarText }}</div>
+          <div style="font-size:15px;font-weight:700;letter-spacing:-.3px;">{{ p.name }}</div>
+          <sc-if value="{{ p.isMe }}" hint-placeholder-val="{{ false }}"><span style="font-size:10px;font-weight:800;color:var(--cc-green);background:var(--cc-green-soft);padding:2px 7px;border-radius:6px;">나</span></sc-if>
+          <div style="flex:1;"></div>
+          <span style="font-size:12px;font-weight:700;color:var(--cc-ink3);">{{ p.qtyText }}</span>
+        </div>
+        <sc-for list="{{ p.items }}" as="it" hint-placeholder-count="1">
+          <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--cc-line);">
+            <span style="font-size:11px;font-weight:800;padding:3px 7px;border-radius:6px;flex:none;background:{{ it.tempBg }};color:{{ it.tempFg }};">{{ it.temp }}</span>
+            <span style="flex:1;font-size:14px;font-weight:600;letter-spacing:-.3px;">{{ it.name }}</span>
+            <div style="display:flex;align-items:center;gap:10px;background:var(--cc-band);border-radius:10px;padding:4px;">
+              <div onClick="{{ it.dec }}" style="width:26px;height:26px;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6E665C" stroke-width="2.6" stroke-linecap="round"><path d="M6 12h12"></path></svg>
+              </div>
+              <span style="font-size:14px;font-weight:800;min-width:14px;text-align:center;">{{ it.qty }}</span>
+              <div onClick="{{ it.inc }}" style="width:26px;height:26px;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1F6E50" stroke-width="2.6" stroke-linecap="round"><path d="M12 6v12M6 12h12"></path></svg>
+              </div>
+            </div>
+            <div onClick="{{ it.remove }}" style="width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9BFB0" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-for>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ noOrders }}" hint-placeholder-val="{{ false }}">
+      <div style="text-align:center;padding:40px 20px;">
+        <div style="width:72px;height:72px;border-radius:24px;background:var(--cc-band);margin:0 auto;display:flex;align-items:center;justify-content:center;">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#C9BFB0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"></path><path d="M8.5 11h7M8.5 15h5"></path></svg>
+        </div>
+        <div style="font-size:15px;font-weight:700;margin-top:16px;">메뉴를 기록해 보세요</div>
+        <div style="font-size:13px;color:var(--cc-ink2);margin-top:6px;line-height:1.5;">위에서 자주 찾는 메뉴를 톡 누르거나<br>직접 입력·음성·캡처로 담을 수 있어요.</div>
+      </div>
+    </sc-if>
+  </div>
+
+  <sc-if value="{{ hasOrders }}" hint-placeholder-val="{{ true }}">
+  <div style="position:absolute;left:0;right:0;bottom:0;padding:14px 20px calc(14px + env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--cc-cream) 24%);">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:0 4px 11px;">
+      <span style="font-size:13px;color:var(--cc-ink2);font-weight:600;">총 {{ totalQty }}잔</span>
+      <span style="font-size:18px;font-weight:800;letter-spacing:-.4px;">{{ totalPriceText }}</span>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <div onClick="{{ goShare }}" style="flex:1;background:#fff;border:1.5px solid var(--cc-green);border-radius:15px;height:54px;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1F6E50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12h6M10 8.5 8 8.5a3.5 3.5 0 0 0 0 7h2M14 8.5h2a3.5 3.5 0 0 1 0 7h-2"></path></svg>
+        <span style="font-size:14px;font-weight:700;color:var(--cc-green-strong);">추가 주문 (링크 보내기)</span>
+      </div>
+      <div onClick="{{ goComplete }}" style="flex:1.25;background:var(--cc-green);border-radius:15px;height:54px;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;box-shadow:0 10px 24px rgba(31,110,80,.30);">
+        <span style="font-size:15px;font-weight:700;color:#fff;">주문 완료하기</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+</div>
+</sc-if>
+
+<!-- ====================== CAFE SELECT ====================== -->
+<sc-if value="{{ isCafe }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="CafeSelect" style="padding:0 0 40px;animation:cc-fade .2s ease;">
+  <div style="position:sticky;top:0;z-index:5;background:var(--cc-cream);padding:54px 20px 8px;">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div onClick="{{ goHome }}" style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-left:-8px;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2A2520" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"></path></svg>
+      </div>
+      <div style="font-size:19px;font-weight:700;letter-spacing:-.4px;">카페 선택</div>
+    </div>
+    <div style="margin-top:12px;background:#fff;border:1px solid var(--cc-line);border-radius:13px;height:46px;display:flex;align-items:center;gap:10px;padding:0 14px;">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#9A9082" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+      <input value="{{ cafeQuery }}" onChange="{{ onCafeQuery }}" placeholder="카페 검색" style="border:none;outline:none;background:transparent;font-size:14px;flex:1;color:var(--cc-ink);"/>
+    </div>
+    <div style="display:flex;background:var(--cc-band);border-radius:11px;padding:4px;margin-top:12px;">
+      <div style="flex:1;text-align:center;font-size:13px;font-weight:700;padding:8px;border-radius:8px;cursor:pointer;background:#fff;color:var(--cc-green);box-shadow:0 1px 3px rgba(0,0,0,.08);">목록</div>
+      <div onClick="{{ goMap }}" style="flex:1;text-align:center;font-size:13px;font-weight:700;padding:8px;border-radius:8px;cursor:pointer;color:var(--cc-ink3);">지도</div>
+    </div>
+  </div>
+  <div style="padding:6px 20px 0;">
+    <sc-for list="{{ cafes }}" as="cafe" hint-placeholder-count="6">
+      <div onClick="{{ cafe.open }}" style="background:var(--cc-card);border:1px solid var(--cc-line);border-radius:16px;padding:14px;display:flex;align-items:center;gap:14px;cursor:pointer;margin-bottom:11px;">
+        <div style="width:52px;height:52px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;flex:none;background:{{ cafe.color }};color:{{ cafe.fg }};">{{ cafe.initial }}</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:15px;font-weight:700;letter-spacing:-.3px;">{{ cafe.name }}</div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:5px;font-size:12px;color:var(--cc-ink2);">
+            <span style="display:inline-flex;align-items:center;gap:3px;color:var(--cc-gold);font-weight:700;"><svg width="13" height="13" viewBox="0 0 24 24" fill="#B98B3E"><path d="M12 2l2.9 6 6.6.6-5 4.3 1.5 6.5L12 16.9 5.9 19.4 7.4 12.9l-5-4.3 6.6-.6z"></path></svg>{{ cafe.rating }}</span>
+            <span style="width:3px;height:3px;border-radius:50%;background:var(--cc-line);"></span>
+            <span>{{ cafe.dist }}</span>
+            <span style="width:3px;height:3px;border-radius:50%;background:var(--cc-line);"></span>
+            <span style="color:var(--cc-green);font-weight:600;">대기 {{ cafe.wait }}</span>
+          </div>
+        </div>
+        <div onClick="{{ cafe.toggleFav }}" style="width:38px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="{{ cafe.favFill }}" stroke="{{ cafe.favStroke }}" stroke-width="1.8" stroke-linejoin="round"><path d="M12 4.5 14.3 9l4.9.7-3.6 3.5.9 4.9L12 16.8 7.5 18.6l.9-4.9L4.8 9.7 9.7 9z"></path></svg>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</sc-if>
+
+<!-- ====================== MENU ====================== -->
+<sc-if value="{{ isMenu }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Menu" style="padding:0 0 150px;animation:cc-fade .2s ease;">
+  <div style="position:sticky;top:0;z-index:5;background:var(--cc-cream);padding:54px 20px 0;">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div onClick="{{ goCafe }}" style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-left:-8px;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2A2520" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"></path></svg>
+      </div>
+      <div style="width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;background:{{ cafeColor }};color:{{ cafeFg }};">{{ cafeInitial }}</div>
+      <div style="font-size:18px;font-weight:700;letter-spacing:-.4px;">{{ cafeName }}</div>
+    </div>
+
+    <!-- 단계 배너 -->
+    <div style="margin-top:14px;">
+      <div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;height:5px;border-radius:3px;background:var(--cc-green);"></div>
+        <div style="flex:1;height:5px;border-radius:3px;background:var(--cc-band);"></div>
+        <div style="flex:1;height:5px;border-radius:3px;background:var(--cc-band);"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;margin-top:7px;">
+        <span style="color:var(--cc-green);">① 메뉴 선택</span>
+        <span style="color:var(--cc-ink3);">② 메뉴 확인</span>
+        <span style="color:var(--cc-ink3);">③ 공유·주문</span>
+      </div>
+    </div>
+
+    <!-- 메뉴 검색 -->
+    <div style="margin-top:13px;background:#fff;border:1px solid var(--cc-line);border-radius:13px;height:44px;display:flex;align-items:center;gap:10px;padding:0 14px;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9A9082" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+      <input value="{{ menuQuery }}" onChange="{{ onMenuQuery }}" placeholder="메뉴 검색" style="border:none;outline:none;background:transparent;font-size:14px;flex:1;color:var(--cc-ink);"/>
+    </div>
+
+    <!-- 음성 주문 안내 -->
+    <div onClick="{{ openVoice }}" style="margin-top:10px;background:var(--cc-green-soft);border-radius:12px;padding:10px 13px;display:flex;align-items:center;gap:10px;cursor:pointer;">
+      <div style="width:28px;height:28px;border-radius:50%;background:var(--cc-green);display:flex;align-items:center;justify-content:center;flex:none;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M6 11a6 6 0 0 0 12 0M12 17v3"></path></svg>
+      </div>
+      <span style="flex:1;font-size:12px;font-weight:700;color:var(--cc-green-strong);letter-spacing:-.2px;">말로도 주문할 수 있어요 — “아이스 아메리카노요”</span>
+      <span style="font-size:11px;font-weight:800;color:#fff;background:var(--cc-green);padding:5px 10px;border-radius:8px;flex:none;">음성</span>
+    </div>
+
+    <div class="cc-scroll" style="display:flex;gap:8px;overflow-x:auto;padding:14px 0 12px;">
+      <sc-for list="{{ categories }}" as="cat" hint-placeholder-count="5">
+        <div onClick="{{ cat.select }}" style="flex:none;font-size:13px;font-weight:700;padding:8px 15px;border-radius:20px;cursor:pointer;background:{{ cat.bg }};color:{{ cat.fg }};">{{ cat.label }}</div>
+      </sc-for>
+    </div>
+  </div>
+  <div style="padding:4px 20px 0;">
+    <sc-for list="{{ menus }}" as="m" hint-placeholder-count="6">
+      <div style="background:var(--cc-card);border:1px solid var(--cc-line);border-radius:18px;padding:14px;display:flex;gap:13px;margin-bottom:12px;">
+        <div style="width:74px;height:74px;border-radius:14px;flex:none;background:linear-gradient(150deg,#F3ECDD,#E7DCC4);display:flex;align-items:center;justify-content:center;">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#B98B3E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9h11v4a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4Z"></path><path d="M16 10h2.2a2 2 0 0 1 0 4H16"></path><path d="M8 3v2M11 3v2"></path></svg>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <span style="font-size:15px;font-weight:700;letter-spacing:-.3px;">{{ m.name }}</span>
+            <sc-if value="{{ m.popular }}" hint-placeholder-val="{{ false }}"><span style="font-size:10px;font-weight:800;color:var(--cc-hot);background:var(--cc-hot-bg);padding:2px 6px;border-radius:6px;">인기</span></sc-if>
+          </div>
+          <div style="font-size:15px;font-weight:800;margin-top:4px;letter-spacing:-.3px;">{{ m.priceText }}</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;">
+            <div style="display:flex;gap:6px;">
+              <div onClick="{{ m.setHot }}" style="font-size:12px;font-weight:700;padding:6px 12px;border-radius:9px;cursor:pointer;background:{{ m.hotBg }};color:{{ m.hotFg }};border:1px solid {{ m.hotBd }};">HOT</div>
+              <div onClick="{{ m.setIce }}" style="font-size:12px;font-weight:700;padding:6px 12px;border-radius:9px;cursor:pointer;background:{{ m.iceBg }};color:{{ m.iceFg }};border:1px solid {{ m.iceBd }};">ICE</div>
+            </div>
+            <div onClick="{{ m.add }}" style="width:34px;height:34px;border-radius:11px;background:var(--cc-green);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 10px rgba(31,110,80,.28);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M12 6v12M6 12h12"></path></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+  <div style="position:absolute;left:0;right:0;bottom:0;padding:14px 20px calc(14px + env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--cc-cream) 22%);">
+    <div onClick="{{ goCollect }}" style="background:var(--cc-green);border-radius:15px;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;cursor:pointer;box-shadow:0 10px 24px rgba(31,110,80,.30);">
+      <div style="display:flex;align-items:center;gap:11px;">
+        <div style="position:relative;width:30px;height:30px;display:flex;align-items:center;justify-content:center;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h11l-1 9a2 2 0 0 1-2 1.8H9A2 2 0 0 1 7 17ZM9 8V6a3 3 0 0 1 6 0v2"></path></svg>
+          <span style="position:absolute;top:-6px;right:-7px;min-width:18px;height:18px;border-radius:9px;background:var(--cc-gold);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 4px;">{{ cartCount }}</span>
+        </div>
+        <span style="font-size:15px;font-weight:700;color:#fff;">추가 주문하기</span>
+      </div>
+      <span style="font-size:16px;font-weight:800;color:#fff;">{{ cartTotalText }}</span>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<!-- ====================== COLLECT (추가 주문) ====================== -->
+<sc-if value="{{ isCollect }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Collect" style="padding:0 0 168px;animation:cc-fade .2s ease;">
+  <div style="position:sticky;top:0;z-index:5;background:var(--cc-cream);padding:54px 20px 12px;">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div onClick="{{ collectBack }}" style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-left:-8px;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2A2520" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"></path></svg>
+      </div>
+      <div style="font-size:19px;font-weight:700;letter-spacing:-.4px;">추가 주문</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;margin-top:14px;">
+      <div style="flex:1;height:5px;border-radius:3px;background:var(--cc-green);"></div>
+      <div style="flex:1;height:5px;border-radius:3px;background:var(--cc-green);"></div>
+      <div style="flex:1;height:5px;border-radius:3px;background:var(--cc-band);"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;margin-top:7px;">
+      <span style="color:var(--cc-green);">① 메뉴 선택</span>
+      <span style="color:var(--cc-green);">② 메뉴 확인</span>
+      <span style="color:var(--cc-ink3);">③ 공유·주문</span>
+    </div>
+  </div>
+
+  <div style="padding:6px 20px 0;">
+    <sc-if value="{{ memoMode }}" hint-placeholder-val="{{ false }}">
+    <div style="background:var(--cc-green-soft);border-radius:13px;padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1F6E50" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="flex:none;"><path d="M5 4h11l3 3v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"></path><path d="M8.5 11h7M8.5 15h5"></path></svg>
+      <span style="font-size:12.5px;font-weight:700;color:var(--cc-green-strong);line-height:1.45;">간단하게 메뉴만 기록해요 — 카페는 나중에 정해도 돼요</span>
+    </div>
+    </sc-if>
+
+    <div style="display:flex;gap:8px;margin-bottom:14px;">
+      <div onClick="{{ openManual }}" style="flex:1;background:var(--cc-green);border-radius:13px;padding:11px;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;box-shadow:0 6px 14px rgba(31,110,80,.24);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M12 6v12M6 12h12"></path></svg>
+        <span style="font-size:12.5px;font-weight:700;color:#fff;">직접 입력</span>
+      </div>
+      <div onClick="{{ openVoice }}" style="flex:1;background:var(--cc-green-soft);border-radius:13px;padding:11px;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1F6E50" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M6 11a6 6 0 0 0 12 0M12 17v3"></path></svg>
+        <span style="font-size:12.5px;font-weight:700;color:var(--cc-green-strong);">음성</span>
+      </div>
+      <div onClick="{{ openCapture }}" style="flex:1;background:var(--cc-gold-soft);border-radius:13px;padding:11px;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B98B3E" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8a2 2 0 0 1 2-2h1.2l1-1.6A1 1 0 0 1 9 4h6a1 1 0 0 1 .8.4L16.8 6H18a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"></path><circle cx="12" cy="12.5" r="3.2"></circle></svg>
+        <span style="font-size:12.5px;font-weight:700;color:#9A6F26;">캡처</span>
+      </div>
+    </div>
+
+    <sc-if value="{{ hasOrders }}" hint-placeholder-val="{{ true }}">
+    <div>
+    <sc-for list="{{ people }}" as="p" hint-placeholder-count="4">
+      <div style="background:var(--cc-card);border:1px solid {{ p.borderColor }};border-radius:18px;padding:14px;margin-bottom:12px;animation:cc-rise .25s ease;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+          <div style="width:34px;height:34px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex:none;background:{{ p.avatarBg }};color:{{ p.avatarFg }};">{{ p.avatarText }}</div>
+          <div style="font-size:15px;font-weight:700;letter-spacing:-.3px;">{{ p.name }}</div>
+          <sc-if value="{{ p.isMe }}" hint-placeholder-val="{{ false }}"><span style="font-size:10px;font-weight:800;color:var(--cc-green);background:var(--cc-green-soft);padding:2px 7px;border-radius:6px;">나</span></sc-if>
+          <div style="flex:1;"></div>
+          <span style="font-size:12px;font-weight:700;color:var(--cc-ink3);">{{ p.qtyText }}</span>
+        </div>
+        <sc-for list="{{ p.items }}" as="it" hint-placeholder-count="1">
+          <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--cc-line);">
+            <span style="font-size:11px;font-weight:800;padding:3px 7px;border-radius:6px;flex:none;background:{{ it.tempBg }};color:{{ it.tempFg }};">{{ it.temp }}</span>
+            <span style="flex:1;font-size:14px;font-weight:600;letter-spacing:-.3px;">{{ it.name }}</span>
+            <div style="display:flex;align-items:center;gap:10px;background:var(--cc-band);border-radius:10px;padding:4px;">
+              <div onClick="{{ it.dec }}" style="width:26px;height:26px;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6E665C" stroke-width="2.6" stroke-linecap="round"><path d="M6 12h12"></path></svg>
+              </div>
+              <span style="font-size:14px;font-weight:800;min-width:14px;text-align:center;">{{ it.qty }}</span>
+              <div onClick="{{ it.inc }}" style="width:26px;height:26px;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1F6E50" stroke-width="2.6" stroke-linecap="round"><path d="M12 6v12M6 12h12"></path></svg>
+              </div>
+            </div>
+            <div onClick="{{ it.remove }}" style="width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9BFB0" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-for>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ noOrders }}" hint-placeholder-val="{{ false }}">
+      <div style="text-align:center;padding:50px 20px;">
+        <div style="width:72px;height:72px;border-radius:24px;background:var(--cc-band);margin:0 auto;display:flex;align-items:center;justify-content:center;">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#C9BFB0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h11l-1 9a2 2 0 0 1-2 1.8H9A2 2 0 0 1 7 17ZM9 8V6a3 3 0 0 1 6 0v2"></path></svg>
+        </div>
+        <div style="font-size:15px;font-weight:700;margin-top:16px;">아직 기록된 주문이 없어요</div>
+        <div style="font-size:13px;color:var(--cc-ink2);margin-top:6px;line-height:1.5;">직접 입력·음성·캡처로 메뉴를 기록해 보세요.</div>
+      </div>
+    </sc-if>
+  </div>
+
+  <sc-if value="{{ hasOrders }}" hint-placeholder-val="{{ true }}">
+  <div style="position:absolute;left:0;right:0;bottom:0;padding:14px 20px calc(14px + env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--cc-cream) 24%);">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:0 4px 11px;">
+      <span style="font-size:13px;color:var(--cc-ink2);font-weight:600;">총 {{ totalQty }}잔</span>
+      <span style="font-size:18px;font-weight:800;letter-spacing:-.4px;">{{ totalPriceText }}</span>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <div onClick="{{ goShare }}" style="flex:1;background:#fff;border:1.5px solid var(--cc-green);border-radius:15px;height:54px;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1F6E50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12h6M10 8.5 8 8.5a3.5 3.5 0 0 0 0 7h2M14 8.5h2a3.5 3.5 0 0 1 0 7h-2"></path></svg>
+        <span style="font-size:14px;font-weight:700;color:var(--cc-green-strong);">추가 주문 (링크 보내기)</span>
+      </div>
+      <div onClick="{{ goComplete }}" style="flex:1.25;background:var(--cc-green);border-radius:15px;height:54px;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;box-shadow:0 10px 24px rgba(31,110,80,.30);">
+        <span style="font-size:15px;font-weight:700;color:#fff;">주문 완료하기</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+</div>
+</sc-if>
+
+<!-- ====================== COMPLETE (주문 완료) ====================== -->
+<sc-if value="{{ isComplete }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Complete" style="padding:0 0 40px;animation:cc-fade .2s ease;">
+  <div style="position:sticky;top:0;z-index:5;background:var(--cc-cream);padding:54px 20px 12px;">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div onClick="{{ goCollect }}" style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-left:-8px;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2A2520" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"></path></svg>
+      </div>
+      <div style="font-size:19px;font-weight:700;letter-spacing:-.4px;">주문 완료</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;margin-top:14px;">
+      <div style="flex:1;height:5px;border-radius:3px;background:var(--cc-green);"></div>
+      <div style="flex:1;height:5px;border-radius:3px;background:var(--cc-green);"></div>
+      <div style="flex:1;height:5px;border-radius:3px;background:var(--cc-green);"></div>
+    </div>
+  </div>
+
+  <div style="padding:8px 20px 0;">
+    <div style="background:var(--cc-green-soft);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:11px;">
+      <div style="width:38px;height:38px;border-radius:50%;background:var(--cc-green);display:flex;align-items:center;justify-content:center;flex:none;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7"></path></svg>
+      </div>
+      <div><div style="font-size:15px;font-weight:800;color:var(--cc-green-strong);">총 {{ totalQty }}잔, 정리 끝!</div><div style="font-size:12px;color:var(--cc-ink2);margin-top:2px;">아래 양식을 복사해 매장에 전달하세요</div></div>
+    </div>
+
+    <!-- 보기 토글 -->
+    <div style="display:flex;background:var(--cc-band);border-radius:12px;padding:4px;margin-top:16px;">
+      <div onClick="{{ setViewNamed }}" style="flex:1;text-align:center;font-size:13px;font-weight:700;padding:10px;border-radius:9px;cursor:pointer;background:{{ namedTabBg }};color:{{ namedTabFg }};box-shadow:{{ namedTabSh }};">이름 포함</div>
+      <div onClick="{{ setViewPlain }}" style="flex:1;text-align:center;font-size:13px;font-weight:700;padding:10px;border-radius:9px;cursor:pointer;background:{{ plainTabBg }};color:{{ plainTabFg }};box-shadow:{{ plainTabSh }};">직원 전달용</div>
+    </div>
+    <div style="font-size:12px;color:var(--cc-ink3);margin-top:8px;line-height:1.5;">{{ viewHint }}</div>
+
+    <!-- 텍스트 양식 -->
+    <div style="background:#fff;border:1px solid var(--cc-line);border-radius:16px;padding:16px;margin-top:12px;">
+      <div style="font-size:13px;font-weight:600;color:var(--cc-ink);line-height:1.85;white-space:pre-line;letter-spacing:-.2px;">{{ completeText }}</div>
+    </div>
+    <div onClick="{{ copyComplete }}" style="margin-top:11px;background:#fff;border:1.5px solid var(--cc-green);border-radius:13px;height:50px;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1F6E50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h8"></path></svg>
+      <span style="font-size:14px;font-weight:700;color:var(--cc-green-strong);">이 양식 복사하기</span>
+    </div>
+
+    <div onClick="{{ finish }}" style="margin-top:18px;background:var(--cc-green-deep);border-radius:15px;height:56px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 10px 24px rgba(18,63,45,.26);">
+      <span style="font-size:16px;font-weight:700;color:#fff;">주문을 완료할게요~</span>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<!-- ====================== SHARE (공유하여 메뉴 추가하기) ====================== -->
+<sc-if value="{{ isShare }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Share" style="padding:0 0 40px;animation:cc-fade .2s ease;">
+  <div style="position:sticky;top:0;z-index:5;background:var(--cc-cream);padding:54px 20px 12px;">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div onClick="{{ goCollect }}" style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-left:-8px;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2A2520" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"></path></svg>
+      </div>
+      <div style="font-size:19px;font-weight:700;letter-spacing:-.4px;">공유하여 메뉴 추가하기</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;margin-top:14px;">
+      <div style="flex:1;height:5px;border-radius:3px;background:var(--cc-green);"></div>
+      <div style="flex:1;height:5px;border-radius:3px;background:var(--cc-green);"></div>
+      <div style="flex:1;height:5px;border-radius:3px;background:var(--cc-green);"></div>
+    </div>
+  </div>
+
+  <div style="padding:8px 20px 0;">
+    <div style="display:flex;background:#E7F0F8;border-radius:12px;padding:4px;margin-bottom:14px;">
+      <div style="flex:1;text-align:center;font-size:13px;font-weight:800;padding:9px;border-radius:9px;background:#fff;color:#1A4FA0;box-shadow:0 1px 3px rgba(0,0,0,.08);">담당자 시점</div>
+      <div onClick="{{ goParticipant }}" style="flex:1;text-align:center;font-size:13px;font-weight:700;padding:9px;border-radius:9px;color:#5E7CA8;cursor:pointer;">참여자 시점 →</div>
+    </div>
+    <div style="background:var(--cc-card);border:1px solid var(--cc-line);border-radius:18px;padding:18px;text-align:center;">
+      <div style="font-size:13px;color:var(--cc-ink2);font-weight:600;">참여 코드</div>
+      <div style="font-size:34px;font-weight:800;letter-spacing:6px;color:var(--cc-green);margin-top:6px;">C4F9</div>
+      <div style="width:150px;height:150px;margin:16px auto 0;border-radius:18px;background:#fff;border:1px solid var(--cc-line);display:flex;align-items:center;justify-content:center;padding:14px;">
+        <svg width="118" height="118" viewBox="0 0 118 118" shape-rendering="crispEdges"><rect width="118" height="118" fill="#fff"></rect><g fill="#1F1A14"><rect x="6" y="6" width="34" height="34"></rect><rect x="78" y="6" width="34" height="34"></rect><rect x="6" y="78" width="34" height="34"></rect></g><g fill="#fff"><rect x="12" y="12" width="22" height="22"></rect><rect x="84" y="12" width="22" height="22"></rect><rect x="12" y="84" width="22" height="22"></rect></g><g fill="#1F1A14"><rect x="18" y="18" width="10" height="10"></rect><rect x="90" y="18" width="10" height="10"></rect><rect x="18" y="90" width="10" height="10"></rect></g><g fill="#1F6E50"><rect x="50" y="6" width="8" height="8"></rect><rect x="62" y="14" width="8" height="8"></rect><rect x="50" y="26" width="8" height="8"></rect><rect x="74" y="50" width="8" height="8"></rect><rect x="50" y="50" width="8" height="8"></rect><rect x="62" y="62" width="8" height="8"></rect><rect x="86" y="62" width="8" height="8"></rect><rect x="50" y="74" width="8" height="8"></rect><rect x="98" y="74" width="8" height="8"></rect><rect x="62" y="86" width="8" height="8"></rect><rect x="86" y="86" width="8" height="8"></rect><rect x="50" y="98" width="8" height="8"></rect><rect x="74" y="98" width="8" height="8"></rect><rect x="98" y="98" width="8" height="8"></rect></g></svg>
+      </div>
+      <div style="font-size:12px;color:var(--cc-ink3);margin-top:12px;">QR을 찍거나 코드를 입력하면 바로 참여할 수 있어요</div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:14px;">
+      <div onClick="{{ copyLink }}" style="flex:1;background:var(--cc-card);border:1px solid var(--cc-line);border-radius:14px;padding:14px 10px;text-align:center;cursor:pointer;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1F6E50" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:6px;"><path d="M9 12h6M10 8.5 8 8.5a3.5 3.5 0 0 0 0 7h2M14 8.5h2a3.5 3.5 0 0 1 0 7h-2"></path></svg>
+        <div style="font-size:12px;font-weight:700;">링크 복사</div>
+      </div>
+      <div onClick="{{ shareKakao }}" style="flex:1;background:#FEE500;border-radius:14px;padding:14px 10px;text-align:center;cursor:pointer;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="#3C1E1E" style="margin-bottom:6px;"><path d="M12 4C7 4 3 7.1 3 10.9c0 2.4 1.7 4.6 4.2 5.8-.2.6-.7 2.4-.8 2.8 0 0 0 .2.1.3h.3c.4-.1 2.7-1.8 3.4-2.3.5.1 1.1.1 1.8.1 5 0 9-3.1 9-6.9S17 4 12 4Z"></path></svg>
+        <div style="font-size:12px;font-weight:700;color:#3C1E1E;">카카오톡 공유</div>
+      </div>
+      <div onClick="{{ copyCode }}" style="flex:1;background:var(--cc-card);border:1px solid var(--cc-line);border-radius:14px;padding:14px 10px;text-align:center;cursor:pointer;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1F6E50" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:6px;"><rect x="4" y="4" width="7" height="7" rx="1"></rect><rect x="13" y="4" width="7" height="7" rx="1"></rect><rect x="4" y="13" width="7" height="7" rx="1"></rect><rect x="13" y="13" width="7" height="7" rx="1"></rect></svg>
+        <div style="font-size:12px;font-weight:700;">코드 복사</div>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div style="font-size:14px;font-weight:700;">참여자 확인 현황</div>
+        <div onClick="{{ refreshStatus }}" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--cc-green);background:var(--cc-green-soft);padding:6px 11px;border-radius:9px;cursor:pointer;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1F6E50" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path><path d="M3 4v4h4"></path></svg>
+          업데이트
+        </div>
+      </div>
+      <div style="font-size:11px;font-weight:700;color:var(--cc-ink3);margin-bottom:9px;">{{ confirmedText }} · {{ updatedAgo }}</div>
+      <sc-for list="{{ participants }}" as="pt" hint-placeholder-count="4">
+        <div style="display:flex;align-items:center;gap:11px;padding:11px 14px;background:var(--cc-card);border:1px solid var(--cc-line);border-radius:14px;margin-bottom:9px;">
+          <div style="width:34px;height:34px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex:none;background:{{ pt.avatarBg }};color:{{ pt.avatarFg }};">{{ pt.avatarText }}</div>
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:14px;font-weight:700;">{{ pt.name }}</div>
+            <div style="font-size:12px;color:var(--cc-ink2);margin-top:2px;">{{ pt.order }}</div>
+          </div>
+          <span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:700;color:{{ pt.statusColor }};">{{ pt.statusDot }}{{ pt.status }}</span>
+        </div>
+      </sc-for>
+    </div>
+
+    <div onClick="{{ goComplete }}" style="margin-top:18px;background:var(--cc-green-deep);border-radius:15px;height:54px;display:flex;align-items:center;justify-content:center;cursor:pointer;">
+      <span style="font-size:15px;font-weight:700;color:#fff;">주문을 완료할게요~</span>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<!-- ====================== PARTICIPANT ====================== -->
+<sc-if value="{{ isParticipant }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Participant" style="padding:0 0 40px;animation:cc-fade .2s ease;">
+  <div style="padding:54px 20px 22px;background:linear-gradient(160deg,#2C6BB0,#1A4FA0);border-radius:0 0 24px 24px;position:relative;overflow:hidden;">
+    <div style="position:absolute;right:-30px;top:-20px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.08);"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;position:relative;">
+      <span style="display:inline-block;background:rgba(255,255,255,.2);color:#fff;font-size:10px;font-weight:800;padding:3px 9px;border-radius:7px;">참여자</span>
+      <div onClick="{{ goShare }}" style="font-size:12px;font-weight:700;color:rgba(255,255,255,.9);cursor:pointer;">담당자 시점 →</div>
+    </div>
+    <div style="font-size:13px;color:rgba(255,255,255,.82);margin-top:14px;position:relative;">함께 커피 주문해요 ☕</div>
+    <div style="font-size:21px;font-weight:800;color:#fff;margin-top:4px;letter-spacing:-.5px;position:relative;">스타벅스 강남R점</div>
+    <div style="font-size:12.5px;color:rgba(255,255,255,.85);margin-top:6px;position:relative;">내 주문만 등록하면 끝이에요</div>
+  </div>
+
+  <div style="padding:20px;display:flex;flex-direction:column;gap:16px;">
+    <div>
+      <div style="font-size:12px;font-weight:800;color:var(--cc-ink2);margin-bottom:7px;">이름</div>
+      <div style="background:#fff;border:1px solid var(--cc-line);border-radius:13px;padding:14px 15px;font-size:15px;font-weight:600;">{{ pName }}</div>
+    </div>
+    <div>
+      <div style="font-size:12px;font-weight:800;color:var(--cc-ink2);margin-bottom:7px;">메뉴</div>
+      <div style="background:#fff;border:1px solid var(--cc-line);border-radius:13px;padding:14px 15px;font-size:15px;font-weight:600;display:flex;align-items:center;justify-content:space-between;">{{ pMenu }}<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#A89E90" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></div>
+    </div>
+    <div>
+      <div style="font-size:12px;font-weight:800;color:var(--cc-ink2);margin-bottom:7px;">온도</div>
+      <div style="display:flex;gap:10px;">
+        <div onClick="{{ setPHot }}" style="flex:1;text-align:center;font-size:14px;font-weight:800;padding:14px;border-radius:13px;cursor:pointer;background:{{ pHotBg }};color:{{ pHotFg }};border:1.5px solid {{ pHotBd }};">HOT</div>
+        <div onClick="{{ setPIce }}" style="flex:1;text-align:center;font-size:14px;font-weight:800;padding:14px;border-radius:13px;cursor:pointer;background:{{ pIceBg }};color:{{ pIceFg }};border:1.5px solid {{ pIceBd }};">ICE</div>
+      </div>
+    </div>
+    <div onClick="{{ registerParticipant }}" style="margin-top:6px;background:#1A4FA0;border-radius:14px;height:56px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 10px 22px rgba(26,79,160,.28);">
+      <span style="font-size:16px;font-weight:700;color:#fff;">내 주문 등록하기</span>
+    </div>
+    <div style="text-align:center;font-size:12px;color:var(--cc-ink3);">등록하면 담당자 화면에 바로 ‘확인 완료’로 떠요</div>
+  </div>
+</div>
+</sc-if>
+
+<!-- ====================== HISTORY (주문 내역) ====================== -->
+<sc-if value="{{ isHistory }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="History" style="padding:54px 0 96px;animation:cc-fade .2s ease;">
+  <div style="padding:0 20px;">
+    <div style="font-size:22px;font-weight:800;letter-spacing:-.5px;">주문 내역</div>
+    <div style="font-size:13px;color:var(--cc-ink2);margin-top:5px;line-height:1.5;">언제 무엇을 주문했는지 모아봤어요. 카드를 누르면 매장에 전달할 양식을 다시 볼 수 있어요.</div>
+  </div>
+
+  <div style="padding:16px 20px 0;">
+    <sc-for list="{{ historyItems }}" as="h" hint-placeholder-count="3">
+      <div style="background:{{ h.cardBg }};border:1.5px solid {{ h.cardBd }};border-radius:18px;margin-bottom:12px;overflow:hidden;">
+        <div onClick="{{ h.toggle }}" style="padding:14px;display:flex;align-items:center;gap:13px;cursor:pointer;">
+          <div style="width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:800;flex:none;background:{{ h.color }};color:{{ h.fg }};">{{ h.initial }}</div>
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;align-items:center;gap:7px;">
+              <span style="font-size:15px;font-weight:700;letter-spacing:-.3px;">{{ h.label }}</span>
+              <sc-if value="{{ h.justNow }}" hint-placeholder-val="{{ false }}"><span style="font-size:10px;font-weight:800;color:#fff;background:var(--cc-green);padding:2px 7px;border-radius:6px;">방금 주문</span></sc-if>
+            </div>
+            <div style="font-size:12px;color:var(--cc-ink2);margin-top:4px;">{{ h.dateText }} · {{ h.summary }} · {{ h.qtyText }}</div>
+          </div>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B6AB9B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        </div>
+        <sc-if value="{{ h.expanded }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:0 14px 14px;">
+          <div style="display:flex;background:var(--cc-band);border-radius:11px;padding:4px;">
+            <div onClick="{{ h.setNamed }}" style="flex:1;text-align:center;font-size:12.5px;font-weight:700;padding:9px;border-radius:8px;cursor:pointer;background:{{ h.namedTabBg }};color:{{ h.namedTabFg }};box-shadow:{{ h.namedTabSh }};">이름 포함</div>
+            <div onClick="{{ h.setPlain }}" style="flex:1;text-align:center;font-size:12.5px;font-weight:700;padding:9px;border-radius:8px;cursor:pointer;background:{{ h.plainTabBg }};color:{{ h.plainTabFg }};box-shadow:{{ h.plainTabSh }};">직원 전달용</div>
+          </div>
+          <div style="background:#fff;border:1px solid var(--cc-line);border-radius:14px;padding:14px 15px;margin-top:11px;">
+            <div style="font-size:13px;font-weight:600;color:var(--cc-ink);line-height:1.8;white-space:pre-line;letter-spacing:-.2px;">{{ h.text }}</div>
+          </div>
+          <div onClick="{{ h.copy }}" style="margin-top:10px;background:#fff;border:1.5px solid var(--cc-green);border-radius:12px;height:46px;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#1F6E50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h8"></path></svg>
+            <span style="font-size:13.5px;font-weight:700;color:var(--cc-green-strong);">이 양식 복사하기</span>
+          </div>
+        </div>
+        </sc-if>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</sc-if>
+
+<!-- ====================== MAP ====================== -->
+<sc-if value="{{ isMap }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Map" style="animation:cc-fade .2s ease;height:100%;">
+  <div style="position:relative;height:62vh;background:linear-gradient(160deg,#E5EAE0,#D8E0D2);overflow:hidden;">
+    <div style="position:absolute;top:54px;left:20px;right:20px;z-index:3;display:flex;align-items:center;gap:10px;">
+      <div onClick="{{ goCafe }}" style="width:40px;height:40px;border-radius:13px;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 12px rgba(40,30,15,.12);">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2A2520" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"></path></svg>
+      </div>
+      <div style="flex:1;background:#fff;border-radius:13px;height:44px;display:flex;align-items:center;padding:0 14px;font-size:14px;color:var(--cc-ink3);box-shadow:0 4px 12px rgba(40,30,15,.10);">주변 카페 검색</div>
+    </div>
+    <svg width="100%" height="100%" style="position:absolute;inset:0;opacity:.5;"><g stroke="#C7CFBE" stroke-width="2" fill="none"><path d="M-20 120 L260 60 L520 180"></path><path d="M60 -20 L120 300 L80 540"></path><path d="M-20 360 L300 320 L520 400"></path><path d="M300 -20 L360 280 L320 540"></path></g></svg>
+    <div style="position:absolute;left:52%;top:46%;transform:translate(-50%,-50%);width:20px;height:20px;border-radius:50%;background:#3B82C4;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.2);"></div>
+    <div style="position:absolute;left:52%;top:46%;transform:translate(-50%,-50%);width:60px;height:60px;border-radius:50%;background:rgba(59,130,196,.18);"></div>
+    <sc-for list="{{ mapPins }}" as="pin" hint-placeholder-count="4">
+      <div onClick="{{ pin.open }}" style="position:absolute;left:{{ pin.x }};top:{{ pin.y }};transform:translate(-50%,-100%);cursor:pointer;text-align:center;">
+        <div style="width:40px;height:40px;border-radius:14px 14px 14px 4px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;box-shadow:0 4px 12px rgba(0,0,0,.22);background:{{ pin.color }};color:{{ pin.fg }};">{{ pin.initial }}</div>
+      </div>
+    </sc-for>
+  </div>
+  <div style="padding:16px 20px;">
+    <div style="font-size:16px;font-weight:700;margin-bottom:12px;">내 주변 카페 6곳</div>
+    <sc-for list="{{ cafes }}" as="cafe" hint-placeholder-count="3">
+      <div onClick="{{ cafe.open }}" style="background:var(--cc-card);border:1px solid var(--cc-line);border-radius:15px;padding:12px;display:flex;align-items:center;gap:12px;cursor:pointer;margin-bottom:10px;">
+        <div style="width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:800;flex:none;background:{{ cafe.color }};color:{{ cafe.fg }};">{{ cafe.initial }}</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:14px;font-weight:700;">{{ cafe.name }}</div>
+          <div style="font-size:12px;color:var(--cc-ink2);margin-top:2px;">{{ cafe.dist }} · 대기 {{ cafe.wait }}</div>
+        </div>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C9BFB0" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</sc-if>
+
+<!-- ====================== MY ====================== -->
+<sc-if value="{{ isMy }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="My" style="padding:54px 0 96px;animation:cc-fade .2s ease;">
+  <div style="padding:0 20px;">
+    <div style="font-size:22px;font-weight:800;letter-spacing:-.5px;">MY</div>
+    <div style="background:var(--cc-card);border:1px solid var(--cc-line);border-radius:18px;padding:16px;display:flex;align-items:center;gap:14px;margin-top:16px;">
+      <div style="width:54px;height:54px;border-radius:18px;background:var(--cc-green-soft);display:flex;align-items:center;justify-content:center;flex:none;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1F6E50" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8.5" r="3.6"></circle><path d="M5 19c.7-3.4 3.4-5 7-5s6.3 1.6 7 5"></path></svg>
+      </div>
+      <div style="flex:1;">
+        <div style="font-size:16px;font-weight:700;">취합 담당자님</div>
+        <div style="font-size:12px;color:var(--cc-ink2);margin-top:3px;">익명 세션 · 지금까지 12번 취합했어요</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:22px 20px 0;">
+    <div style="font-size:14px;font-weight:700;margin-bottom:12px;">내 취향 설정</div>
+    <div style="background:var(--cc-card);border:1px solid var(--cc-line);border-radius:18px;padding:6px 16px;">
+      <sc-for list="{{ prefs }}" as="pf" hint-placeholder-count="3">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid {{ pf.border }};">
+          <span style="font-size:14px;font-weight:600;">{{ pf.label }}</span>
+          <div style="display:flex;background:var(--cc-band);border-radius:10px;padding:3px;">
+            <sc-for list="{{ pf.opts }}" as="op" hint-placeholder-count="3">
+              <div onClick="{{ op.select }}" style="font-size:12px;font-weight:700;padding:6px 13px;border-radius:8px;cursor:pointer;background:{{ op.bg }};color:{{ op.fg }};box-shadow:{{ op.sh }};">{{ op.label }}</div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+</div>
+</sc-if>
+
+</div><!-- /scroll -->
+
+<!-- ====================== BOTTOM NAV ====================== -->
+<sc-if value="{{ showTabs }}" hint-placeholder-val="{{ false }}">
+<div style="flex:none;display:flex;background:#fff;border-top:1px solid var(--cc-line);padding:8px 8px calc(8px + env(safe-area-inset-bottom));box-shadow:0 -4px 16px rgba(40,30,15,.04);">
+  <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
+    <div onClick="{{ t.go }}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:5px 0;cursor:pointer;">
+      <div style="color:{{ t.color }};">
+        <sc-if value="{{ t.isHome }}" hint-placeholder-val="{{ true }}"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5 12 4l8 7.5"></path><path d="M6 10v9h12v-9"></path></svg></sc-if>
+        <sc-if value="{{ t.isMap }}" hint-placeholder-val="{{ false }}"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m9 4-5 2v14l5-2 6 2 5-2V4l-5 2-6-2Z"></path><path d="M9 4v14M15 6v14"></path></svg></sc-if>
+        <sc-if value="{{ t.isHistory }}" hint-placeholder-val="{{ false }}"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-2.2-1.4L13.6 21 12 19.6 10.4 21 8.2 19.6 6 21Z"></path><path d="M9 8h6M9 12h6"></path></svg></sc-if>
+        <sc-if value="{{ t.isMy }}" hint-placeholder-val="{{ false }}"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="3.6"></circle><path d="M5 19c.7-3.4 3.4-5 7-5s6.3 1.6 7 5"></path></svg></sc-if>
+      </div>
+      <span style="font-size:10.5px;font-weight:700;color:{{ t.color }};">{{ t.label }}</span>
+    </div>
+  </sc-for>
+</div>
+</sc-if>
+
+<!-- ====================== VOICE OVERLAY ====================== -->
+<sc-if value="{{ overlayVoice }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;z-index:30;background:rgba(18,14,8,.5);backdrop-filter:blur(2px);display:flex;align-items:flex-end;animation:cc-fade .2s ease;">
+  <div class="cc-scroll" style="width:100%;max-height:92%;overflow-y:auto;background:var(--cc-cream);border-radius:24px 24px 0 0;padding:22px 20px calc(20px + env(safe-area-inset-bottom));animation:cc-sheet .28s cubic-bezier(.2,.8,.2,1);">
+    <div style="width:40px;height:4px;border-radius:2px;background:var(--cc-line);margin:0 auto 18px;"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="font-size:18px;font-weight:700;letter-spacing:-.4px;">음성으로 받기</div>
+        <div style="font-size:12px;color:var(--cc-ink2);margin-top:2px;">한 명씩 말하면 계속 받아요 · 멈출 때까지 확정 안 돼요</div>
+      </div>
+      <div onClick="{{ closeOverlay }}" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A9082" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg></div>
+    </div>
+
+    <div style="background:#fff;border:1px solid var(--cc-line);border-radius:18px;padding:22px 18px;margin-top:16px;min-height:128px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;">
+      <sc-if value="{{ voiceListening }}" hint-placeholder-val="{{ true }}">
+        <div style="position:relative;width:64px;height:64px;display:flex;align-items:center;justify-content:center;">
+          <span style="position:absolute;inset:0;border-radius:50%;background:var(--cc-green);opacity:.25;animation:cc-ping 1.6s ease-out infinite;"></span>
+          <div style="width:64px;height:64px;border-radius:50%;background:var(--cc-green);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px rgba(31,110,80,.35);">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M6 11a6 6 0 0 0 12 0M12 17v3"></path></svg>
+          </div>
+        </div>
+        <div style="font-size:15px;font-weight:700;margin-top:16px;color:var(--cc-green);">듣고 있어요…</div>
+        <div style="font-size:16px;font-weight:600;margin-top:10px;line-height:1.5;min-height:24px;">{{ voiceTyped }}<span style="color:var(--cc-green);animation:cc-blink 1s step-end infinite;">|</span></div>
+      </sc-if>
+      <sc-if value="{{ voiceRecognized }}" hint-placeholder-val="{{ false }}">
+        <div style="width:50px;height:50px;border-radius:50%;background:var(--cc-green-soft);display:flex;align-items:center;justify-content:center;">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1F6E50" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7"></path></svg>
+        </div>
+        <div style="font-size:15px;font-weight:700;margin-top:12px;color:var(--cc-green-strong);">{{ voiceLastName }} 님, 받았어요</div>
+        <div style="font-size:12.5px;color:var(--cc-ink2);margin-top:5px;">다음 분, 말씀하세요 — 마이크는 계속 켜져 있어요</div>
+      </sc-if>
+      <sc-if value="{{ voiceFinished }}" hint-placeholder-val="{{ false }}">
+        <div style="width:50px;height:50px;border-radius:50%;background:var(--cc-green);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 18px rgba(31,110,80,.3);">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7"></path></svg>
+        </div>
+        <div style="font-size:15px;font-weight:700;margin-top:12px;">다 받았어요!</div>
+        <div style="font-size:12.5px;color:var(--cc-ink2);margin-top:5px;">아래에서 확인하고 추가하세요</div>
+      </sc-if>
+    </div>
+
+    <sc-if value="{{ voiceHasAdded }}" hint-placeholder-val="{{ false }}">
+    <div style="margin-top:16px;">
+      <div style="font-size:12px;font-weight:800;color:var(--cc-ink2);margin-bottom:9px;display:flex;align-items:center;gap:6px;">받은 주문 <span style="color:var(--cc-green);">{{ voiceAddedCount }}</span></div>
+      <sc-for list="{{ voiceAddedList }}" as="v" hint-placeholder-count="1">
+        <div style="background:#fff;border:1px solid var(--cc-line);border-radius:14px;padding:11px 13px;display:flex;align-items:center;gap:10px;margin-bottom:8px;animation:cc-rise .25s ease;">
+          <div style="width:30px;height:30px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex:none;background:{{ v.avatarBg }};">{{ v.avatarText }}</div>
+          <span style="font-size:14px;font-weight:700;flex:1;letter-spacing:-.3px;">{{ v.name }}</span>
+          <span style="font-size:11px;font-weight:800;padding:3px 7px;border-radius:6px;background:{{ v.tempBg }};color:{{ v.tempFg }};">{{ v.temp }}</span>
+          <span style="font-size:13px;font-weight:600;color:var(--cc-ink2);">{{ v.menu }}</span>
+          <span style="font-size:12px;font-weight:700;color:var(--cc-ink3);">{{ v.qty }}</span>
+        </div>
+      </sc-for>
+      <div onClick="{{ finishVoice }}" style="margin-top:8px;background:var(--cc-green);border-radius:14px;height:54px;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-shadow:0 8px 18px rgba(31,110,80,.3);">
+        <span style="font-size:15px;font-weight:700;color:#fff;">그만 듣기 · {{ voiceAddedCount }}명 추가</span>
+      </div>
+    </div>
+    </sc-if>
+    <sc-if value="{{ voiceListening }}" hint-placeholder-val="{{ true }}">
+    <div style="text-align:center;font-size:12px;color:var(--cc-ink3);margin-top:14px;">또렷하게 “메뉴 · 온도 · 이름”을 말해 주세요</div>
+    </sc-if>
+  </div>
+</div>
+</sc-if>
+
+<!-- ====================== CAPTURE MODAL ====================== -->
+<sc-if value="{{ overlayCapture }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;z-index:30;background:rgba(18,14,8,.5);backdrop-filter:blur(2px);display:flex;align-items:flex-end;animation:cc-fade .2s ease;">
+  <div class="cc-scroll" style="width:100%;max-height:90%;overflow-y:auto;background:var(--cc-cream);border-radius:24px 24px 0 0;padding:22px 20px calc(20px + env(safe-area-inset-bottom));animation:cc-sheet .28s cubic-bezier(.2,.8,.2,1);">
+    <div style="width:40px;height:4px;border-radius:2px;background:var(--cc-line);margin:0 auto 18px;"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-size:18px;font-weight:700;letter-spacing:-.4px;">캡처 이미지 분석</div>
+      <div onClick="{{ closeOverlay }}" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A9082" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg></div>
+    </div>
+
+    <sc-if value="{{ capUpload }}" hint-placeholder-val="{{ true }}">
+    <div style="margin-top:16px;">
+      <div style="font-size:13px;color:var(--cc-ink2);line-height:1.5;margin-bottom:14px;">카카오톡 단체방의 주문 대화를 캡처해서 올려주세요. 사람별로 메뉴를 자동으로 정리해 드려요.</div>
+      <div style="background:#9DB7C9;border-radius:16px;padding:14px;">
+        <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.85);margin-bottom:8px;text-align:center;">이런 캡처를 올리면 돼요</div>
+        <sc-for list="{{ sampleChat }}" as="c" hint-placeholder-count="4">
+          <div style="display:flex;justify-content:{{ c.justify }};margin-bottom:7px;">
+            <div style="max-width:75%;background:{{ c.bubbleBg }};border-radius:12px;padding:7px 11px;">
+              <sc-if value="{{ c.showName }}" hint-placeholder-val="{{ false }}"><div style="font-size:10px;color:rgba(0,0,0,.45);margin-bottom:2px;font-weight:600;">{{ c.name }}</div></sc-if>
+              <span style="font-size:13px;color:#1A1A1A;">{{ c.text }}</span>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:16px;">
+        <div onClick="{{ startCapture }}" style="flex:1;background:var(--cc-band);border-radius:14px;padding:15px;text-align:center;cursor:pointer;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6E665C" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:5px;"><path d="M4 8a2 2 0 0 1 2-2h1.2l1-1.6A1 1 0 0 1 9 4h6a1 1 0 0 1 .8.4L16.8 6H18a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"></path><circle cx="12" cy="12.5" r="3.2"></circle></svg>
+          <div style="font-size:13px;font-weight:700;color:var(--cc-ink2);">카메라</div>
+        </div>
+        <div onClick="{{ startCapture }}" style="flex:1;background:var(--cc-green);border-radius:14px;padding:15px;text-align:center;cursor:pointer;box-shadow:0 8px 18px rgba(31,110,80,.28);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:5px;"><rect x="4" y="5" width="16" height="14" rx="2.4"></rect><path d="m4 15 4-4 3.5 3.5L16 9l4 4"></path><circle cx="9" cy="9.5" r="1.4"></circle></svg>
+          <div style="font-size:13px;font-weight:700;color:#fff;">갤러리에서 선택</div>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ capAnalyzing }}" hint-placeholder-val="{{ false }}">
+    <div style="margin-top:24px;text-align:center;padding-bottom:10px;">
+      <div style="position:relative;width:64px;height:64px;margin:0 auto;">
+        <svg width="64" height="64" viewBox="0 0 64 64" style="animation:cc-spin 1s linear infinite;"><circle cx="32" cy="32" r="27" fill="none" stroke="#E9F1EC" stroke-width="6"></circle><path d="M32 5a27 27 0 0 1 27 27" fill="none" stroke="#1F6E50" stroke-width="6" stroke-linecap="round"></path></svg>
+      </div>
+      <div style="font-size:16px;font-weight:700;margin-top:18px;">대화를 분석하고 있어요</div>
+      <div style="font-size:13px;color:var(--cc-ink2);margin-top:6px;">잠시만요, 사람별 메뉴를 정리하는 중이에요</div>
+      <div style="margin-top:20px;text-align:left;background:#fff;border:1px solid var(--cc-line);border-radius:16px;padding:6px 16px;">
+        <sc-for list="{{ analyzeSteps }}" as="st" hint-placeholder-count="3">
+          <div style="display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid {{ st.border }};">
+            <div style="width:22px;height:22px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;background:{{ st.dotBg }};color:#fff;font-size:12px;">{{ st.dot }}</div>
+            <span style="font-size:13px;font-weight:600;color:{{ st.textColor }};">{{ st.label }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ capResult }}" hint-placeholder-val="{{ false }}">
+    <div style="margin-top:16px;">
+      <div style="background:var(--cc-green-soft);border-radius:14px;padding:13px 15px;display:flex;align-items:center;gap:10px;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1F6E50" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7"></path></svg>
+        <div style="flex:1;">
+          <div style="font-size:14px;font-weight:700;color:var(--cc-green-strong);">4명의 주문을 찾았어요</div>
+          <div style="font-size:12px;color:var(--cc-ink2);margin-top:2px;">원본과 비교해 확인한 뒤 추가하세요</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:14px;">
+        <div style="flex:1;background:#9DB7C9;border-radius:14px;padding:11px;">
+          <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.9);margin-bottom:7px;">원본 캡처</div>
+          <sc-for list="{{ sampleChat }}" as="c" hint-placeholder-count="4">
+            <div style="display:flex;justify-content:{{ c.justify }};margin-bottom:5px;">
+              <div style="max-width:80%;background:{{ c.bubbleBg }};border-radius:9px;padding:5px 8px;"><span style="font-size:11px;color:#1A1A1A;">{{ c.text }}</span></div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="flex:1;background:#fff;border:1px solid var(--cc-line);border-radius:14px;padding:11px;">
+          <div style="font-size:10px;font-weight:700;color:var(--cc-green);margin-bottom:7px;">정리된 결과</div>
+          <sc-for list="{{ capPeople }}" as="cp" hint-placeholder-count="4">
+            <div style="display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid var(--cc-line);">
+              <span style="font-size:9px;font-weight:800;padding:2px 5px;border-radius:5px;flex:none;background:{{ cp.tempBg }};color:{{ cp.tempFg }};">{{ cp.temp }}</span>
+              <div style="flex:1;min-width:0;"><div style="font-size:11px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ cp.menu }}</div><div style="font-size:10px;color:var(--cc-ink3);">{{ cp.name }}</div></div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <sc-if value="{{ capFlagResolved }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top:13px;background:var(--cc-green-soft);border:1px solid #BFE0CF;border-radius:13px;padding:11px 13px;display:flex;align-items:center;gap:9px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1F6E50" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7"></path></svg>
+        <span style="font-size:12.5px;font-weight:700;color:var(--cc-green-strong);">이서연 님 온도 확인 완료 · {{ capFlagTempText }}</span>
+      </div>
+      </sc-if>
+      <sc-if value="{{ capFlagUnresolved }}" hint-placeholder-val="{{ true }}">
+      <div style="margin-top:13px;background:#FFF6DD;border:1px solid #F0DCA0;border-radius:13px;padding:13px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:10px;font-weight:800;background:#E8A13C;color:#fff;padding:3px 7px;border-radius:6px;flex:none;">확인 필요</span>
+          <span style="font-size:12.5px;font-weight:700;color:#7A6320;">‘이서연 — 돌체 라떼’ 온도가 불명확해요</span>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:11px;">
+          <div onClick="{{ resolveCapHot }}" style="flex:1;text-align:center;font-size:13px;font-weight:800;padding:11px;border-radius:11px;background:var(--cc-hot-bg);color:var(--cc-hot);border:1px solid var(--cc-hot);cursor:pointer;">HOT으로</div>
+          <div onClick="{{ resolveCapIce }}" style="flex:1;text-align:center;font-size:13px;font-weight:800;padding:11px;border-radius:11px;background:var(--cc-ice-bg);color:var(--cc-ice);border:1px solid var(--cc-ice);cursor:pointer;">ICE로</div>
+        </div>
+      </div>
+      </sc-if>
+      <div style="display:flex;gap:10px;margin-top:14px;">
+        <div onClick="{{ closeOverlay }}" style="flex:1;text-align:center;font-size:15px;font-weight:700;padding:15px;border-radius:14px;background:var(--cc-band);color:var(--cc-ink2);cursor:pointer;">취소</div>
+        <div onClick="{{ approveCapture }}" style="flex:2;text-align:center;font-size:15px;font-weight:700;padding:15px;border-radius:14px;background:var(--cc-green);color:#fff;cursor:pointer;box-shadow:0 8px 18px rgba(31,110,80,.3);">4명 모두 추가하기</div>
+      </div>
+    </div>
+    </sc-if>
+  </div>
+</div>
+</sc-if>
+
+<!-- ====================== MANUAL ADD MODAL ====================== -->
+<sc-if value="{{ overlayManual }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;z-index:30;background:rgba(18,14,8,.5);backdrop-filter:blur(2px);display:flex;align-items:flex-end;animation:cc-fade .2s ease;">
+  <div class="cc-scroll" style="width:100%;max-height:90%;overflow-y:auto;background:var(--cc-cream);border-radius:24px 24px 0 0;padding:22px 20px calc(20px + env(safe-area-inset-bottom));animation:cc-sheet .28s cubic-bezier(.2,.8,.2,1);">
+    <div style="width:40px;height:4px;border-radius:2px;background:var(--cc-line);margin:0 auto 18px;"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="font-size:18px;font-weight:700;letter-spacing:-.4px;">직접 입력</div>
+        <div style="font-size:12px;color:var(--cc-ink2);margin-top:2px;">메뉴 이름을 자유롭게 적어 기록해요</div>
+      </div>
+      <div onClick="{{ closeOverlay }}" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A9082" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg></div>
+    </div>
+
+    <div style="margin-top:18px;display:flex;flex-direction:column;gap:14px;">
+      <div>
+        <div style="font-size:12px;font-weight:800;color:var(--cc-ink2);margin-bottom:7px;">이름 <span style="color:var(--cc-ink3);font-weight:600;">(선택)</span></div>
+        <input value="{{ manualName }}" onChange="{{ onManualName }}" placeholder="예: 김민준" style="width:100%;background:#fff;border:1px solid var(--cc-line);border-radius:13px;padding:14px 15px;font-size:15px;font-weight:600;outline:none;color:var(--cc-ink);"/>
+      </div>
+      <div>
+        <div style="font-size:12px;font-weight:800;color:var(--cc-ink2);margin-bottom:7px;">메뉴</div>
+        <input value="{{ manualMenu }}" onChange="{{ onManualMenu }}" placeholder="예: 아이스 바닐라 라떼" style="width:100%;background:#fff;border:1px solid var(--cc-line);border-radius:13px;padding:14px 15px;font-size:15px;font-weight:600;outline:none;color:var(--cc-ink);"/>
+      </div>
+      <div>
+        <div style="font-size:12px;font-weight:800;color:var(--cc-ink2);margin-bottom:7px;">온도</div>
+        <div style="display:flex;gap:10px;">
+          <div onClick="{{ setManualHot }}" style="flex:1;text-align:center;font-size:14px;font-weight:800;padding:13px;border-radius:13px;cursor:pointer;background:{{ mHotBg }};color:{{ mHotFg }};border:1.5px solid {{ mHotBd }};">HOT</div>
+          <div onClick="{{ setManualIce }}" style="flex:1;text-align:center;font-size:14px;font-weight:800;padding:13px;border-radius:13px;cursor:pointer;background:{{ mIceBg }};color:{{ mIceFg }};border:1.5px solid {{ mIceBd }};">ICE</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:12px;font-weight:800;color:var(--cc-ink2);margin-bottom:7px;">수량</div>
+        <div style="display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--cc-line);border-radius:13px;padding:9px 14px;width:fit-content;">
+          <div onClick="{{ manualDec }}" style="width:34px;height:34px;border-radius:10px;background:var(--cc-band);display:flex;align-items:center;justify-content:center;cursor:pointer;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6E665C" stroke-width="2.6" stroke-linecap="round"><path d="M6 12h12"></path></svg>
+          </div>
+          <span style="font-size:17px;font-weight:800;min-width:22px;text-align:center;">{{ manualQty }}</span>
+          <div onClick="{{ manualInc }}" style="width:34px;height:34px;border-radius:10px;background:var(--cc-green-soft);display:flex;align-items:center;justify-content:center;cursor:pointer;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1F6E50" stroke-width="2.6" stroke-linecap="round"><path d="M12 6v12M6 12h12"></path></svg>
+          </div>
+        </div>
+      </div>
+      <div onClick="{{ addManual }}" style="margin-top:4px;background:var(--cc-green);border-radius:14px;height:56px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 10px 22px rgba(31,110,80,.28);">
+        <span style="font-size:16px;font-weight:700;color:#fff;">기록에 추가하기</span>
+      </div>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<!-- ====================== TOAST ====================== -->
+<sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;left:50%;bottom:96px;z-index:50;background:var(--cc-green-deep);color:#fff;font-size:14px;font-weight:600;padding:13px 20px;border-radius:13px;box-shadow:0 10px 28px rgba(0,0,0,.25);white-space:nowrap;animation:cc-toast 2.2s ease forwards;">{{ toast }}</div>
+</sc-if>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    screen: 'loading',
+    memoMode: false,
+    resumeScreen: null,
+    overlay: null,
+    voicePhase: 'listening',
+    voiceTyped: '',
+    voiceAdded: [],
+    voiceIdx: 0,
+    capStep: 'upload',
+    analyzeIdx: 0,
+    capFlagTemp: null,
+    manualName: '', manualMenu: '', manualTemp: 'ICE', manualQty: 1,
+    completeView: 'named',
+    pName: '박지후', pMenu: '바닐라 라떼', pTemp: 'ICE',
+    partDone: { '나': true, '김민준': true, '이서연': false, '박지후': false },
+    menuCat: 0, menuQuery: '', cafeQuery: '', memoQuery: '',
+    menuTemp: {}, cart: {},
+    favs: { starbucks: true, mega: true, twosome: false, ediya: true, compose: false, paik: false },
+    statusUpdated: 0,
+    history: [
+      { id: 'hseed1', label: '스타벅스 강남R점', initial: 'S', color: '#00704A', fg: '#fff', ts: Date.now() - 2 * 86400000, justNow: false, people: [ { name: '나', items: [ { name: '아메리카노', temp: 'ICE', qty: 1, price: 4500 } ] }, { name: '김민준', items: [ { name: '돌체 라떼', temp: 'HOT', qty: 1, price: 6300 } ] }, { name: '이서연', items: [ { name: '아메리카노', temp: 'ICE', qty: 2, price: 4500 } ] } ] },
+      { id: 'hseed2', label: '메가커피 역삼점', initial: 'M', color: '#FFC400', fg: '#3A2E00', ts: Date.now() - 7 * 86400000, justNow: false, people: [ { name: '나', items: [ { name: '카페 라떼', temp: 'ICE', qty: 1, price: 5000 } ] }, { name: '한지민', items: [ { name: '콜드브루', temp: 'ICE', qty: 1, price: 4900 } ] } ] },
+    ],
+    expandedHistory: null,
+    historyView: {},
+    people: [
+      { id: 'me', name: '나', isMe: true, color: '#1F6E50', fg: '#fff', items: [ { id: 'i1', name: '아메리카노', temp: 'ICE', qty: 1, price: 4500 } ] },
+      { id: 'p1', name: '김민준', color: '#E8A13C', fg: '#fff', items: [ { id: 'i2', name: '돌체 라떼', temp: 'HOT', qty: 1, price: 6300 } ] },
+      { id: 'p2', name: '이서연', color: '#6A8CC7', fg: '#fff', items: [ { id: 'i3', name: '아메리카노', temp: 'ICE', qty: 2, price: 4500 } ] },
+      { id: 'p3', name: '박지후', color: '#C77B9E', fg: '#fff', items: [ { id: 'i4', name: '바닐라 라떼', temp: 'ICE', qty: 1, price: 5500 } ] },
+    ],
+    toast: '',
+  };
+  _toastT = null; _voiceT = null; _capT = null; _loadT = null;
+  _lastDeep = null;
+  DEEP = ['cafe','menu','memo','collect','complete','share','participant'];
+
+  CAFES = [
+    { id: 'starbucks', name: '스타벅스 강남R점', initial: 'S', color: '#00704A', fg: '#fff', rating: '4.8', dist: '120m', wait: '5분' },
+    { id: 'mega', name: '메가커피 역삼점', initial: 'M', color: '#FFC400', fg: '#3A2E00', rating: '4.6', dist: '80m', wait: '3분' },
+    { id: 'twosome', name: '투썸플레이스 선릉점', initial: 'T', color: '#C8102E', fg: '#fff', rating: '4.7', dist: '200m', wait: '8분' },
+    { id: 'ediya', name: '이디야커피 강남점', initial: 'E', color: '#1A4FA0', fg: '#fff', rating: '4.5', dist: '150m', wait: '6분' },
+    { id: 'compose', name: '컴포즈커피 테헤란점', initial: 'C', color: '#122C4B', fg: '#fff', rating: '4.6', dist: '90m', wait: '4분' },
+    { id: 'paik', name: '빽다방 강남대로점', initial: '빽', color: '#FFE000', fg: '#1A1A1A', rating: '4.4', dist: '240m', wait: '7분' },
+  ];
+  CATS = ['추천', '커피', '라떼', '티·에이드', '디저트'];
+  MENUS = [
+    { id: 'm1', name: '아메리카노', price: 4500, popular: true, cat: [0,1] },
+    { id: 'm2', name: '카페 라떼', price: 5000, popular: false, cat: [0,2] },
+    { id: 'm3', name: '돌체 라떼', price: 6300, popular: true, cat: [0,2] },
+    { id: 'm4', name: '바닐라 라떼', price: 5500, popular: false, cat: [2] },
+    { id: 'm5', name: '카푸치노', price: 5000, popular: false, cat: [1,2] },
+    { id: 'm6', name: '자몽 허니 블랙티', price: 6300, popular: false, cat: [0,3] },
+    { id: 'm7', name: '콜드브루', price: 4900, popular: true, cat: [1] },
+    { id: 'm8', name: '딸기 초코 케이크', price: 6500, popular: false, cat: [4] },
+  ];
+  SAMPLE_CHAT = [
+    { name: '민준', text: '저 아아요 ☕', me: false },
+    { name: '서연', text: '나는 돌체라떼 핫', me: false },
+    { name: '나', text: '아아 두 잔이요!', me: true },
+    { name: '지후', text: '바닐라라떼 아이스로 주세요', me: false },
+  ];
+  CAP_PEOPLE = [
+    { name: '김민준', menu: '아메리카노', temp: 'ICE' },
+    { name: '이서연', menu: '돌체 라떼', temp: 'HOT' },
+    { name: '나', menu: '아메리카노 2잔', temp: 'ICE' },
+    { name: '박지후', menu: '바닐라 라떼', temp: 'ICE' },
+  ];
+  ANALYZE = ['대화에서 메뉴 키워드 찾는 중', '온도(핫/아이스) 구분하는 중', '사람별로 묶는 중'];
+  VOICE_QUEUE = [
+    { name: '정우성', menu: '아메리카노', temp: 'ICE', qty: 1, price: 4500, color: '#5B8C7A', phrase: '아이스 아메리카노 한 잔이요' },
+    { name: '한지민', menu: '돌체 라떼', temp: 'HOT', qty: 1, price: 6300, color: '#C98A33', phrase: '저는 따뜻한 돌체라떼요' },
+    { name: '공유', menu: '바닐라 라떼', temp: 'ICE', qty: 2, price: 5500, color: '#7B6FB0', phrase: '바닐라라떼 아이스 두 잔이요' },
+  ];
+  PREFS = [
+    { label: '기본 온도', opts: ['HOT', 'ICE'] },
+    { label: '당도', opts: ['적게', '보통', '많이'] },
+    { label: '우유', opts: ['일반', '오트', '두유'] },
+  ];
+  prefSel = [1, 1, 1];
+
+  won(n) { return n.toLocaleString('ko-KR') + '원'; }
+
+  componentDidMount() {
+    let saved = null;
+    try { const raw = localStorage.getItem('callcoffee_session'); if (raw) saved = JSON.parse(raw); } catch (e) {}
+    this._lastDeep = saved && saved.lastDeep ? saved.lastDeep : null;
+    this._loadT = setTimeout(() => {
+      const rs = (this._lastDeep && this.DEEP.includes(this._lastDeep)) ? this._lastDeep : null;
+      const patch = { screen: 'home', resumeScreen: rs };
+      if (saved) {
+        if (Array.isArray(saved.people) && saved.people.length) patch.people = saved.people;
+        if (Array.isArray(saved.history)) patch.history = saved.history;
+        patch.memoMode = !!saved.memoMode;
+        if (saved.selectedCafeId) patch.selectedCafeId = saved.selectedCafeId;
+      }
+      this.setState(patch);
+    }, 1500);
+  }
+  componentDidUpdate() {
+    if (this.state.screen === 'loading') return;
+    if (this.DEEP.includes(this.state.screen)) this._lastDeep = this.state.screen;
+    try {
+      localStorage.setItem('callcoffee_session', JSON.stringify({
+        screen: this.state.screen, lastDeep: this._lastDeep,
+        people: this.state.people, memoMode: this.state.memoMode, selectedCafeId: this.state.selectedCafeId, history: this.state.history,
+      }));
+    } catch (e) {}
+  }
+  componentWillUnmount() { clearTimeout(this._toastT); clearInterval(this._voiceT); clearTimeout(this._voiceT); clearInterval(this._capT); clearTimeout(this._loadT); }
+
+  showToast(msg) {
+    clearTimeout(this._toastT);
+    this.setState({ toast: msg });
+    this._toastT = setTimeout(() => this.setState({ toast: '' }), 2100);
+  }
+  go(screen) { this.setState({ screen, overlay: null }); document.querySelector('.cc-scroll')?.scrollTo?.(0, 0); }
+
+  resume() { if (this.state.resumeScreen) this.go(this.state.resumeScreen); }
+  enterMemo() { this.setState({ memoMode: true, selectedCafeId: undefined }); this.go('memo'); }
+  memoVoice(e) { if (e) e.stopPropagation(); this.setState({ memoMode: true, selectedCafeId: undefined, screen: 'memo' }); document.querySelector('.cc-scroll')?.scrollTo?.(0, 0); this.openVoice(); }
+  memoCapture(e) { if (e) e.stopPropagation(); this.setState({ memoMode: true, selectedCafeId: undefined, screen: 'memo' }); document.querySelector('.cc-scroll')?.scrollTo?.(0, 0); this.openCapture(); }
+  quickAdd(m) {
+    const people = this.state.people.slice();
+    const item = { id: 'q' + Date.now(), name: m.name, temp: 'ICE', qty: 1, price: m.price };
+    const idx = people.findIndex(p => p.isMe);
+    if (idx >= 0) people[idx] = Object.assign({}, people[idx], { items: people[idx].items.concat([item]) });
+    else people.unshift({ id: 'me' + Date.now(), name: '나', isMe: true, color: '#1F6E50', fg: '#fff', items: [item] });
+    this.setState({ people });
+    this.showToast(m.name + ' 기록했어요');
+  }
+  collectBack() { this.go(this.state.memoMode ? 'home' : 'menu'); }
+  finish() {
+    const cafe = this.CAFES.find(c => c.id === (this.state.selectedCafeId || 'starbucks')) || this.CAFES[0];
+    const memo = this.state.memoMode;
+    const snap = JSON.parse(JSON.stringify(this.state.people));
+    const entry = { id: 'h' + Date.now(), label: memo ? '메뉴 메모' : cafe.name, initial: memo ? '메' : cafe.initial, color: memo ? '#1F6E50' : cafe.color, fg: memo ? '#fff' : cafe.fg, ts: Date.now(), justNow: true, people: snap };
+    const history = [entry].concat(this.state.history.map(h => Object.assign({}, h, { justNow: false })));
+    this._lastDeep = null;
+    this.setState({ resumeScreen: null, history, expandedHistory: entry.id });
+    this.showToast('주문을 완료했어요 🎉');
+    this.go('home');
+  }
+
+  // ---- order text builders ----
+  qtyOf(ppl) { return ppl.reduce((a, p) => a + p.items.reduce((x, it) => x + it.qty, 0), 0); }
+  priceOf(ppl) { return ppl.reduce((a, p) => a + p.items.reduce((x, it) => x + it.qty * it.price, 0), 0); }
+  buildNamedFor(ppl) {
+    const lines = ppl.map(p => p.name + ': ' + p.items.map(it => it.temp + ' ' + it.name + ' ' + it.qty + '잔').join(', '));
+    return lines.join('\n') + '\n\n합계 ' + this.qtyOf(ppl) + '잔 · ' + this.won(this.priceOf(ppl));
+  }
+  buildPlainFor(ppl) {
+    const agg = {};
+    ppl.forEach(p => p.items.forEach(it => { const k = it.temp + ' ' + it.name; agg[k] = (agg[k] || 0) + it.qty; }));
+    const lines = Object.keys(agg).map(k => k + ' ' + agg[k] + '잔');
+    return lines.join('\n') + '\n\n합계 ' + this.qtyOf(ppl) + '잔 · ' + this.won(this.priceOf(ppl));
+  }
+  buildNamed() { return this.buildNamedFor(this.state.people); }
+  buildPlain() { return this.buildPlainFor(this.state.people); }
+  totalQty() { return this.qtyOf(this.state.people); }
+  totalPrice() { return this.priceOf(this.state.people); }
+  relTime(ts) {
+    const now = Date.now(), d = now - ts, day = 86400000, dt = new Date(ts);
+    const time = String(dt.getHours()).padStart(2, '0') + ':' + String(dt.getMinutes()).padStart(2, '0');
+    if (d < 60000) return '방금 전 · ' + time;
+    const sameDay = dt.toDateString() === new Date().toDateString();
+    if (sameDay) return '오늘 ' + time;
+    if (d < 2 * day) return '어제 ' + time;
+    return Math.floor(d / day) + '일 전 · ' + time;
+  }
+  toggleHistory(id) { this.setState({ expandedHistory: this.state.expandedHistory === id ? null : id }); }
+  setHistoryView(id, v) { this.setState({ historyView: Object.assign({}, this.state.historyView, { [id]: v }) }); }
+  copyHistory(h) {
+    const v = this.state.historyView[h.id] || 'named';
+    const t = v === 'named' ? this.buildNamedFor(h.people) : this.buildPlainFor(h.people);
+    try { navigator.clipboard && navigator.clipboard.writeText(t); } catch (e) {}
+    this.showToast('주문 양식을 복사했어요');
+  }
+  copyComplete() {
+    const t = this.state.completeView === 'named' ? this.buildNamed() : this.buildPlain();
+    try { navigator.clipboard && navigator.clipboard.writeText(t); } catch (e) {}
+    this.showToast('주문 양식을 복사했어요');
+  }
+
+  // ---- share ----
+  refreshStatus() {
+    const partDone = Object.assign({}, this.state.partDone);
+    const pending = Object.keys(partDone).find(k => !partDone[k]);
+    if (pending) { partDone[pending] = true; this.setState({ partDone, statusUpdated: Date.now() }); this.showToast(pending + ' 님이 방금 등록했어요'); }
+    else { this.setState({ statusUpdated: Date.now() }); this.showToast('현황을 업데이트했어요'); }
+  }
+
+  // ---- continuous voice ----
+  openVoice() {
+    clearInterval(this._voiceT);
+    this.setState({ overlay: 'voice', voiceAdded: [], voiceIdx: 0, voicePhase: 'listening', voiceTyped: '' });
+    this.typePhrase(0);
+  }
+  typePhrase(idx) {
+    const q = this.VOICE_QUEUE[idx];
+    clearInterval(this._voiceT);
+    if (!q) { this.setState({ voicePhase: 'done' }); return; }
+    this.setState({ voicePhase: 'listening', voiceTyped: '', voiceIdx: idx });
+    let i = 0;
+    this._voiceT = setInterval(() => {
+      i++;
+      this.setState({ voiceTyped: q.phrase.slice(0, i) });
+      if (i >= q.phrase.length) {
+        clearInterval(this._voiceT);
+        this._voiceT = setTimeout(() => {
+          const added = this.state.voiceAdded.concat([q]);
+          this.setState({ voiceAdded: added, voicePhase: 'recognized' });
+          this._voiceT = setTimeout(() => {
+            const next = idx + 1;
+            if (this.VOICE_QUEUE[next]) this.typePhrase(next);
+            else this.setState({ voicePhase: 'done' });
+          }, 1000);
+        }, 420);
+      }
+    }, 80);
+  }
+  finishVoice() {
+    const people = this.state.people.slice();
+    this.state.voiceAdded.forEach((q, i) => {
+      people.push({ id: 'v' + i + Date.now(), name: q.name, color: q.color, fg: '#fff', items: [ { id: 'iv' + i + Date.now(), name: q.menu, temp: q.temp, qty: q.qty, price: q.price } ] });
+    });
+    const n = this.state.voiceAdded.length;
+    this.setState({ people, overlay: null });
+    if (this.state.screen !== 'collect') this.go('collect');
+    this.showToast(n + '명의 주문을 추가했어요 🎉');
+  }
+
+  // ---- manual add ----
+  openManual() { this.setState({ overlay: 'manual', manualName: '', manualMenu: '', manualTemp: 'ICE', manualQty: 1 }); }
+  addManual() {
+    const name = (this.state.manualName || '').trim() || '손님';
+    const menu = (this.state.manualMenu || '').trim();
+    if (!menu) { this.showToast('메뉴를 입력해 주세요'); return; }
+    const colors = ['#5B8C7A', '#C98A33', '#7B6FB0', '#6A8CC7', '#C77B9E', '#E8A13C'];
+    const color = colors[this.state.people.length % colors.length];
+    const person = { id: 'mn' + Date.now(), name, color, fg: '#fff', items: [ { id: 'mi' + Date.now(), name: menu, temp: this.state.manualTemp, qty: this.state.manualQty, price: 4500 } ] };
+    this.setState({ people: this.state.people.concat([person]), overlay: null });
+    this.showToast(name + ' 님 주문을 추가했어요');
+  }
+
+  // ---- capture ----
+  resolveCapFlag(t) { this.setState({ capFlagTemp: t }); }
+  openCapture() { clearInterval(this._capT); this.setState({ overlay: 'capture', capStep: 'upload', analyzeIdx: 0, capFlagTemp: null }); }
+  startCapture() {
+    this.setState({ capStep: 'analyzing', analyzeIdx: 0 });
+    clearInterval(this._capT);
+    this._capT = setInterval(() => {
+      const next = this.state.analyzeIdx + 1;
+      if (next > this.ANALYZE.length) { clearInterval(this._capT); this.setState({ capStep: 'result' }); }
+      else this.setState({ analyzeIdx: next });
+    }, 750);
+  }
+  approveCapture() {
+    const colors = ['#E8A13C', '#6A8CC7', '#1F6E50', '#C77B9E'];
+    const people = this.CAP_PEOPLE.map((p, i) => {
+      const qty = p.menu.includes('2잔') ? 2 : 1;
+      const name = p.menu.replace(' 2잔', '');
+      const price = name.includes('돌체') ? 6300 : name.includes('바닐라') ? 5500 : 4500;
+      const temp = (p.name === '이서연' && this.state.capFlagTemp) ? this.state.capFlagTemp : p.temp;
+      return { id: 'c' + i + Date.now(), name: p.name, isMe: p.name === '나', color: p.name === '나' ? '#1F6E50' : colors[i % 4], fg: '#fff', items: [ { id: 'ci' + i + Date.now(), name, temp, qty, price } ] };
+    });
+    this.setState({ people, overlay: null });
+    if (this.state.screen !== 'collect') this.go('collect');
+    this.showToast('4명의 주문을 추가했어요 🎉');
+  }
+  closeOverlay() { clearInterval(this._voiceT); clearTimeout(this._voiceT); clearInterval(this._capT); this.setState({ overlay: null }); }
+
+  // ---- menu ----
+  tempOf(id) { return this.state.menuTemp[id] || 'ICE'; }
+  setTemp(id, t) { this.setState({ menuTemp: Object.assign({}, this.state.menuTemp, { [id]: t }) }); }
+  addCart(m) {
+    this.setState({ cart: Object.assign({}, this.state.cart, { [m.id]: (this.state.cart[m.id] || 0) + 1 }) });
+    this.showToast(m.name + ' 담았어요 🎉');
+  }
+
+  // ---- collect edit ----
+  changeQty(pid, iid, d) {
+    const people = this.state.people.map(p => {
+      if (p.id !== pid) return p;
+      return Object.assign({}, p, { items: p.items.map(it => it.id === iid ? Object.assign({}, it, { qty: Math.max(1, it.qty + d) }) : it) });
+    });
+    this.setState({ people });
+  }
+  removeItem(pid, iid) {
+    let people = this.state.people.map(p => p.id !== pid ? p : Object.assign({}, p, { items: p.items.filter(it => it.id !== iid) }));
+    people = people.filter(p => p.items.length > 0);
+    this.setState({ people });
+    this.showToast('항목을 삭제했어요');
+  }
+
+  // ---- participant ----
+  setPTemp(t) { this.setState({ pTemp: t }); }
+  registerParticipant() {
+    const partDone = Object.assign({}, this.state.partDone, { [this.state.pName]: true });
+    this.setState({ partDone });
+    this.go('share');
+    this.showToast(this.state.pName + ' 님 주문이 등록됐어요 🎉');
+  }
+
+  renderVals() {
+    const s = this.state;
+    const sel = this.CAFES.find(c => c.id === (s.selectedCafeId || 'starbucks')) || this.CAFES[0];
+
+    const cafeRow = (c) => Object.assign({}, c, {
+      favFill: s.favs[c.id] ? '#B98B3E' : 'none',
+      favStroke: s.favs[c.id] ? '#B98B3E' : '#C9BFB0',
+      open: () => { this.setState({ selectedCafeId: c.id, memoMode: false }); this.go('menu'); },
+      toggleFav: (e) => { e.stopPropagation(); this.setState({ favs: Object.assign({}, s.favs, { [c.id]: !s.favs[c.id] }) }); },
+    });
+    const cq = (s.cafeQuery || '').trim();
+    const cafes = this.CAFES.filter(c => !cq || c.name.includes(cq)).map(cafeRow);
+    const favCafes = this.CAFES.filter(c => s.favs[c.id]).map(c => Object.assign({}, c, { open: () => { this.setState({ selectedCafeId: c.id, memoMode: false }); this.go('menu'); } }));
+
+    const mapPos = [['52%','30%'],['30%','52%'],['72%','40%'],['44%','66%'],['66%','64%'],['24%','34%']];
+    const mapPins = this.CAFES.map((c, i) => Object.assign({}, c, { x: mapPos[i][0], y: mapPos[i][1], open: () => { this.setState({ selectedCafeId: c.id, memoMode: false }); this.go('menu'); } }));
+
+    const mq = (s.menuQuery || '').trim();
+    const baseMenus = mq ? this.MENUS.filter(m => m.name.includes(mq)) : this.MENUS.filter(m => s.menuCat === 0 ? (m.popular || m.cat.includes(0)) : m.cat.includes(s.menuCat));
+    const menus = baseMenus.map(m => {
+      const t = this.tempOf(m.id); const hot = t === 'HOT', ice = t === 'ICE';
+      return {
+        name: m.name, popular: m.popular, priceText: this.won(m.price),
+        hotBg: hot ? 'var(--cc-hot-bg)' : '#fff', hotFg: hot ? 'var(--cc-hot)' : '#A89E90', hotBd: hot ? 'var(--cc-hot)' : 'var(--cc-line)',
+        iceBg: ice ? 'var(--cc-ice-bg)' : '#fff', iceFg: ice ? 'var(--cc-ice)' : '#A89E90', iceBd: ice ? 'var(--cc-ice)' : 'var(--cc-line)',
+        setHot: () => this.setTemp(m.id, 'HOT'), setIce: () => this.setTemp(m.id, 'ICE'), add: () => this.addCart(m),
+      };
+    });
+    const categories = this.CATS.map((label, i) => ({ label, select: () => this.setState({ menuCat: i, menuQuery: '' }), bg: s.menuCat === i ? 'var(--cc-green)' : 'var(--cc-band)', fg: s.menuCat === i ? '#fff' : 'var(--cc-ink2)' }));
+    const cartCount = Object.values(s.cart).reduce((a, b) => a + b, 0);
+    const cartTotal = Object.entries(s.cart).reduce((a, [id, n]) => a + (this.MENUS.find(m => m.id === id)?.price || 0) * n, 0);
+
+    const people = s.people.map(p => {
+      const qty = p.items.reduce((a, it) => a + it.qty, 0);
+      return {
+        name: p.name, isMe: !!p.isMe, qtyText: qty + '잔',
+        avatarText: p.isMe ? '나' : p.name.slice(-2), avatarBg: p.color, avatarFg: p.fg,
+        borderColor: p.isMe ? 'var(--cc-green)' : 'var(--cc-line)',
+        items: p.items.map(it => ({
+          name: it.name, temp: it.temp, qty: it.qty,
+          tempBg: it.temp === 'HOT' ? 'var(--cc-hot-bg)' : 'var(--cc-ice-bg)',
+          tempFg: it.temp === 'HOT' ? 'var(--cc-hot)' : 'var(--cc-ice)',
+          inc: () => this.changeQty(p.id, it.id, 1), dec: () => this.changeQty(p.id, it.id, -1), remove: () => this.removeItem(p.id, it.id),
+        })),
+      };
+    });
+    const hasOrders = s.people.length > 0;
+
+    const baseParts = [
+      { name: '나', order: '아이스 아메리카노 1잔', bg: '#1F6E50' },
+      { name: '김민준', order: '돌체 라떼 HOT 1잔', bg: '#E8A13C' },
+      { name: '이서연', order: '아이스 아메리카노 2잔', bg: '#6A8CC7' },
+      { name: '박지후', order: s.partDone['박지후'] ? '바닐라 라떼 ICE 1잔' : '확인 대기 중', bg: '#C77B9E' },
+    ];
+    const participants = baseParts.map(p => {
+      const ok = !!s.partDone[p.name];
+      return { name: p.name, order: p.order, avatarText: p.name === '나' ? '나' : p.name.slice(-2), avatarBg: p.bg, avatarFg: '#fff',
+        status: ok ? '확인 완료' : '대기 중', statusColor: ok ? 'var(--cc-green)' : 'var(--cc-ink3)', statusDot: ok ? '● ' : '○ ' };
+    });
+    const confirmed = baseParts.filter(p => s.partDone[p.name]).length;
+
+    const recentOrders = [
+      { initial: 'S', color: '#00704A', fg: '#fff', name: '스타벅스 강남R점', summary: '아메리카노 외 3잔 · 18,100원', date: '2일 전', reorder: () => { this.setState({ selectedCafeId: 'starbucks', memoMode: false }); this.go('menu'); } },
+      { initial: 'M', color: '#FFC400', fg: '#3A2E00', name: '메가커피 역삼점', summary: '카페라떼 외 5잔 · 21,500원', date: '지난주', reorder: () => { this.setState({ selectedCafeId: 'mega', memoMode: false }); this.go('menu'); } },
+    ];
+
+    const sampleChat = this.SAMPLE_CHAT.map(c => ({ text: c.text, name: c.name, showName: !c.me, justify: c.me ? 'flex-end' : 'flex-start', bubbleBg: c.me ? '#FEE500' : '#fff' }));
+    const capPeople = this.CAP_PEOPLE.map(p => {
+      const flagged = p.name === '이서연';
+      const temp = flagged ? (s.capFlagTemp || p.temp) : p.temp;
+      return { name: p.name, menu: p.menu, temp, tempBg: temp === 'HOT' ? 'var(--cc-hot-bg)' : 'var(--cc-ice-bg)', tempFg: temp === 'HOT' ? 'var(--cc-hot)' : 'var(--cc-ice)' };
+    });
+    const analyzeSteps = this.ANALYZE.map((label, i) => {
+      const done = i < s.analyzeIdx, active = i === s.analyzeIdx;
+      return { label, border: i === this.ANALYZE.length - 1 ? 'transparent' : 'var(--cc-line)', dot: done ? '✓' : '', dotBg: done ? 'var(--cc-green)' : active ? 'var(--cc-gold)' : 'var(--cc-band)', textColor: done || active ? 'var(--cc-ink)' : 'var(--cc-ink3)' };
+    });
+
+    const prefs = this.PREFS.map((pf, pi) => ({
+      label: pf.label, border: pi === this.PREFS.length - 1 ? 'transparent' : 'var(--cc-line)',
+      opts: pf.opts.map((label, oi) => ({ label, select: () => { this.prefSel[pi] = oi; this.forceUpdate(); },
+        bg: this.prefSel[pi] === oi ? '#fff' : 'transparent', fg: this.prefSel[pi] === oi ? 'var(--cc-green)' : 'var(--cc-ink3)', sh: this.prefSel[pi] === oi ? '0 1px 3px rgba(0,0,0,.08)' : 'none' })),
+    }));
+
+    const tabDefs = [
+      { id: 'home', label: '홈', go: () => this.go('home') },
+      { id: 'map', label: '지도', go: () => this.go('map') },
+      { id: 'history', label: '내역', go: () => this.go('history') },
+      { id: 'my', label: 'MY', go: () => this.go('my') },
+    ];
+    const tabs = tabDefs.map(t => ({ label: t.label, go: t.go, isHome: t.id === 'home', isMap: t.id === 'map', isHistory: t.id === 'history', isMy: t.id === 'my', color: s.screen === t.id ? 'var(--cc-green)' : '#B6AB9B' }));
+    const showTabs = ['home', 'map', 'history', 'my'].includes(s.screen);
+
+    const quickMenus = this.MENUS.filter(m => m.popular).map(m => ({ name: m.name, priceText: this.won(m.price), add: () => this.quickAdd(m) }));
+    const memoQ = (s.memoQuery || '').trim();
+    const memoResults = (memoQ ? this.MENUS.filter(m => m.name.includes(memoQ)) : []).map(m => ({ name: m.name, priceText: this.won(m.price), add: () => { this.quickAdd(m); this.setState({ memoQuery: '' }); } }));
+    const memoSearching = memoQ.length > 0;
+    const memoNoResult = memoSearching && memoResults.length === 0;
+    const historyItems = s.history.map(h => {
+      const view = s.historyView[h.id] || 'named';
+      const named = view === 'named';
+      const qty = this.qtyOf(h.people);
+      const first = (h.people[0] && h.people[0].items[0]) ? h.people[0].items[0].name : '주문';
+      return {
+        id: h.id, label: h.label, initial: h.initial, color: h.color, fg: h.fg,
+        dateText: this.relTime(h.ts), qtyText: qty + '잔', justNow: !!h.justNow,
+        summary: first + (qty > 1 ? (' 외 ' + (qty - 1) + '잔') : ''),
+        expanded: s.expandedHistory === h.id,
+        cardBg: h.justNow ? 'var(--cc-green-soft)' : 'var(--cc-card)', cardBd: h.justNow ? 'var(--cc-green)' : 'var(--cc-line)',
+        view, namedTabBg: named ? '#fff' : 'transparent', namedTabFg: named ? 'var(--cc-green)' : 'var(--cc-ink3)', namedTabSh: named ? '0 1px 3px rgba(0,0,0,.08)' : 'none',
+        plainTabBg: !named ? '#fff' : 'transparent', plainTabFg: !named ? 'var(--cc-green)' : 'var(--cc-ink3)', plainTabSh: !named ? '0 1px 3px rgba(0,0,0,.08)' : 'none',
+        text: named ? this.buildNamedFor(h.people) : this.buildPlainFor(h.people),
+        toggle: () => this.toggleHistory(h.id), setNamed: () => this.setHistoryView(h.id, 'named'), setPlain: () => this.setHistoryView(h.id, 'plain'), copy: () => this.copyHistory(h),
+      };
+    });
+    const hasHistory = s.history.length > 0;
+
+    const voiceAddedList = s.voiceAdded.map(q => ({ name: q.name, menu: q.menu, qty: q.qty + '잔', avatarText: q.name.slice(-2), avatarBg: q.color, tempBg: q.temp === 'HOT' ? 'var(--cc-hot-bg)' : 'var(--cc-ice-bg)', tempFg: q.temp === 'HOT' ? 'var(--cc-hot)' : 'var(--cc-ice)', temp: q.temp }));
+    const voiceLast = s.voiceAdded[s.voiceAdded.length - 1];
+
+    const pTemp = s.pTemp;
+    const resumeLabels = { cafe: '카페 고르던 중', menu: '메뉴 고르던 중', collect: '추가 주문 정리 중', complete: '주문 완료 단계', share: '공유로 메뉴 받는 중', participant: '참여자 등록 중' };
+    const namedActive = s.completeView === 'named';
+    const total = this.totalQty();
+
+    const mh = s.manualTemp === 'HOT', mi = s.manualTemp === 'ICE';
+    const upd = s.statusUpdated ? '방금 업데이트됨' : '실시간';
+
+    return {
+      isLoading: s.screen === 'loading', isHome: s.screen === 'home', isCafe: s.screen === 'cafe', isMenu: s.screen === 'menu',
+      isCollect: s.screen === 'collect', isComplete: s.screen === 'complete', isShare: s.screen === 'share',
+      isParticipant: s.screen === 'participant', isMap: s.screen === 'map', isMy: s.screen === 'my', isMemo: s.screen === 'memo', isHistory: s.screen === 'history',
+      goHome: () => this.go('home'), goCafe: () => { this.setState({ memoMode: false }); this.go('cafe'); }, goMenu: () => this.go('menu'),
+      goCollect: () => this.go('collect'), goShare: () => this.go('share'), goComplete: () => this.go('complete'), goMap: () => this.go('map'), goMy: () => this.go('my'),
+      collectBack: () => this.collectBack(),
+      enterMemo: () => this.enterMemo(), memoMode: s.memoMode,
+      memoVoice: (e) => this.memoVoice(e), memoCapture: (e) => this.memoCapture(e),
+      quickMenus, historyItems, hasHistory,
+      memoQuery: s.memoQuery, onMemoQuery: (e) => this.setState({ memoQuery: e.target.value }),
+      memoResults, memoSearching, memoNoResult,
+      hasResume: !!s.resumeScreen, resumeLabel: resumeLabels[s.resumeScreen] || '이어서 정리하기', resume: () => this.resume(),
+      finish: () => this.finish(),
+      // cafe / menu search
+      cafeQuery: s.cafeQuery, onCafeQuery: (e) => this.setState({ cafeQuery: e.target.value }),
+      menuQuery: s.menuQuery, onMenuQuery: (e) => this.setState({ menuQuery: e.target.value }),
+      cafes, favCafes, mapPins, recentOrders,
+      cafeName: sel.name, cafeInitial: sel.initial, cafeColor: sel.color, cafeFg: sel.fg,
+      menus, categories, cartCount, cartTotalText: this.won(cartTotal),
+      people, hasOrders, noOrders: !hasOrders, totalQty: total, totalPriceText: this.won(this.totalPrice()),
+      // complete
+      completeView: s.completeView, setViewNamed: () => this.setState({ completeView: 'named' }), setViewPlain: () => this.setState({ completeView: 'plain' }),
+      completeText: namedActive ? this.buildNamed() : this.buildPlain(),
+      viewHint: namedActive ? '누가 무엇을 시켰는지 한눈에 보여요' : '이름을 빼고 메뉴·수량만 — 매장 직원에게 그대로 전달하세요',
+      namedTabBg: namedActive ? '#fff' : 'transparent', namedTabFg: namedActive ? 'var(--cc-green)' : 'var(--cc-ink3)', namedTabSh: namedActive ? '0 1px 3px rgba(0,0,0,.08)' : 'none',
+      plainTabBg: !namedActive ? '#fff' : 'transparent', plainTabFg: !namedActive ? 'var(--cc-green)' : 'var(--cc-ink3)', plainTabSh: !namedActive ? '0 1px 3px rgba(0,0,0,.08)' : 'none',
+      copyComplete: () => this.copyComplete(),
+      // share
+      participants, confirmedText: confirmed + '/4 확인', updatedAgo: upd, refreshStatus: () => this.refreshStatus(),
+      goParticipant: () => this.go('participant'),
+      copyLink: () => this.showToast('참여 링크를 복사했어요'), copyCode: () => this.showToast('참여 코드 C4F9를 복사했어요'), shareKakao: () => this.showToast('카카오톡으로 공유했어요 🎉'),
+      // participant form
+      pName: s.pName, pMenu: s.pMenu, pTemp,
+      pHotBg: pTemp === 'HOT' ? 'var(--cc-hot-bg)' : '#fff', pHotFg: pTemp === 'HOT' ? 'var(--cc-hot)' : '#A89E90', pHotBd: pTemp === 'HOT' ? 'var(--cc-hot)' : 'var(--cc-line)',
+      pIceBg: pTemp === 'ICE' ? 'var(--cc-ice-bg)' : '#fff', pIceFg: pTemp === 'ICE' ? 'var(--cc-ice)' : '#A89E90', pIceBd: pTemp === 'ICE' ? 'var(--cc-ice)' : 'var(--cc-line)',
+      setPHot: () => this.setPTemp('HOT'), setPIce: () => this.setPTemp('ICE'), registerParticipant: () => this.registerParticipant(),
+      prefs, tabs, showTabs,
+      // overlays
+      overlayVoice: s.overlay === 'voice', overlayCapture: s.overlay === 'capture', overlayManual: s.overlay === 'manual',
+      voiceListening: s.voicePhase === 'listening', voiceRecognized: s.voicePhase === 'recognized', voiceFinished: s.voicePhase === 'done',
+      voiceTyped: s.voiceTyped, voiceAddedList, voiceHasAdded: s.voiceAdded.length > 0, voiceAddedCount: s.voiceAdded.length, voiceLastName: voiceLast ? voiceLast.name : '',
+      capUpload: s.capStep === 'upload', capAnalyzing: s.capStep === 'analyzing', capResult: s.capStep === 'result',
+      capFlagResolved: !!s.capFlagTemp, capFlagUnresolved: !s.capFlagTemp, capFlagTempText: s.capFlagTemp || '',
+      sampleChat, capPeople, analyzeSteps,
+      openVoice: () => this.openVoice(), openCapture: () => this.openCapture(), openManual: () => this.openManual(), closeOverlay: () => this.closeOverlay(),
+      finishVoice: () => this.finishVoice(), startCapture: () => this.startCapture(), approveCapture: () => this.approveCapture(),
+      resolveCapHot: () => this.resolveCapFlag('HOT'), resolveCapIce: () => this.resolveCapFlag('ICE'),
+      // manual
+      manualName: s.manualName, manualMenu: s.manualMenu, manualQty: s.manualQty,
+      onManualName: (e) => this.setState({ manualName: e.target.value }), onManualMenu: (e) => this.setState({ manualMenu: e.target.value }),
+      setManualHot: () => this.setState({ manualTemp: 'HOT' }), setManualIce: () => this.setState({ manualTemp: 'ICE' }),
+      manualInc: () => this.setState({ manualQty: s.manualQty + 1 }), manualDec: () => this.setState({ manualQty: Math.max(1, s.manualQty - 1) }),
+      mHotBg: mh ? 'var(--cc-hot-bg)' : '#fff', mHotFg: mh ? 'var(--cc-hot)' : '#A89E90', mHotBd: mh ? 'var(--cc-hot)' : 'var(--cc-line)',
+      mIceBg: mi ? 'var(--cc-ice-bg)' : '#fff', mIceFg: mi ? 'var(--cc-ice)' : '#A89E90', mIceBd: mi ? 'var(--cc-ice)' : 'var(--cc-line)',
+      addManual: () => this.addManual(),
+      toast: s.toast,
+    };
+  }
+}
+</script>
+</body>
+</html>
