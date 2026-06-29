@@ -1,6 +1,6 @@
-import { ChevronLeft, LinkIcon, KakaoIcon, GridIcon, QrSample } from '../icons'
+import { ChevronLeft, LinkIcon, KakaoIcon, GridIcon, QrSample, ChevronRight, PersonIcon } from '../icons'
 
-export default function Share({ participants, confirmedCount, onBack, onCopyLink, onCopyCode, onShareKakao, onFinish }) {
+export default function Share({ participants, confirmedCount, onBack, onCopyLink, onCopyCode, onShareKakao, onFinish, onGoParticipant }) {
   return (
     <div style={{ padding: '0 0 40px', animation: 'cc-fade .2s ease' }}>
       <div style={{ position: 'sticky', top: 0, zIndex: 5, background: 'var(--cc-cream)', padding: '54px 20px 12px' }}>
@@ -68,6 +68,17 @@ export default function Share({ participants, confirmedCount, onBack, onCopyLink
               </div>
             </div>
           </div>
+        </div>
+
+        <div onClick={onGoParticipant} style={{ marginTop: 20, background: 'var(--cc-card)', border: '1px solid var(--cc-line)', borderRadius: 16, padding: 14, display: 'flex', alignItems: 'center', gap: 13, cursor: 'pointer' }}>
+          <div style={{ width: 38, height: 38, borderRadius: 12, background: 'var(--cc-green-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none' }}>
+            <PersonIcon color="#1F6E50" size={20} />
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: 14, fontWeight: 700 }}>참여자 등록</div>
+            <div style={{ fontSize: 12, color: 'var(--cc-ink2)', marginTop: 2 }}>직접 이름과 메뉴를 등록할 수 있어요</div>
+          </div>
+          <ChevronRight color="#9A9082" size={18} />
         </div>
 
         <div style={{ marginTop: 20 }}>

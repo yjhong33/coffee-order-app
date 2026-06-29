@@ -1,3 +1,5 @@
+import { won } from './data'
+
 export function personQty(person) {
   return person.items.reduce((sum, it) => sum + it.qty, 0)
 }
@@ -12,4 +14,23 @@ export function computeTotals(people) {
     }
   }
   return { totalQty, totalPrice }
+}
+
+export function buildNamedFor(people) {
+  const lines = people.map((p) => `${p.name}: ${p.items.map((it) => `${it.temp} ${it.name} ${it.qty}잔`).join(', ')}`)
+  const { totalQty, totalPrice } = computeTotals(people)
+  return `${lines.join('\n')}\n\n합계 ${totalQty}잔 · ${won(totalPrice)}`
+}
+
+export function buildPlainFor(people) {
+  const agg = {}
+  people.forEach((p) =>
+    p.items.forEach((it) => {
+      const key = `${it.temp} ${it.name}`
+      agg[key] = (agg[key] || 0) + it.qty
+    }),
+  )
+  const lines = Object.keys(agg).map((key) => `${key} ${agg[key]}잔`)
+  const { totalQty, totalPrice } = computeTotals(people)
+  return `${lines.join('\n')}\n\n합계 ${totalQty}잔 · ${won(totalPrice)}`
 }

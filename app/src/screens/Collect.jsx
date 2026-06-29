@@ -1,7 +1,7 @@
-import { ChevronLeft, ChevronRight, MicIcon, CaptureIcon, MinusIcon, PlusIcon, CloseIcon, CupIcon } from '../icons'
+import { ChevronLeft, ChevronRight, MicIcon, CaptureIcon, MinusIcon, PlusIcon, CloseIcon, CupIcon, GridIcon } from '../icons'
 import { won } from '../data'
 
-export default function Collect({ people, totalQty, totalPrice, onBack, onOpenVoice, onOpenCapture, onChangeQty, onRemoveItem, onGoShare }) {
+export default function Collect({ people, totalQty, totalPrice, memoMode, onBack, onOpenVoice, onOpenCapture, onOpenManual, onChangeQty, onRemoveItem, onFinish }) {
   const hasOrders = people.length > 0
 
   return (
@@ -11,18 +11,22 @@ export default function Collect({ people, totalQty, totalPrice, onBack, onOpenVo
           <div onClick={onBack} style={{ width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', marginLeft: -8 }}>
             <ChevronLeft />
           </div>
-          <div style={{ fontSize: 19, fontWeight: 700, letterSpacing: '-.4px' }}>주문 취합</div>
+          <div style={{ fontSize: 19, fontWeight: 700, letterSpacing: '-.4px' }}>{memoMode ? '메뉴 메모' : '주문 취합'}</div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 14 }}>
-          <div style={{ flex: 1, height: 5, borderRadius: 3, background: 'var(--cc-green)' }}></div>
-          <div style={{ flex: 1, height: 5, borderRadius: 3, background: 'var(--cc-green)' }}></div>
-          <div style={{ flex: 1, height: 5, borderRadius: 3, background: 'var(--cc-band)' }}></div>
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, fontWeight: 700, marginTop: 7 }}>
-          <span style={{ color: 'var(--cc-green)' }}>① 메뉴 선택</span>
-          <span style={{ color: 'var(--cc-green)' }}>② 취합 확인</span>
-          <span style={{ color: 'var(--cc-ink3)' }}>③ 공유</span>
-        </div>
+        {!memoMode && (
+          <>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 14 }}>
+              <div style={{ flex: 1, height: 5, borderRadius: 3, background: 'var(--cc-green)' }}></div>
+              <div style={{ flex: 1, height: 5, borderRadius: 3, background: 'var(--cc-green)' }}></div>
+              <div style={{ flex: 1, height: 5, borderRadius: 3, background: 'var(--cc-band)' }}></div>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, fontWeight: 700, marginTop: 7 }}>
+              <span style={{ color: 'var(--cc-green)' }}>① 메뉴 선택</span>
+              <span style={{ color: 'var(--cc-green)' }}>② 취합 확인</span>
+              <span style={{ color: 'var(--cc-ink3)' }}>③ 공유</span>
+            </div>
+          </>
+        )}
       </div>
 
       <div style={{ padding: '6px 20px 0' }}>
@@ -34,6 +38,10 @@ export default function Collect({ people, totalQty, totalPrice, onBack, onOpenVo
           <div onClick={onOpenCapture} style={{ flex: 1, background: 'var(--cc-gold-soft)', borderRadius: 13, padding: 11, display: 'flex', alignItems: 'center', gap: 9, cursor: 'pointer' }}>
             <CaptureIcon size={19} />
             <span style={{ fontSize: 13, fontWeight: 700, color: '#9A6F26' }}>캡처 추가</span>
+          </div>
+          <div onClick={onOpenManual} style={{ flex: 1, background: 'var(--cc-band)', borderRadius: 13, padding: 11, display: 'flex', alignItems: 'center', gap: 9, cursor: 'pointer' }}>
+            <GridIcon size={19} color="var(--cc-ink2)" />
+            <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--cc-ink2)' }}>직접 입력</span>
           </div>
         </div>
 
@@ -106,8 +114,8 @@ export default function Collect({ people, totalQty, totalPrice, onBack, onOpenVo
             <span style={{ fontSize: 13, color: 'var(--cc-ink2)', fontWeight: 600 }}>총 {totalQty}잔</span>
             <span style={{ fontSize: 18, fontWeight: 800, letterSpacing: '-.4px' }}>{won(totalPrice)}</span>
           </div>
-          <div onClick={onGoShare} style={{ background: 'var(--cc-green)', borderRadius: 15, height: 56, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, cursor: 'pointer', boxShadow: '0 10px 24px rgba(31,110,80,.30)' }}>
-            <span style={{ fontSize: 16, fontWeight: 700, color: '#fff' }}>공유하고 참여 받기</span>
+          <div onClick={onFinish} style={{ background: 'var(--cc-green)', borderRadius: 15, height: 56, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, cursor: 'pointer', boxShadow: '0 10px 24px rgba(31,110,80,.30)' }}>
+            <span style={{ fontSize: 16, fontWeight: 700, color: '#fff' }}>완료하기</span>
             <ChevronRight />
           </div>
         </div>

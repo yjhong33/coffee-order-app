@@ -73,3 +73,33 @@ export const RECENT_ORDERS = [
 export function won(n) {
   return n.toLocaleString('ko-KR') + '원'
 }
+
+export const HISTORY_SEED = [
+  {
+    id: 'hseed1',
+    label: '스타벅스 강남R점',
+    initial: 'S',
+    color: '#00704A',
+    fg: '#fff',
+    ts: Date.now() - 2 * 86400000,
+    justNow: false,
+    people: [
+      { name: '나', items: [{ name: '아메리카노', temp: 'ICE', qty: 1, price: 4500 }] },
+      { name: '김민준', items: [{ name: '돌체 라떼', temp: 'HOT', qty: 1, price: 6300 }] },
+      { name: '이서연', items: [{ name: '아메리카노', temp: 'ICE', qty: 2, price: 4500 }] },
+    ],
+  },
+  {
+    id: 'hseed2',
+    label: '메가커피 역삼점',
+    initial: 'M',
+    color: '#FFC400',
+    fg: '#3A2E00',
+    ts: Date.now() - 7 * 86400000,
+    justNow: false,
+    people: [
+      { name: '나', items: [{ name: '카페 라떼', temp: 'ICE', qty: 1, price: 5000 }] },
+      { name: '한지민', items: [{ name: '콜드브루', temp: 'ICE', qty: 1, price: 4900 }] },
+    ],
+  },
+]

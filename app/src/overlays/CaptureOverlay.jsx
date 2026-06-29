@@ -1,7 +1,10 @@
 import { CloseIcon, CameraIcon, GalleryIcon, SpinnerIcon, CheckIcon } from '../icons'
 import { SAMPLE_CHAT, CAP_PEOPLE, ANALYZE_STEPS } from '../data'
 
-export default function CaptureOverlay({ step, analyzeIdx, onClose, onStart, onApprove }) {
+const FLAGGED_NAME = '이서연'
+
+export default function CaptureOverlay({ step, analyzeIdx, onClose, onStart, onApprove, capFlagTemp, onResolveFlag }) {
+  const flagResolved = !!capFlagTemp
   return (
     <div style={{ position: 'absolute', inset: 0, zIndex: 30, background: 'rgba(18,14,8,.5)', backdropFilter: 'blur(2px)', display: 'flex', alignItems: 'flex-end', animation: 'cc-fade .2s ease' }}>
       <div className="cc-scroll" style={{ width: '100%', maxHeight: '90%', overflowY: 'auto', background: 'var(--cc-cream)', borderRadius: '24px 24px 0 0', padding: '22px 20px calc(20px + env(safe-area-inset-bottom))', animation: 'cc-sheet .28s cubic-bezier(.2,.8,.2,1)' }}>
@@ -103,29 +106,49 @@ export default function CaptureOverlay({ step, analyzeIdx, onClose, onStart, onA
               </div>
               <div style={{ flex: 1, background: '#fff', border: '1px solid var(--cc-line)', borderRadius: 14, padding: 11 }}>
                 <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--cc-green)', marginBottom: 7 }}>정리된 결과</div>
-                {CAP_PEOPLE.map((cp, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '5px 0', borderBottom: '1px solid var(--cc-line)' }}>
-                    <span
-                      style={{
-                        fontSize: 9,
-                        fontWeight: 800,
-                        padding: '2px 5px',
-                        borderRadius: 5,
-                        flex: 'none',
-                        background: cp.temp === 'HOT' ? 'var(--cc-hot-bg)' : 'var(--cc-ice-bg)',
-                        color: cp.temp === 'HOT' ? 'var(--cc-hot)' : 'var(--cc-ice)',
-                      }}
-                    >
-                      {cp.temp}
-                    </span>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: 11, fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{cp.menu}</div>
-                      <div style={{ fontSize: 10, color: 'var(--cc-ink3)' }}>{cp.name}</div>
+                {CAP_PEOPLE.map((cp, i) => {
+                  const flagged = cp.name === FLAGGED_NAME
+                  const temp = flagged ? capFlagTemp || cp.temp : cp.temp
+                  return (
+                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '5px 0', borderBottom: '1px solid var(--cc-line)' }}>
+                      <span
+                        style={{
+                          fontSize: 9,
+                          fontWeight: 800,
+                          padding: '2px 5px',
+                          borderRadius: 5,
+                          flex: 'none',
+                          background: temp === 'HOT' ? 'var(--cc-hot-bg)' : 'var(--cc-ice-bg)',
+                          color: temp === 'HOT' ? 'var(--cc-hot)' : 'var(--cc-ice)',
+                        }}
+                      >
+                        {flagged && !flagResolved ? '?' : temp}
+                      </span>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontSize: 11, fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{cp.menu}</div>
+                        <div style={{ fontSize: 10, color: 'var(--cc-ink3)' }}>{cp.name}</div>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             </div>
+
+            {!flagResolved && (
+              <div style={{ marginTop: 14, background: 'var(--cc-gold-soft)', border: '1px solid var(--cc-gold)', borderRadius: 14, padding: 14 }}>
+                <div style={{ fontSize: 13, fontWeight: 700, color: '#9A6F26' }}>{FLAGGED_NAME} 님의 온도가 명확하지 않아요</div>
+                <div style={{ fontSize: 12, color: 'var(--cc-ink2)', marginTop: 4 }}>HOT인지 ICE인지 선택해 주세요</div>
+                <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
+                  <div onClick={() => onResolveFlag('HOT')} style={{ flex: 1, textAlign: 'center', fontSize: 13, fontWeight: 700, padding: 10, borderRadius: 10, cursor: 'pointer', background: '#fff', color: 'var(--cc-hot)', border: '1px solid var(--cc-hot)' }}>
+                    HOT
+                  </div>
+                  <div onClick={() => onResolveFlag('ICE')} style={{ flex: 1, textAlign: 'center', fontSize: 13, fontWeight: 700, padding: 10, borderRadius: 10, cursor: 'pointer', background: '#fff', color: 'var(--cc-ice)', border: '1px solid var(--cc-ice)' }}>
+                    ICE
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div style={{ fontSize: 12, color: 'var(--cc-ink3)', textAlign: 'center', marginTop: 12, lineHeight: 1.5 }}>
               혹시 잘못 인식된 게 있다면, 추가한 뒤
               <br />
@@ -133,7 +156,21 @@ export default function CaptureOverlay({ step, analyzeIdx, onClose, onStart, onA
             </div>
             <div style={{ display: 'flex', gap: 10, marginTop: 14 }}>
               <div onClick={onClose} style={{ flex: 1, textAlign: 'center', fontSize: 15, fontWeight: 700, padding: 15, borderRadius: 14, background: 'var(--cc-band)', color: 'var(--cc-ink2)', cursor: 'pointer' }}>취소</div>
-              <div onClick={onApprove} style={{ flex: 2, textAlign: 'center', fontSize: 15, fontWeight: 700, padding: 15, borderRadius: 14, background: 'var(--cc-green)', color: '#fff', cursor: 'pointer', boxShadow: '0 8px 18px rgba(31,110,80,.3)' }}>
+              <div
+                onClick={flagResolved ? onApprove : undefined}
+                style={{
+                  flex: 2,
+                  textAlign: 'center',
+                  fontSize: 15,
+                  fontWeight: 700,
+                  padding: 15,
+                  borderRadius: 14,
+                  background: flagResolved ? 'var(--cc-green)' : 'var(--cc-band)',
+                  color: flagResolved ? '#fff' : 'var(--cc-ink3)',
+                  cursor: flagResolved ? 'pointer' : 'not-allowed',
+                  boxShadow: flagResolved ? '0 8px 18px rgba(31,110,80,.3)' : 'none',
+                }}
+              >
                 {CAP_PEOPLE.length}명 모두 추가하기
               </div>
             </div>

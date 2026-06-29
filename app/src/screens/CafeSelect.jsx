@@ -1,6 +1,6 @@
 import { ChevronLeft, SearchIcon, StarIcon, HeartIcon } from '../icons'
 
-export default function CafeSelect({ cafes, favs, onBack, onGoMap, onOpenCafe, onToggleFav }) {
+export default function CafeSelect({ cafes, favs, cafeQuery, onCafeQueryChange, onBack, onGoMap, onOpenCafe, onToggleFav }) {
   return (
     <div style={{ padding: '0 0 40px', animation: 'cc-fade .2s ease' }}>
       <div style={{ position: 'sticky', top: 0, zIndex: 5, background: 'var(--cc-cream)', padding: '54px 20px 8px' }}>
@@ -12,7 +12,12 @@ export default function CafeSelect({ cafes, favs, onBack, onGoMap, onOpenCafe, o
         </div>
         <div style={{ marginTop: 12, background: '#fff', border: '1px solid var(--cc-line)', borderRadius: 13, height: 46, display: 'flex', alignItems: 'center', gap: 10, padding: '0 14px' }}>
           <SearchIcon size={19} />
-          <span style={{ fontSize: 14, color: 'var(--cc-ink3)' }}>카페 검색</span>
+          <input
+            value={cafeQuery}
+            onChange={(e) => onCafeQueryChange(e.target.value)}
+            placeholder="카페 검색"
+            style={{ flex: 1, fontSize: 14, color: 'var(--cc-ink)', border: 'none', outline: 'none', background: 'transparent' }}
+          />
         </div>
         <div style={{ display: 'flex', background: 'var(--cc-band)', borderRadius: 11, padding: 4, marginTop: 12 }}>
           <div style={{ flex: 1, textAlign: 'center', fontSize: 13, fontWeight: 700, padding: 8, borderRadius: 8, cursor: 'pointer', background: '#fff', color: 'var(--cc-green)', boxShadow: '0 1px 3px rgba(0,0,0,.08)' }}>목록</div>

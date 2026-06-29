@@ -1,7 +1,7 @@
-import { ChevronLeft, PastryIcon, PlusIcon, CupIcon } from '../icons'
+import { ChevronLeft, PastryIcon, PlusIcon, CupIcon, SearchIcon } from '../icons'
 import { won } from '../data'
 
-export default function Menu({ cafe, categories, menuCat, onSelectCat, menus, menuTemp, onSetTemp, cartCount, cartTotal, onAddCart, onBack, onGoCollect }) {
+export default function Menu({ cafe, categories, menuCat, onSelectCat, menus, menuQuery, onMenuQueryChange, menuTemp, onSetTemp, cartCount, cartTotal, onAddCart, onBack, onGoCollect }) {
   return (
     <div style={{ padding: '0 0 150px', animation: 'cc-fade .2s ease' }}>
       <div style={{ position: 'sticky', top: 0, zIndex: 5, background: 'var(--cc-cream)', padding: '54px 20px 0' }}>
@@ -11,6 +11,15 @@ export default function Menu({ cafe, categories, menuCat, onSelectCat, menus, me
           </div>
           <div style={{ width: 30, height: 30, borderRadius: 9, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 800, background: cafe.color, color: cafe.fg }}>{cafe.initial}</div>
           <div style={{ fontSize: 18, fontWeight: 700, letterSpacing: '-.4px' }}>{cafe.name}</div>
+        </div>
+        <div style={{ marginTop: 12, background: '#fff', border: '1px solid var(--cc-line)', borderRadius: 13, height: 44, display: 'flex', alignItems: 'center', gap: 10, padding: '0 14px' }}>
+          <SearchIcon size={18} />
+          <input
+            value={menuQuery}
+            onChange={(e) => onMenuQueryChange(e.target.value)}
+            placeholder="메뉴 검색"
+            style={{ flex: 1, fontSize: 14, color: 'var(--cc-ink)', border: 'none', outline: 'none', background: 'transparent' }}
+          />
         </div>
         <div className="cc-scroll" style={{ display: 'flex', gap: 8, overflowX: 'auto', padding: '14px 0 12px' }}>
           {categories.map((label, i) => (

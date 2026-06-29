@@ -10,23 +10,31 @@ import {
   PARTICIPANT_STATUS,
   RECENT_ORDERS,
   CAP_PEOPLE,
+  HISTORY_SEED,
 } from './data'
-import { computeTotals } from './selectors'
+import { computeTotals, buildNamedFor, buildPlainFor } from './selectors'
 import { parseVoiceOrder } from './voiceParser'
 import Home from './screens/Home'
 import CafeSelect from './screens/CafeSelect'
 import Menu from './screens/Menu'
 import Collect from './screens/Collect'
+import Complete from './screens/Complete'
 import Share from './screens/Share'
+import Participant from './screens/Participant'
+import History from './screens/History'
+import Loading from './screens/Loading'
 import Map from './screens/Map'
 import My from './screens/My'
 import VoiceOverlay from './overlays/VoiceOverlay'
 import CaptureOverlay from './overlays/CaptureOverlay'
+import ManualAddOverlay from './overlays/ManualAddOverlay'
 import BottomNav from './components/BottomNav'
 import Toast from './components/Toast'
 
-const TABBED_SCREENS = ['home', 'map', 'collect', 'my']
+const TABBED_SCREENS = ['home', 'map', 'history', 'my']
 const CAP_PEOPLE_COLORS = ['#E8A13C', '#6A8CC7', '#1F6E50', '#C77B9E']
+const DEEP_SCREENS = ['cafe', 'menu', 'memo', 'collect', 'complete', 'share', 'participant']
+const SESSION_KEY = 'callcoffee_session'
 const SpeechRecognitionAPI = typeof window !== 'undefined' ? window.SpeechRecognition || window.webkitSpeechRecognition : null
 
 let idSeq = 0
@@ -61,6 +69,7 @@ function capturePersonToItem(p) {
 }
 
 export default function App() {
+  const [loading, setLoading] = useState(true)
   const [screen, setScreen] = useState('home')
   const [overlay, setOverlay] = useState(null)
   const [voicePhase, setVoicePhase] = useState('listening')
@@ -70,6 +79,7 @@ export default function App() {
   const [voiceError, setVoiceError] = useState('')
   const [capStep, setCapStep] = useState('upload')
   const [analyzeIdx, setAnalyzeIdx] = useState(0)
+  const [capFlagTemp, setCapFlagTemp] = useState(null)
   const [menuCat, setMenuCat] = useState(0)
   const [menuTemp, setMenuTemp] = useState({})
   const [cart, setCart] = useState({})
@@ -79,19 +89,87 @@ export default function App() {
   const [prefSel, setPrefSel] = useState([1, 1, 1])
   const [toast, setToast] = useState('')
 
+  // ---- new state (additive) ----
+  const [memoMode, setMemoMode] = useState(false)
+  const [history, setHistory] = useState(HISTORY_SEED)
+  const [resumeScreen, setResumeScreen] = useState(null)
+  const [completeView, setCompleteView] = useState('named')
+  const [expandedHistory, setExpandedHistory] = useState(null)
+  const [historyView, setHistoryViewMap] = useState({})
+  const [manualName, setManualName] = useState('')
+  const [manualMenu, setManualMenu] = useState('')
+  const [manualTemp, setManualTemp] = useState('ICE')
+  const [manualQty, setManualQty] = useState(1)
+  const [pName, setPName] = useState('박지후')
+  const [pMenu, setPMenu] = useState('바닐라 라떼')
+  const [pTemp, setPTemp] = useState('ICE')
+  const [partDone, setPartDone] = useState({ 나: true, 김민준: true, 이서연: false, 박지후: false })
+  const [cafeQuery, setCafeQuery] = useState('')
+  const [menuQuery, setMenuQuery] = useState('')
+
   const scrollRef = useRef(null)
   const recognitionRef = useRef(null)
   const capTimerRef = useRef(null)
   const toastTimerRef = useRef(null)
+  const loadTimerRef = useRef(null)
+  const lastDeepRef = useRef(null)
 
   useEffect(() => {
     scrollRef.current?.scrollTo(0, 0)
   }, [screen])
 
+  // ---- initial load / resume restore ----
+  useEffect(() => {
+    let saved = null
+    try {
+      const raw = localStorage.getItem(SESSION_KEY)
+      if (raw) saved = JSON.parse(raw)
+    } catch {
+      // ignore malformed session
+    }
+    lastDeepRef.current = saved && saved.lastDeep ? saved.lastDeep : null
+
+    loadTimerRef.current = setTimeout(() => {
+      if (saved) {
+        if (Array.isArray(saved.people) && saved.people.length) setPeople(saved.people)
+        if (Array.isArray(saved.history)) setHistory(saved.history)
+        if (saved.selectedCafeId) setSelectedCafeId(saved.selectedCafeId)
+        setMemoMode(!!saved.memoMode)
+      }
+      const rs = lastDeepRef.current && DEEP_SCREENS.includes(lastDeepRef.current) ? lastDeepRef.current : null
+      setResumeScreen(rs)
+      setLoading(false)
+    }, 1200)
+
+    return () => clearTimeout(loadTimerRef.current)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // ---- persist session to localStorage ----
+  useEffect(() => {
+    if (loading) return
+    if (DEEP_SCREENS.includes(screen)) lastDeepRef.current = screen
+    try {
+      localStorage.setItem(
+        SESSION_KEY,
+        JSON.stringify({
+          lastDeep: lastDeepRef.current,
+          people,
+          memoMode,
+          selectedCafeId,
+          history,
+        }),
+      )
+    } catch {
+      // storage unavailable — skip persistence silently
+    }
+  }, [loading, screen, people, memoMode, selectedCafeId, history])
+
   useEffect(() => {
     return () => {
       clearTimeout(toastTimerRef.current)
       clearInterval(capTimerRef.current)
+      clearTimeout(loadTimerRef.current)
       recognitionRef.current?.stop()
     }
   }, [])
@@ -109,7 +187,45 @@ export default function App() {
 
   function openCafe(cafeId) {
     setSelectedCafeId(cafeId)
+    setMemoMode(false)
     go('menu')
+  }
+
+  // ---- memo mode / resume ----
+  function enterMemo() {
+    setMemoMode(true)
+    go('memo')
+  }
+  function resume() {
+    if (resumeScreen) go(resumeScreen)
+  }
+  function quickAdd(menu) {
+    setPeople((prev) =>
+      mergeItemIntoPeople(prev, { id: 'me', name: '나', isMe: true, color: '#1F6E50', fg: '#fff' }, { name: menu.name, temp: 'ICE', qty: 1, price: menu.price }),
+    )
+    showToast(`${menu.name} 기록했어요`)
+  }
+  function collectBack() {
+    go(memoMode ? 'home' : 'menu')
+  }
+  function finish() {
+    const cafe = CAFES.find((c) => c.id === selectedCafeId) || CAFES[0]
+    const snap = JSON.parse(JSON.stringify(people))
+    const entry = {
+      id: makeId('h'),
+      label: memoMode ? '메뉴 메모' : cafe.name,
+      initial: memoMode ? '메' : cafe.initial,
+      color: memoMode ? '#1F6E50' : cafe.color,
+      fg: memoMode ? '#fff' : cafe.fg,
+      ts: Date.now(),
+      justNow: true,
+      people: snap,
+    }
+    setHistory((prev) => [entry, ...prev.map((h) => ({ ...h, justNow: false }))])
+    setExpandedHistory(entry.id)
+    setResumeScreen(null)
+    lastDeepRef.current = null
+    go('complete')
   }
 
   // ---- voice overlay ----
@@ -185,6 +301,10 @@ export default function App() {
     setOverlay('capture')
     setCapStep('upload')
     setAnalyzeIdx(0)
+    setCapFlagTemp(null)
+  }
+  function resolveCapFlag(temp) {
+    setCapFlagTemp(temp)
   }
   function startCapture() {
     setCapStep('analyzing')
@@ -203,11 +323,13 @@ export default function App() {
     }, 750)
   }
   function approveCapture() {
+    if (!capFlagTemp) return
     setPeople((prev) => {
       let next = prev
       CAP_PEOPLE.forEach((p, i) => {
         const isMe = p.name === '나'
-        const item = capturePersonToItem(p)
+        const flagged = p.name === '이서연'
+        const item = capturePersonToItem(flagged ? { ...p, temp: capFlagTemp } : p)
         next = mergeItemIntoPeople(
           next,
           { id: makeId('p'), name: p.name, isMe, color: isMe ? '#1F6E50' : CAP_PEOPLE_COLORS[i % CAP_PEOPLE_COLORS.length], fg: '#fff' },
@@ -216,13 +338,63 @@ export default function App() {
       })
       return next
     })
-    setOverlay(null)
+    if (screen !== 'collect') go('collect')
+    else setOverlay(null)
     showToast('4명의 주문을 취합에 추가했어요 🎉')
   }
   function closeOverlay() {
     recognitionRef.current?.stop()
     clearInterval(capTimerRef.current)
     setOverlay(null)
+  }
+
+  // ---- manual add overlay ----
+  function openManual() {
+    setManualName('')
+    setManualMenu('')
+    setManualTemp('ICE')
+    setManualQty(1)
+    setOverlay('manual')
+  }
+  function addManual() {
+    const name = manualName.trim() || '손님'
+    const menuName = manualMenu.trim()
+    if (!menuName) {
+      showToast('메뉴를 입력해 주세요')
+      return
+    }
+    const colors = ['#5B8C7A', '#C98A33', '#7B6FB0', '#6A8CC7', '#C77B9E', '#E8A13C']
+    const color = colors[people.length % colors.length]
+    setPeople((prev) => [
+      ...prev,
+      { id: makeId('mn'), name, color, fg: '#fff', items: [{ id: makeId('mi'), name: menuName, temp: manualTemp, qty: manualQty, price: 4500 }] },
+    ])
+    setOverlay(null)
+    showToast(`${name} 님 주문을 추가했어요`)
+  }
+
+  // ---- participant ----
+  function registerParticipant() {
+    setPartDone((prev) => ({ ...prev, [pName]: true }))
+    go('share')
+    showToast(`${pName} 님 주문이 등록됐어요 🎉`)
+  }
+
+  // ---- history ----
+  function toggleHistory(id) {
+    setExpandedHistory((prev) => (prev === id ? null : id))
+  }
+  function setHistoryView(id, view) {
+    setHistoryViewMap((prev) => ({ ...prev, [id]: view }))
+  }
+  async function copyHistory(h) {
+    const view = historyView[h.id] || 'named'
+    const text = view === 'named' ? buildNamedFor(h.people) : buildPlainFor(h.people)
+    await copyText(text, '주문 양식을 복사했어요')
+  }
+  async function copyComplete() {
+    const text = completeView === 'named' ? buildNamedFor(people) : buildPlainFor(people)
+    await copyText(text, '주문 양식을 복사했어요')
   }
 
   // ---- menu ----
@@ -272,14 +444,18 @@ export default function App() {
   const selectedCafe = CAFES.find((c) => c.id === selectedCafeId) || CAFES[0]
   const favCafes = CAFES.filter((c) => favs[c.id])
   const mapPins = CAFES.map((c, i) => ({ ...c, x: MAP_POS[i][0], y: MAP_POS[i][1] }))
-  const menus = MENUS.filter((m) => (menuCat === 0 ? m.popular || m.cat.includes(0) : m.cat.includes(menuCat)))
+  const filteredCafes = cafeQuery.trim() ? CAFES.filter((c) => c.name.includes(cafeQuery.trim())) : CAFES
+  const menuQueryTrimmed = menuQuery.trim()
+  const menus = menuQueryTrimmed
+    ? MENUS.filter((m) => m.name.includes(menuQueryTrimmed))
+    : MENUS.filter((m) => (menuCat === 0 ? m.popular || m.cat.includes(0) : m.cat.includes(menuCat)))
   const cartCount = Object.values(cart).reduce((a, b) => a + b, 0)
   const cartTotal = Object.entries(cart).reduce((a, [id, n]) => a + (MENUS.find((m) => m.id === id)?.price || 0) * n, 0)
   const { totalQty, totalPrice } = computeTotals(people)
   const hasOrders = people.length > 0
   const confirmedCount = PARTICIPANT_STATUS.filter((p) => p.ok).length
 
-  const showTabs = TABBED_SCREENS.includes(screen) && !overlay
+  const showTabs = TABBED_SCREENS.includes(screen) && !overlay && !loading
 
   return (
     <div style={{ minHeight: '100dvh', display: 'flex', justifyContent: 'center', alignItems: 'stretch', background: '#E7E1D6' }}>
@@ -311,9 +487,23 @@ export default function App() {
               onGoCollect={() => go('collect')}
               onOpenCafe={openCafe}
               onReorder={openCafe}
+              resumeScreen={resumeScreen}
+              onResume={resume}
+              onEnterMemo={enterMemo}
             />
           )}
-          {screen === 'cafe' && <CafeSelect cafes={CAFES} favs={favs} onBack={() => go('home')} onGoMap={() => go('map')} onOpenCafe={openCafe} onToggleFav={toggleFav} />}
+          {screen === 'cafe' && (
+            <CafeSelect
+              cafes={filteredCafes}
+              favs={favs}
+              cafeQuery={cafeQuery}
+              onCafeQueryChange={setCafeQuery}
+              onBack={() => go('home')}
+              onGoMap={() => go('map')}
+              onOpenCafe={openCafe}
+              onToggleFav={toggleFav}
+            />
+          )}
           {screen === 'menu' && (
             <Menu
               cafe={selectedCafe}
@@ -321,6 +511,8 @@ export default function App() {
               menuCat={menuCat}
               onSelectCat={setMenuCat}
               menus={menus}
+              menuQuery={menuQuery}
+              onMenuQueryChange={setMenuQuery}
               menuTemp={menuTemp}
               onSetTemp={setTemp}
               cartCount={cartCount}
@@ -330,16 +522,28 @@ export default function App() {
               onGoCollect={() => go('collect')}
             />
           )}
-          {screen === 'collect' && (
+          {(screen === 'collect' || screen === 'memo') && (
             <Collect
               people={people}
               totalQty={totalQty}
               totalPrice={totalPrice}
-              onBack={() => go('menu')}
+              memoMode={memoMode}
+              onBack={collectBack}
               onOpenVoice={openVoice}
               onOpenCapture={openCapture}
+              onOpenManual={openManual}
               onChangeQty={changeQty}
               onRemoveItem={removeItem}
+              onFinish={finish}
+            />
+          )}
+          {screen === 'complete' && (
+            <Complete
+              completeView={completeView}
+              onSetView={setCompleteView}
+              completeText={completeView === 'named' ? buildNamedFor(people) : buildPlainFor(people)}
+              onCopy={copyComplete}
+              onBack={() => go('collect')}
               onGoShare={() => go('share')}
             />
           )}
@@ -352,6 +556,29 @@ export default function App() {
               onCopyCode={() => copyText('C4F9', '참여 코드 C4F9를 복사했어요')}
               onShareKakao={() => showToast('카카오톡으로 공유했어요 🎉')}
               onFinish={() => go('home')}
+              onGoParticipant={() => go('participant')}
+            />
+          )}
+          {screen === 'participant' && (
+            <Participant
+              pName={pName}
+              onNameChange={setPName}
+              pMenu={pMenu}
+              onMenuChange={setPMenu}
+              pTemp={pTemp}
+              onSetTemp={setPTemp}
+              onRegister={registerParticipant}
+              onBack={() => go('share')}
+            />
+          )}
+          {screen === 'history' && (
+            <History
+              history={history}
+              expandedHistory={expandedHistory}
+              onToggle={toggleHistory}
+              historyView={historyView}
+              onSetView={setHistoryView}
+              onCopy={copyHistory}
             />
           )}
           {screen === 'map' && <Map cafes={CAFES} mapPins={mapPins} onBack={() => go('cafe')} onOpenCafe={openCafe} />}
@@ -374,7 +601,34 @@ export default function App() {
             error={voiceError}
           />
         )}
-        {overlay === 'capture' && <CaptureOverlay step={capStep} analyzeIdx={analyzeIdx} onClose={closeOverlay} onStart={startCapture} onApprove={approveCapture} />}
+        {overlay === 'capture' && (
+          <CaptureOverlay
+            step={capStep}
+            analyzeIdx={analyzeIdx}
+            onClose={closeOverlay}
+            onStart={startCapture}
+            onApprove={approveCapture}
+            capFlagTemp={capFlagTemp}
+            onResolveFlag={resolveCapFlag}
+          />
+        )}
+        {overlay === 'manual' && (
+          <ManualAddOverlay
+            name={manualName}
+            onNameChange={setManualName}
+            menu={manualMenu}
+            onMenuChange={setManualMenu}
+            temp={manualTemp}
+            onSetTemp={setManualTemp}
+            qty={manualQty}
+            onInc={() => setManualQty((q) => q + 1)}
+            onDec={() => setManualQty((q) => Math.max(1, q - 1))}
+            onClose={closeOverlay}
+            onAdd={addManual}
+          />
+        )}
+
+        {loading && <Loading />}
 
         {toast && <Toast message={toast} />}
       </div>

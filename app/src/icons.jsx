@@ -198,6 +198,16 @@ export function MapTabIcon({ color, size = 24 }) {
   )
 }
 
+export function HistoryTabIcon({ color, size = 24 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="13" r="8"></circle>
+      <path d="M12 9v4l3 2"></path>
+      <path d="M9 2h6"></path>
+    </svg>
+  )
+}
+
 export function QrSample() {
   return (
     <svg width="118" height="118" viewBox="0 0 118 118" shapeRendering="crispEdges">

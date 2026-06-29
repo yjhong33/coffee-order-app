@@ -1,6 +1,21 @@
-import { SearchIcon, PersonIcon, PinIcon, ChevronRight, MicIcon, CaptureIcon, CupIcon } from '../icons'
+import { SearchIcon, PersonIcon, PinIcon, ChevronRight, MicIcon, CaptureIcon, CupIcon, GridIcon } from '../icons'
 
-export default function Home({ favCafes, recentOrders, hasOrders, totalQty, onGoMy, onGoCafe, onOpenVoice, onOpenCapture, onGoCollect, onOpenCafe, onReorder }) {
+export default function Home({
+  favCafes,
+  recentOrders,
+  hasOrders,
+  totalQty,
+  onGoMy,
+  onGoCafe,
+  onOpenVoice,
+  onOpenCapture,
+  onGoCollect,
+  onOpenCafe,
+  onReorder,
+  resumeScreen,
+  onResume,
+  onEnterMemo,
+}) {
   return (
     <div style={{ padding: '0 0 96px', animation: 'cc-fade .25s ease' }}>
       <div
@@ -83,6 +98,31 @@ export default function Home({ favCafes, recentOrders, hasOrders, totalQty, onGo
           </div>
         </div>
       </div>
+
+      <div style={{ padding: '14px 20px 0' }}>
+        <div onClick={onEnterMemo} style={{ background: 'var(--cc-card)', border: '1px solid var(--cc-line)', borderRadius: 18, padding: 16, display: 'flex', alignItems: 'center', gap: 13, cursor: 'pointer' }}>
+          <div style={{ width: 40, height: 40, borderRadius: 13, background: 'var(--cc-band)', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none' }}>
+            <GridIcon />
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: 15, fontWeight: 700, letterSpacing: '-.3px' }}>메뉴 메모</div>
+            <div style={{ fontSize: 12, color: 'var(--cc-ink2)', marginTop: 4, lineHeight: 1.45 }}>카페를 정하기 전에 메뉴부터 빠르게 적어둬요</div>
+          </div>
+          <ChevronRight color="#9A9082" size={20} />
+        </div>
+      </div>
+
+      {resumeScreen && (
+        <div style={{ padding: '14px 20px 0' }}>
+          <div onClick={onResume} style={{ background: 'var(--cc-gold-soft)', border: '1px solid var(--cc-gold)', borderRadius: 18, padding: '15px 16px', display: 'flex', alignItems: 'center', gap: 13, cursor: 'pointer' }}>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: '#9A6F26' }}>이어서 정리하기</div>
+              <div style={{ fontSize: 12, color: 'var(--cc-ink2)', marginTop: 3 }}>하던 작업이 남아 있어요</div>
+            </div>
+            <ChevronRight color="#9A6F26" size={20} />
+          </div>
+        </div>
+      )}
 
       {hasOrders && (
         <div style={{ padding: '18px 20px 0' }}>
