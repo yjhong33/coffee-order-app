@@ -13,6 +13,16 @@ export default function Complete({ completeView, onSetView, completeText, onCopy
           </div>
           <div style={{ fontSize: 19, fontWeight: 700, letterSpacing: '-.4px' }}>주문 완료</div>
         </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 14 }}>
+          <div style={{ flex: 1, height: 5, borderRadius: 3, background: 'var(--cc-green)' }}></div>
+          <div style={{ flex: 1, height: 5, borderRadius: 3, background: 'var(--cc-green)' }}></div>
+          <div style={{ flex: 1, height: 5, borderRadius: 3, background: 'var(--cc-green)' }}></div>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, fontWeight: 700, marginTop: 7 }}>
+          <span style={{ color: 'var(--cc-green)' }}>① 메뉴 선택</span>
+          <span style={{ color: 'var(--cc-green)' }}>② 메뉴 확인</span>
+          <span style={{ color: 'var(--cc-green)' }}>③ 공유·주문</span>
+        </div>
       </div>
 
       <div style={{ padding: '8px 20px 0' }}>

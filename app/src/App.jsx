@@ -590,6 +590,7 @@ export default function App() {
               onChangeQty={changeQty}
               onRemoveItem={removeItem}
               onFinish={finish}
+              onGoShare={() => go('share')}
             />
           )}
           {screen === 'complete' && (

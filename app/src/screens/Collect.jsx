@@ -1,7 +1,7 @@
-import { ChevronLeft, ChevronRight, MicIcon, CaptureIcon, MinusIcon, PlusIcon, CloseIcon, CupIcon, GridIcon } from '../icons'
+import { ChevronLeft, ChevronRight, MicIcon, CaptureIcon, MinusIcon, PlusIcon, CloseIcon, CupIcon, GridIcon, LinkIcon } from '../icons'
 import { won } from '../data'
 
-export default function Collect({ people, totalQty, totalPrice, memoMode, onBack, onOpenVoice, onOpenCapture, onOpenManual, onChangeQty, onRemoveItem, onFinish }) {
+export default function Collect({ people, totalQty, totalPrice, memoMode, onBack, onOpenVoice, onOpenCapture, onOpenManual, onChangeQty, onRemoveItem, onFinish, onGoShare }) {
   const hasOrders = people.length > 0
 
   return (
@@ -118,9 +118,17 @@ export default function Collect({ people, totalQty, totalPrice, memoMode, onBack
             <span style={{ fontSize: 13, color: 'var(--cc-ink2)', fontWeight: 600 }}>총 {totalQty}잔</span>
             <span style={{ fontSize: 18, fontWeight: 800, letterSpacing: '-.4px' }}>{won(totalPrice)}</span>
           </div>
-          <div onClick={onFinish} style={{ background: 'var(--cc-green)', borderRadius: 15, height: 56, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, cursor: 'pointer', boxShadow: '0 10px 24px rgba(31,110,80,.30)' }}>
-            <span style={{ fontSize: 16, fontWeight: 700, color: '#fff' }}>주문하러 가기</span>
-            <ChevronRight />
+          <div style={{ display: 'flex', gap: 10 }}>
+            {!memoMode && onGoShare && (
+              <div onClick={onGoShare} style={{ flex: 1, background: '#fff', border: '1.5px solid var(--cc-green)', borderRadius: 15, height: 56, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7, cursor: 'pointer' }}>
+                <LinkIcon color="#1F6E50" size={18} />
+                <span style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--cc-green)' }}>추가 주문 (링크 보내기)</span>
+              </div>
+            )}
+            <div onClick={onFinish} style={{ flex: 1.3, background: 'var(--cc-green)', borderRadius: 15, height: 56, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, cursor: 'pointer', boxShadow: '0 10px 24px rgba(31,110,80,.30)' }}>
+              <span style={{ fontSize: 16, fontWeight: 700, color: '#fff' }}>주문하러 가기</span>
+              <ChevronRight />
+            </div>
           </div>
         </div>
       )}
