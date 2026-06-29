@@ -1,6 +1,15 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { ChevronLeft, ChevronRight, MapLines, LocateIcon } from '../icons'
+import { ChevronLeft, ChevronRight, MapLines, LocateIcon, RefreshIcon, DefaultCafeMarker } from '../icons'
 import { loadKakaoMaps } from '../kakaoMap'
+
+const DEFAULT_MARKER_SVG =
+  '<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+  '<circle cx="20" cy="20" r="20" fill="#B98B3E"></circle>' +
+  '<path d="M19 9c0 1.2-1.4 1.2-1.4 2.5S19 13 19 13" stroke="#fff" stroke-width="1.4" stroke-linecap="round"></path>' +
+  '<path d="M23 9c0 1.2-1.4 1.2-1.4 2.5S23 13 23 13" stroke="#fff" stroke-width="1.4" stroke-linecap="round"></path>' +
+  '<path d="M11 17h17l-1.3 9.3A3 3 0 0 1 23.7 29H16.3a3 3 0 0 1-3-2.7L12 17Z" fill="#fff"></path>' +
+  '<path d="M28 18.5h1.6a2.6 2.6 0 0 1 0 5.2H27.6" stroke="#fff" stroke-width="1.8" stroke-linecap="round"></path>' +
+  '</svg>'
 
 const BRAND_KEYWORDS = {
   starbucks: ['스타벅스'],
@@ -20,7 +29,7 @@ function matchBrand(placeName, cafes) {
   return null
 }
 
-export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, onOpenCafe }) {
+export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, onOpenCafe, onEnterMemo }) {
   const mapDivRef = useRef(null)
   const mapRef = useRef(null)
   const overlaysRef = useRef([])
@@ -33,12 +42,13 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
   const [userPos, setUserPos] = useState(null)
   const [locationDenied, setLocationDenied] = useState(false)
   const [nearbyCafes, setNearbyCafes] = useState([])
+  const [searchCenter, setSearchCenter] = useState(null)
+  const [mapMoved, setMapMoved] = useState(false)
 
-  useEffect(() => {
-    if (!mapReady || !userPos || !window.kakao?.maps?.services) return
+  function searchNearby(center) {
+    if (!window.kakao?.maps?.services) return
     const kakao = window.kakao
     const places = new kakao.maps.services.Places()
-    const location = new kakao.maps.LatLng(userPos.lat, userPos.lng)
     places.categorySearch(
       'CE7',
       (results, status) => {
@@ -59,18 +69,45 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
             color: matched?.color ?? '#8B7355',
             fg: matched?.fg ?? '#fff',
             initial: matched?.initial ?? place.place_name[0],
+            registered: !!matched,
           }
         })
         setNearbyCafes(mapped)
+        setMapMoved(false)
       },
-      { location, radius: 1000, sort: kakao.maps.services.SortBy.DISTANCE },
+      { location: center, radius: 1000, sort: kakao.maps.services.SortBy.DISTANCE },
     )
-  }, [mapReady, userPos, cafes])
+  }
+
+  useEffect(() => {
+    if (!mapReady || !userPos || !window.kakao?.maps?.services) return
+    const center = new window.kakao.maps.LatLng(userPos.lat, userPos.lng)
+    setSearchCenter(center)
+    searchNearby(center)
+  }, [mapReady, userPos])
+
+  useEffect(() => {
+    if (!mapReady || !mapRef.current) return
+    const handler = () => setMapMoved(true)
+    window.kakao.maps.event.addListener(mapRef.current, 'dragend', handler)
+    window.kakao.maps.event.addListener(mapRef.current, 'zoom_changed', handler)
+    return () => {
+      window.kakao.maps.event.removeListener(mapRef.current, 'dragend', handler)
+      window.kakao.maps.event.removeListener(mapRef.current, 'zoom_changed', handler)
+    }
+  }, [mapReady])
+
+  function researchHere() {
+    if (!mapRef.current) return
+    const center = mapRef.current.getCenter()
+    setSearchCenter(center)
+    searchNearby(center)
+  }
 
   const displayCafes = useMemo(() => {
-    if (!mapFailed && !locationDenied && userPos && nearbyCafes.length > 0) return nearbyCafes
+    if (!mapFailed && !locationDenied && searchCenter && nearbyCafes.length > 0) return nearbyCafes
     return cafes
-  }, [mapFailed, locationDenied, userPos, nearbyCafes, cafes])
+  }, [mapFailed, locationDenied, searchCenter, nearbyCafes, cafes])
 
   useEffect(() => {
     let cancelled = false
@@ -116,27 +153,33 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
     overlaysRef.current = []
     displayCafes.forEach((cafe) => {
       if (cafe.lat == null || cafe.lng == null) return
+      const isUnregistered = cafe.id.startsWith('kakao-') && !cafe.registered
       const position = new kakao.maps.LatLng(cafe.lat, cafe.lng)
       const el = document.createElement('div')
-      el.style.cssText =
-        'width:40px;height:40px;border-radius:14px 14px 14px 4px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.22);cursor:pointer;'
-      el.style.background = cafe.logo ? '#fff' : cafe.color
-      el.style.color = cafe.fg
-      if (cafe.logo) {
-        const img = document.createElement('img')
-        img.src = cafe.logo
-        img.alt = cafe.name
-        img.style.cssText = 'width:100%;height:100%;object-fit:cover;'
-        el.appendChild(img)
+      if (isUnregistered) {
+        el.style.cssText = 'width:40px;height:40px;cursor:pointer;filter:drop-shadow(0 4px 8px rgba(0,0,0,.25));'
+        el.innerHTML = DEFAULT_MARKER_SVG
       } else {
-        el.textContent = cafe.initial
+        el.style.cssText =
+          'width:40px;height:40px;border-radius:14px 14px 14px 4px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.22);cursor:pointer;'
+        el.style.background = cafe.logo ? '#fff' : cafe.color
+        el.style.color = cafe.fg
+        if (cafe.logo) {
+          const img = document.createElement('img')
+          img.src = cafe.logo
+          img.alt = cafe.name
+          img.style.cssText = 'width:100%;height:100%;object-fit:cover;'
+          el.appendChild(img)
+        } else {
+          el.textContent = cafe.initial
+        }
       }
-      el.onclick = () => onOpenCafe(cafe.id)
+      el.onclick = () => (isUnregistered ? onEnterMemo() : onOpenCafe(cafe.id))
       const overlay = new kakao.maps.CustomOverlay({ position, content: el, yAnchor: 1 })
       overlay.setMap(mapRef.current)
       overlaysRef.current.push(overlay)
     })
-  }, [mapReady, displayCafes, onOpenCafe])
+  }, [mapReady, displayCafes, onOpenCafe, onEnterMemo])
 
   function locateMe() {
     if (mapFailed) {
@@ -193,6 +236,30 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
         </div>
 
         {!showFallback && <div ref={mapDivRef} style={{ position: 'absolute', inset: 0 }}></div>}
+
+        {!showFallback && mapMoved && (
+          <div
+            onClick={researchHere}
+            style={{
+              position: 'absolute',
+              top: 108,
+              left: '50%',
+              transform: 'translateX(-50%)',
+              zIndex: 3,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+              background: '#fff',
+              borderRadius: 20,
+              padding: '9px 16px',
+              cursor: 'pointer',
+              boxShadow: '0 4px 12px rgba(40,30,15,.18)',
+            }}
+          >
+            <RefreshIcon size={15} />
+            <span style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--cc-ink)' }}>이 지역 재검색</span>
+          </div>
+        )}
 
         <div
           onClick={locateMe}
@@ -260,18 +327,25 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
         {displayCafes.length === 0 && (
           <div style={{ textAlign: 'center', fontSize: 14, color: 'var(--cc-ink3)', padding: '24px 0' }}>검색 결과가 없어요</div>
         )}
-        {displayCafes.map((cafe) => (
-          <div key={cafe.id} onClick={() => onOpenCafe(cafe.id)} style={{ background: 'var(--cc-card)', border: '1px solid var(--cc-line)', borderRadius: 15, padding: 12, display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer', marginBottom: 10 }}>
-            <div style={{ width: 44, height: 44, borderRadius: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 800, flex: 'none', overflow: 'hidden', background: cafe.logo ? '#fff' : cafe.color, color: cafe.fg, border: cafe.logo ? '1px solid var(--cc-line)' : 'none' }}>
-              {cafe.logo ? <img src={cafe.logo} alt={cafe.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : cafe.initial}
+        {displayCafes.map((cafe) => {
+          const isUnregistered = cafe.id.startsWith('kakao-') && !cafe.registered
+          return (
+            <div
+              key={cafe.id}
+              onClick={() => (isUnregistered ? onEnterMemo() : onOpenCafe(cafe.id))}
+              style={{ background: 'var(--cc-card)', border: '1px solid var(--cc-line)', borderRadius: 15, padding: 12, display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer', marginBottom: 10 }}
+            >
+              <div style={{ width: 44, height: 44, borderRadius: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 800, flex: 'none', overflow: 'hidden', background: isUnregistered ? 'transparent' : cafe.logo ? '#fff' : cafe.color, color: cafe.fg, border: cafe.logo ? '1px solid var(--cc-line)' : 'none' }}>
+                {isUnregistered ? <DefaultCafeMarker size={44} /> : cafe.logo ? <img src={cafe.logo} alt={cafe.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : cafe.initial}
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 15, fontWeight: 700 }}>{cafe.name}</div>
+                <div style={{ fontSize: 13, color: 'var(--cc-ink2)', marginTop: 2 }}>{cafe.dist} · 대기 {cafe.wait}</div>
+              </div>
+              <ChevronRight color="#C9BFB0" strokeWidth="2.2" />
             </div>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 15, fontWeight: 700 }}>{cafe.name}</div>
-              <div style={{ fontSize: 13, color: 'var(--cc-ink2)', marginTop: 2 }}>{cafe.dist} · 대기 {cafe.wait}</div>
-            </div>
-            <ChevronRight color="#C9BFB0" strokeWidth="2.2" />
-          </div>
-        ))}
+          )
+        })}
       </div>
     </div>
   )

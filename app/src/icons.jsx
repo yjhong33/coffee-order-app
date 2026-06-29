@@ -91,6 +91,18 @@ export function CupIcon({ color = '#fff', size = 20 }) {
   )
 }
 
+export function DefaultCafeMarker({ size = 40 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 40 40" fill="none">
+      <circle cx="20" cy="20" r="20" fill="#B98B3E"></circle>
+      <path d="M19 9c0 1.2-1.4 1.2-1.4 2.5S19 13 19 13" stroke="#fff" strokeWidth="1.4" strokeLinecap="round"></path>
+      <path d="M23 9c0 1.2-1.4 1.2-1.4 2.5S23 13 23 13" stroke="#fff" strokeWidth="1.4" strokeLinecap="round"></path>
+      <path d="M11 17h17l-1.3 9.3A3 3 0 0 1 23.7 29H16.3a3 3 0 0 1-3-2.7L12 17Z" fill="#fff"></path>
+      <path d="M28 18.5h1.6a2.6 2.6 0 0 1 0 5.2H27.6" stroke="#fff" strokeWidth="1.8" strokeLinecap="round"></path>
+    </svg>
+  )
+}
+
 export function MugIcon({ color = '#fff', size = 20 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">

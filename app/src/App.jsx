@@ -115,6 +115,7 @@ export default function App() {
   const [myName, setMyName] = useState('취합 담당자')
   const [cafeQuery, setCafeQuery] = useState('')
   const [menuQuery, setMenuQuery] = useState('')
+  const [memoQuery, setMemoQuery] = useState('')
   const [frameScale, setFrameScale] = useState(1)
   const [frameOffsetX, setFrameOffsetX] = useState(0)
 
@@ -308,6 +309,7 @@ export default function App() {
       initial: memoMode ? '메' : cafe.initial,
       color: memoMode ? '#1F6E50' : cafe.color,
       fg: memoMode ? '#fff' : cafe.fg,
+      logo: memoMode ? null : cafe.logo,
       ts: Date.now(),
       justNow: true,
       people: snap,
@@ -672,6 +674,8 @@ export default function App() {
   const mapPins = CAFES.map((c, i) => ({ ...c, x: MAP_POS[i][0], y: MAP_POS[i][1] }))
   const filteredCafes = cafeQuery.trim() ? CAFES.filter((c) => c.name.includes(cafeQuery.trim())) : CAFES
   const filteredMapPins = cafeQuery.trim() ? mapPins.filter((c) => c.name.includes(cafeQuery.trim())) : mapPins
+  const memoQueryTrimmed = memoQuery.trim()
+  const memoMenus = memoQueryTrimmed ? MENUS.filter((m) => m.name.includes(memoQueryTrimmed)) : MENUS
   const menuQueryTrimmed = menuQuery.trim()
   const menus = menuQueryTrimmed
     ? MENUS.filter((m) => m.name.includes(menuQueryTrimmed))
@@ -779,6 +783,10 @@ export default function App() {
               onChangeNote={changeNote}
               onFinish={finish}
               onGoShare={goShare}
+              memoMenus={memoMenus}
+              memoQuery={memoQuery}
+              onMemoQueryChange={setMemoQuery}
+              onQuickAdd={quickAdd}
             />
           )}
           {screen === 'complete' && (
@@ -848,6 +856,7 @@ export default function App() {
               onQueryChange={setCafeQuery}
               onBack={() => go('cafe')}
               onOpenCafe={openCafe}
+              onEnterMemo={enterMemo}
             />
           )}
           {screen === 'my' && (

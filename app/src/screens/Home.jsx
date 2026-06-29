@@ -95,7 +95,7 @@ export default function Home({
               <GridIcon />
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 16, fontWeight: 700, letterSpacing: '-.3px', color: 'var(--cc-green-strong)' }}>간단하게 주문 메모하기</div>
+              <div style={{ fontSize: 16, fontWeight: 700, letterSpacing: '-.3px', color: 'var(--cc-green-strong)' }}>간단하게 주문하기</div>
               <div style={{ fontSize: 13, color: 'var(--cc-ink2)', marginTop: 4, lineHeight: 1.45 }}>카페 선택 없이 메뉴만 빠르게 기록해요</div>
             </div>
             <ChevronRight color="#1F6E50" size={20} />

@@ -1,7 +1,25 @@
-import { ChevronLeft, ChevronRight, MicIcon, CaptureIcon, MinusIcon, PlusIcon, CloseIcon, CupIcon, GridIcon, LinkIcon } from '../icons'
+import { ChevronLeft, ChevronRight, MicIcon, CaptureIcon, MinusIcon, PlusIcon, CloseIcon, CupIcon, GridIcon, LinkIcon, SearchIcon } from '../icons'
 import { won } from '../data'
 
-export default function Collect({ people, totalQty, totalPrice, memoMode, onBack, onOpenVoice, onOpenCapture, onOpenManual, onChangeQty, onRemoveItem, onChangeNote, onFinish, onGoShare }) {
+export default function Collect({
+  people,
+  totalQty,
+  totalPrice,
+  memoMode,
+  onBack,
+  onOpenVoice,
+  onOpenCapture,
+  onOpenManual,
+  onChangeQty,
+  onRemoveItem,
+  onChangeNote,
+  onFinish,
+  onGoShare,
+  memoMenus,
+  memoQuery,
+  onMemoQueryChange,
+  onQuickAdd,
+}) {
   const hasOrders = people.length > 0
 
   return (
@@ -12,7 +30,7 @@ export default function Collect({ people, totalQty, totalPrice, memoMode, onBack
             <ChevronLeft />
           </div>
           <div style={{ fontSize: 20, fontWeight: 700, letterSpacing: '-.4px' }}>
-            {memoMode ? '메뉴 메모' : '메뉴 확인'}
+            {memoMode ? '메뉴 주문하기' : '메뉴 확인'}
             {!memoMode && <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--cc-ink3)', marginLeft: 6 }}>(추가 주문)</span>}
           </div>
         </div>
@@ -34,10 +52,38 @@ export default function Collect({ people, totalQty, totalPrice, memoMode, onBack
 
       <div style={{ padding: '6px 20px 0' }}>
         {memoMode && (
-          <div style={{ background: 'var(--cc-green-soft)', borderRadius: 13, padding: '12px 14px', display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
-            <GridIcon size={20} />
-            <span style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--cc-green-strong)', lineHeight: 1.45 }}>간단하게 메뉴만 기록해요 — 카페는 나중에 정해도 돼요</span>
-          </div>
+          <>
+            <div style={{ background: 'var(--cc-green-soft)', borderRadius: 13, padding: '12px 14px', display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+              <GridIcon size={20} />
+              <span style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--cc-green-strong)', lineHeight: 1.45 }}>간단하게 메뉴만 기록해요.</span>
+            </div>
+            <div style={{ position: 'relative', marginBottom: 10 }}>
+              <div style={{ position: 'absolute', left: 14, top: 0, bottom: 0, display: 'flex', alignItems: 'center' }}>
+                <SearchIcon size={16} color="#C9BFB0" />
+              </div>
+              <input
+                value={memoQuery}
+                onChange={(e) => onMemoQueryChange(e.target.value)}
+                placeholder="메뉴 검색"
+                style={{ width: '100%', background: 'var(--cc-card)', border: '1px solid var(--cc-line)', borderRadius: 13, height: 44, padding: '0 14px 0 38px', fontSize: 14.5, color: 'var(--cc-ink)', outline: 'none' }}
+              />
+            </div>
+            <div className="cc-scroll" style={{ display: 'flex', gap: 8, overflowX: 'auto', marginBottom: 14, paddingBottom: 2 }}>
+              {memoMenus.map((m) => (
+                <div
+                  key={m.id}
+                  onClick={() => onQuickAdd(m)}
+                  style={{ flex: 'none', background: 'var(--cc-card)', border: '1px solid var(--cc-line)', borderRadius: 12, padding: '9px 13px', display: 'flex', alignItems: 'center', gap: 7, cursor: 'pointer' }}
+                >
+                  <PlusIcon color="#1F6E50" size={14} strokeWidth="2.6" />
+                  <span style={{ fontSize: 13.5, fontWeight: 700 }}>{m.name}</span>
+                </div>
+              ))}
+              {memoMenus.length === 0 && (
+                <span style={{ fontSize: 13, color: 'var(--cc-ink3)', padding: '9px 4px' }}>검색 결과가 없어요</span>
+              )}
+            </div>
+          </>
         )}
         <div style={{ display: 'flex', gap: 8, marginBottom: 14 }}>
           <div onClick={onOpenManual} style={{ flex: 1, background: 'var(--cc-green)', borderRadius: 13, padding: 11, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7, cursor: 'pointer', boxShadow: '0 6px 14px rgba(31,110,80,.24)' }}>
