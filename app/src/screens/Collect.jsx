@@ -1,5 +1,8 @@
+import { useState } from 'react'
 import { ChevronLeft, ChevronRight, MicIcon, CaptureIcon, MinusIcon, PlusIcon, CloseIcon, CupIcon, GridIcon, LinkIcon, SearchIcon } from '../icons'
 import { won } from '../data'
+
+const SIZES = ['S', 'M', 'L']
 
 export default function Collect({
   people,
@@ -22,6 +25,16 @@ export default function Collect({
   onQuickAdd,
 }) {
   const hasOrders = people.length > 0
+  const [quickPick, setQuickPick] = useState(null) // { menu, temp, qty, size }
+
+  function openQuickPick(m) {
+    setQuickPick({ menu: m, temp: 'ICE', qty: 1, size: 'M' })
+  }
+  function confirmQuickPick() {
+    if (!quickPick) return
+    onQuickAdd(quickPick.menu, quickPick.temp, quickPick.qty, quickPick.size)
+    setQuickPick(null)
+  }
 
   return (
     <div style={{ padding: '0 0 150px', animation: 'cc-fade .2s ease' }}>
@@ -73,7 +86,7 @@ export default function Collect({
               {memoMenus.map((m) => (
                 <div
                   key={m.id}
-                  onClick={() => onQuickAdd(m)}
+                  onClick={() => openQuickPick(m)}
                   style={{ flex: 'none', background: 'var(--cc-card)', border: '1px solid var(--cc-line)', borderRadius: 12, padding: '9px 13px', display: 'flex', alignItems: 'center', gap: 7, cursor: 'pointer' }}
                 >
                   <PlusIcon color="#1F6E50" size={14} strokeWidth="2.6" />
@@ -186,6 +199,76 @@ export default function Collect({
           </div>
         )}
       </div>
+
+      {quickPick && (
+        <div
+          style={{ position: 'fixed', inset: 0, zIndex: 40, background: 'rgba(20,16,10,.35)', display: 'flex', alignItems: 'flex-end' }}
+          onClick={() => setQuickPick(null)}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{ width: '100%', maxWidth: 480, margin: '0 auto', background: '#fff', borderRadius: '20px 20px 0 0', padding: '20px 20px calc(24px + env(safe-area-inset-bottom))', boxShadow: '0 -8px 24px rgba(0,0,0,.15)', animation: 'cc-fade .15s ease' }}
+          >
+            <div style={{ width: 36, height: 4, borderRadius: 3, background: 'var(--cc-line)', margin: '0 auto 16px' }}></div>
+            <div style={{ fontSize: 17, fontWeight: 800, marginBottom: 18, letterSpacing: '-.3px' }}>{quickPick.menu.name}</div>
+
+            {/* HOT / ICE */}
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--cc-ink3)', marginBottom: 8 }}>온도</div>
+            <div style={{ display: 'flex', gap: 8, marginBottom: 18 }}>
+              {['ICE', 'HOT'].map((t) => (
+                <div
+                  key={t}
+                  onClick={() => setQuickPick((p) => ({ ...p, temp: t }))}
+                  style={{
+                    flex: 1, height: 44, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: 14, fontWeight: 800, cursor: 'pointer',
+                    background: quickPick.temp === t ? (t === 'HOT' ? 'var(--cc-hot-bg)' : 'var(--cc-ice-bg)') : 'var(--cc-band)',
+                    color: quickPick.temp === t ? (t === 'HOT' ? 'var(--cc-hot)' : 'var(--cc-ice)') : 'var(--cc-ink3)',
+                    border: quickPick.temp === t ? `1.5px solid ${t === 'HOT' ? 'var(--cc-hot)' : 'var(--cc-ice)'}` : '1.5px solid transparent',
+                  }}
+                >{t}</div>
+              ))}
+            </div>
+
+            {/* Size */}
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--cc-ink3)', marginBottom: 8 }}>사이즈</div>
+            <div style={{ display: 'flex', gap: 8, marginBottom: 18 }}>
+              {SIZES.map((s) => (
+                <div
+                  key={s}
+                  onClick={() => setQuickPick((p) => ({ ...p, size: s }))}
+                  style={{
+                    flex: 1, height: 44, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: 14, fontWeight: 800, cursor: 'pointer',
+                    background: quickPick.size === s ? 'var(--cc-green-soft)' : 'var(--cc-band)',
+                    color: quickPick.size === s ? 'var(--cc-green-strong)' : 'var(--cc-ink3)',
+                    border: quickPick.size === s ? '1.5px solid var(--cc-green)' : '1.5px solid transparent',
+                  }}
+                >{s}</div>
+              ))}
+            </div>
+
+            {/* Qty */}
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--cc-ink3)', marginBottom: 8 }}>수량</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 22 }}>
+              <div onClick={() => setQuickPick((p) => ({ ...p, qty: Math.max(1, p.qty - 1) }))} style={{ width: 40, height: 40, borderRadius: 12, background: 'var(--cc-band)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                <MinusIcon />
+              </div>
+              <span style={{ fontSize: 18, fontWeight: 800, minWidth: 24, textAlign: 'center' }}>{quickPick.qty}</span>
+              <div onClick={() => setQuickPick((p) => ({ ...p, qty: p.qty + 1 }))} style={{ width: 40, height: 40, borderRadius: 12, background: 'var(--cc-band)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                <PlusIcon color="#1F6E50" size={16} strokeWidth="2.6" />
+              </div>
+            </div>
+
+            <div
+              onClick={confirmQuickPick}
+              style={{ width: '100%', height: 52, borderRadius: 14, background: 'var(--cc-green)', color: '#fff', fontSize: 16, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 8px 20px rgba(31,110,80,.28)' }}
+            >
+              추가하기
+            </div>
+          </div>
+        </div>
+      )}
 
       {hasOrders && (
         <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, padding: '14px 20px calc(14px + env(safe-area-inset-bottom))', background: 'linear-gradient(transparent,var(--cc-cream) 24%)' }}>

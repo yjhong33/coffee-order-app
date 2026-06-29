@@ -291,11 +291,12 @@ export default function App() {
   function resume() {
     if (resumeScreen) go(resumeScreen)
   }
-  function quickAdd(menu) {
+  function quickAdd(menu, temp = 'ICE', qty = 1, size = '') {
+    const label = size ? `${menu.name} (${size})` : menu.name
     setPeople((prev) =>
-      mergeItemIntoPeople(prev, { id: 'me', name: '나', isMe: true, color: '#1F6E50', fg: '#fff' }, { name: menu.name, temp: 'ICE', qty: 1, price: menu.price }),
+      mergeItemIntoPeople(prev, { id: 'me', name: '나', isMe: true, color: '#1F6E50', fg: '#fff' }, { name: label, temp, qty, price: menu.price }),
     )
-    showToast(`${menu.name} 기록했어요`)
+    showToast(`${label} 기록했어요`)
   }
   function collectBack() {
     go(memoMode ? 'home' : 'menu')
