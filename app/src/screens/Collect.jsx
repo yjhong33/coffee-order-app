@@ -84,7 +84,10 @@ export default function Collect({ people, totalQty, totalPrice, memoMode, onBack
                         >
                           {it.temp}
                         </span>
-                        <span style={{ flex: 1, fontSize: 15, fontWeight: 600, letterSpacing: '-.3px' }}>{it.name}</span>
+                        <span style={{ flex: 1, fontSize: 15, fontWeight: 600, letterSpacing: '-.3px' }}>
+                          {it.name}
+                          {it.size && <span style={{ fontWeight: 500, color: 'var(--cc-ink3)' }}> · {it.size}</span>}
+                        </span>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'var(--cc-band)', borderRadius: 10, padding: 4 }}>
                           <div onClick={() => onChangeQty(p.id, it.id, -1)} style={{ width: 26, height: 26, borderRadius: 8, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                             <MinusIcon />

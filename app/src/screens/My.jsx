@@ -86,7 +86,9 @@ export default function My({ recentOrders, prefs, prefSel, onSelectPref, onReord
         <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 12 }}>최근 그룹 주문</div>
         {recentOrders.map((ro) => (
           <div key={ro.cafeId} onClick={() => onReorder(ro.cafeId)} style={{ background: 'var(--cc-card)', border: '1px solid var(--cc-line)', borderRadius: 15, padding: 13, display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer', marginBottom: 10 }}>
-            <div style={{ width: 44, height: 44, borderRadius: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 17, fontWeight: 800, flex: 'none', background: ro.color, color: ro.fg }}>{ro.initial}</div>
+            <div style={{ width: 44, height: 44, borderRadius: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 17, fontWeight: 800, flex: 'none', overflow: 'hidden', background: ro.logo ? '#fff' : ro.color, color: ro.fg, border: ro.logo ? '1px solid var(--cc-line)' : 'none' }}>
+              {ro.logo ? <img src={ro.logo} alt={ro.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : ro.initial}
+            </div>
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontSize: 15, fontWeight: 700 }}>{ro.name}</div>
               <div style={{ fontSize: 13, color: 'var(--cc-ink2)', marginTop: 2 }}>{ro.summary} · {ro.date}</div>

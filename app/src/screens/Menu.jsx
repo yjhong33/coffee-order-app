@@ -1,7 +1,7 @@
 import { ChevronLeft, PastryIcon, PlusIcon, CupIcon, SearchIcon, MicIcon } from '../icons'
 import { won } from '../data'
 
-export default function Menu({ cafe, categories, menuCat, onSelectCat, menus, menuQuery, onMenuQueryChange, menuTemp, onSetTemp, menuNote, onMenuNoteChange, cartCount, cartTotal, onAddCart, onBack, onGoCollect, onOpenVoice }) {
+export default function Menu({ cafe, categories, menuCat, onSelectCat, menus, menuQuery, onMenuQueryChange, menuTemp, onSetTemp, menuNote, onMenuNoteChange, menuSize, onSetSize, sizeOptions, cartCount, cartTotal, onAddCart, onBack, onGoCollect, onOpenVoice }) {
   return (
     <div style={{ padding: '0 0 150px', animation: 'cc-fade .2s ease' }}>
       <div style={{ position: 'sticky', top: 0, zIndex: 5, background: 'var(--cc-cream)', padding: '54px 20px 0' }}>
@@ -9,7 +9,9 @@ export default function Menu({ cafe, categories, menuCat, onSelectCat, menus, me
           <div onClick={onBack} style={{ width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', marginLeft: -8 }}>
             <ChevronLeft />
           </div>
-          <div style={{ width: 30, height: 30, borderRadius: 9, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, fontWeight: 800, background: cafe.color, color: cafe.fg }}>{cafe.initial}</div>
+          <div style={{ width: 30, height: 30, borderRadius: 9, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, fontWeight: 800, overflow: 'hidden', background: cafe.logo ? '#fff' : cafe.color, color: cafe.fg, border: cafe.logo ? '1px solid var(--cc-line)' : 'none' }}>
+            {cafe.logo ? <img src={cafe.logo} alt={cafe.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : cafe.initial}
+          </div>
           <div style={{ fontSize: 19, fontWeight: 700, letterSpacing: '-.4px' }}>{cafe.name}</div>
         </div>
         <div style={{ marginTop: 12, background: '#fff', border: '1px solid var(--cc-line)', borderRadius: 13, height: 44, display: 'flex', alignItems: 'center', gap: 10, padding: '0 14px' }}>
@@ -52,6 +54,9 @@ export default function Menu({ cafe, categories, menuCat, onSelectCat, menus, me
           const temp = menuTemp[m.id] || 'ICE'
           const hot = temp === 'HOT'
           const ice = temp === 'ICE'
+          const sizeNamed = sizeOptions?.type === 'named'
+          const sizeTempBased = sizeOptions?.type === 'temperature_based'
+          const currentSize = sizeNamed ? menuSize?.[m.id] || sizeOptions.default : null
           return (
             <div key={m.id} style={{ background: 'var(--cc-card)', border: '1px solid var(--cc-line)', borderRadius: 18, padding: 14, display: 'flex', gap: 13, marginBottom: 12 }}>
               <div style={{ width: 74, height: 74, borderRadius: 14, flex: 'none', background: 'linear-gradient(150deg,#F3ECDD,#E7DCC4)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -100,6 +105,31 @@ export default function Menu({ cafe, categories, menuCat, onSelectCat, menus, me
                     <PlusIcon />
                   </div>
                 </div>
+                {sizeNamed && (
+                  <div style={{ display: 'flex', gap: 6, marginTop: 8 }}>
+                    {sizeOptions.options.map((s) => (
+                      <div
+                        key={s}
+                        onClick={() => onSetSize(m.id, s)}
+                        style={{
+                          fontSize: 12,
+                          fontWeight: 700,
+                          padding: '5px 10px',
+                          borderRadius: 8,
+                          cursor: 'pointer',
+                          background: currentSize === s ? 'var(--cc-green-soft)' : '#fff',
+                          color: currentSize === s ? 'var(--cc-green)' : '#A89E90',
+                          border: `1px solid ${currentSize === s ? 'var(--cc-green)' : 'var(--cc-line)'}`,
+                        }}
+                      >
+                        {s}
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {sizeTempBased && (
+                  <div style={{ marginTop: 8, fontSize: 12, fontWeight: 600, color: 'var(--cc-ink3)' }}>{hot ? sizeOptions.options.HOT : sizeOptions.options.ICE}</div>
+                )}
                 <input
                   value={menuNote?.[m.id] || ''}
                   onChange={(e) => onMenuNoteChange(m.id, e.target.value)}

@@ -54,7 +54,9 @@ export default function History({ history, expandedHistory, onToggle, historyVie
                 }}
               >
                 <div onClick={() => onToggle(h.id)} style={{ display: 'flex', alignItems: 'center', gap: 13, cursor: 'pointer' }}>
-                  <div style={{ width: 46, height: 46, borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 800, flex: 'none', background: h.color, color: h.fg }}>{h.initial}</div>
+                  <div style={{ width: 46, height: 46, borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 800, flex: 'none', overflow: 'hidden', background: h.logo ? '#fff' : h.color, color: h.fg, border: h.logo ? '1px solid var(--cc-line)' : 'none' }}>
+                    {h.logo ? <img src={h.logo} alt={h.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : h.initial}
+                  </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                       <span style={{ fontSize: 15, fontWeight: 700, letterSpacing: '-.3px' }}>{h.label}</span>

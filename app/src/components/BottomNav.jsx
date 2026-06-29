@@ -1,9 +1,9 @@
 import { HomeTabIcon, MapTabIcon, HistoryTabIcon, PersonIcon } from '../icons'
 
 const TABS = [
-  { id: 'home', label: '홈', Icon: HomeTabIcon },
-  { id: 'map', label: '지도', Icon: MapTabIcon },
-  { id: 'history', label: '내역', Icon: HistoryTabIcon },
+  { id: 'home', label: 'Home', Icon: HomeTabIcon },
+  { id: 'map', label: 'Map', Icon: MapTabIcon },
+  { id: 'history', label: 'Order', Icon: HistoryTabIcon },
   { id: 'my', label: 'MY', Icon: PersonIcon },
 ]
 

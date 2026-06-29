@@ -1,10 +1,17 @@
+import logoStarbucks from './assets/logos/starbucks.png'
+import logoMega from './assets/logos/mega.jpeg'
+import logoTwosome from './assets/logos/twosome.png'
+import logoEdiya from './assets/logos/ediya.jpeg'
+import logoCompose from './assets/logos/compose.png'
+import logoPaik from './assets/logos/paik.png'
+
 export const CAFES = [
-  { id: 'starbucks', name: '스타벅스 강남R점', initial: 'S', color: '#00704A', fg: '#fff', rating: '4.8', dist: '120m', wait: '5분' },
-  { id: 'mega', name: '메가커피 역삼점', initial: 'M', color: '#FFC400', fg: '#3A2E00', rating: '4.6', dist: '80m', wait: '3분' },
-  { id: 'twosome', name: '투썸플레이스 선릉점', initial: 'T', color: '#C8102E', fg: '#fff', rating: '4.7', dist: '200m', wait: '8분' },
-  { id: 'ediya', name: '이디야커피 강남점', initial: 'E', color: '#1A4FA0', fg: '#fff', rating: '4.5', dist: '150m', wait: '6분' },
-  { id: 'compose', name: '컴포즈커피 테헤란점', initial: 'C', color: '#122C4B', fg: '#fff', rating: '4.6', dist: '90m', wait: '4분' },
-  { id: 'paik', name: '빽다방 강남대로점', initial: '빽', color: '#FFE000', fg: '#1A1A1A', rating: '4.4', dist: '240m', wait: '7분' },
+  { id: 'starbucks', name: '스타벅스 강남R점', initial: 'S', color: '#00704A', fg: '#fff', rating: '4.8', dist: '120m', wait: '5분', logo: logoStarbucks },
+  { id: 'mega', name: '메가커피 역삼점', initial: 'M', color: '#FFC400', fg: '#3A2E00', rating: '4.6', dist: '80m', wait: '3분', logo: logoMega },
+  { id: 'twosome', name: '투썸플레이스 선릉점', initial: 'T', color: '#C8102E', fg: '#fff', rating: '4.7', dist: '200m', wait: '8분', logo: logoTwosome },
+  { id: 'ediya', name: '이디야커피 강남점', initial: 'E', color: '#1A4FA0', fg: '#fff', rating: '4.5', dist: '150m', wait: '6분', logo: logoEdiya },
+  { id: 'compose', name: '컴포즈커피 테헤란점', initial: 'C', color: '#122C4B', fg: '#fff', rating: '4.6', dist: '90m', wait: '4분', logo: logoCompose },
+  { id: 'paik', name: '빽다방 강남대로점', initial: '빽', color: '#FFE000', fg: '#1A1A1A', rating: '4.4', dist: '240m', wait: '7분', logo: logoPaik },
 ]
 
 export const MAP_POS = [
@@ -59,9 +66,38 @@ export const INITIAL_PEOPLE = [
 ]
 
 export const RECENT_ORDERS = [
-  { initial: 'S', color: '#00704A', fg: '#fff', cafeId: 'starbucks', name: '스타벅스 강남R점', summary: '아메리카노 외 3잔 · 18,100원', date: '2일 전' },
-  { initial: 'M', color: '#FFC400', fg: '#3A2E00', cafeId: 'mega', name: '메가커피 역삼점', summary: '카페라떼 외 5잔 · 21,500원', date: '지난주' },
+  { initial: 'S', color: '#00704A', fg: '#fff', cafeId: 'starbucks', name: '스타벅스 강남R점', summary: '아메리카노 외 3잔 · 18,100원', date: '2일 전', logo: logoStarbucks },
+  { initial: 'M', color: '#FFC400', fg: '#3A2E00', cafeId: 'mega', name: '메가커피 역삼점', summary: '카페라떼 외 5잔 · 21,500원', date: '지난주', logo: logoMega },
 ]
+
+export const CAFE_SIZE_OPTIONS = {
+  starbucks: {
+    type: 'named',
+    options: ['Tall', 'Grande', 'Venti'],
+    default: 'Tall',
+  },
+  mega: {
+    type: 'menu_based',
+  },
+  twosome: {
+    type: 'named',
+    options: ['Regular', 'Large', 'Max'],
+    default: 'Regular',
+  },
+  ediya: {
+    type: 'named',
+    options: ['Large', 'Extra'],
+    default: 'Large',
+  },
+  compose: {
+    type: 'fixed',
+    displayName: '20oz',
+  },
+  paik: {
+    type: 'temperature_based',
+    options: { HOT: '16oz', ICE: '24oz' },
+  },
+}
 
 export function won(n) {
   return n.toLocaleString('ko-KR') + '원'
@@ -74,6 +110,7 @@ export const HISTORY_SEED = [
     initial: 'S',
     color: '#00704A',
     fg: '#fff',
+    logo: logoStarbucks,
     ts: Date.now() - 2 * 86400000,
     justNow: false,
     people: [
@@ -88,6 +125,7 @@ export const HISTORY_SEED = [
     initial: 'M',
     color: '#FFC400',
     fg: '#3A2E00',
+    logo: logoMega,
     ts: Date.now() - 7 * 86400000,
     justNow: false,
     people: [

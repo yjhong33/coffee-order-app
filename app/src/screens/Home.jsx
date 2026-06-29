@@ -1,4 +1,4 @@
-import { SearchIcon, PersonIcon, PinIcon, ChevronRight, MicIcon, CaptureIcon, CupIcon, GridIcon } from '../icons'
+import { PersonIcon, PinIcon, ChevronRight, MicIcon, CaptureIcon, CupIcon, GridIcon } from '../icons'
 
 export default function Home({
   favCafes,
@@ -7,7 +7,6 @@ export default function Home({
   totalQty,
   onGoMy,
   onGoCafe,
-  onGoCafeSearch,
   onOpenVoice,
   onOpenCapture,
   onGoCollect,
@@ -40,10 +39,6 @@ export default function Home({
           <div onClick={onGoMy} style={{ width: 42, height: 42, borderRadius: 14, background: 'rgba(255,255,255,.16)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flex: 'none' }}>
             <PersonIcon />
           </div>
-        </div>
-        <div onClick={onGoCafeSearch} style={{ marginTop: 18, background: '#fff', borderRadius: 14, height: 48, display: 'flex', alignItems: 'center', gap: 10, padding: '0 14px', cursor: 'pointer', boxShadow: '0 6px 16px rgba(10,40,28,.18)' }}>
-          <SearchIcon />
-          <span style={{ fontSize: 16, color: 'var(--cc-ink3)', fontWeight: 500 }}>카페 이름이나 메뉴를 검색해 보세요</span>
         </div>
       </div>
 
@@ -149,12 +144,14 @@ export default function Home({
                     justifyContent: 'center',
                     fontSize: 24,
                     fontWeight: 800,
+                    overflow: 'hidden',
                     boxShadow: '0 4px 12px rgba(40,30,15,.10)',
-                    background: cafe.color,
+                    background: cafe.logo ? '#fff' : cafe.color,
                     color: cafe.fg,
+                    border: cafe.logo ? '1px solid var(--cc-line)' : 'none',
                   }}
                 >
-                  {cafe.initial}
+                  {cafe.logo ? <img src={cafe.logo} alt={cafe.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : cafe.initial}
                 </div>
                 <div style={{ fontSize: 13, fontWeight: 600, marginTop: 8, letterSpacing: '-.3px', lineHeight: 1.3, overflow: 'hidden', textOverflow: 'ellipsis' }}>{brand}</div>
                 {branch && <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--cc-ink2)', letterSpacing: '-.2px', lineHeight: 1.3, overflow: 'hidden', textOverflow: 'ellipsis' }}>{branch}</div>}
@@ -169,7 +166,9 @@ export default function Home({
         <div style={{ fontSize: 18, fontWeight: 700, letterSpacing: '-.4px', marginBottom: 12 }}>최근 주문</div>
         {recentOrders.map((ro) => (
           <div key={ro.cafeId} onClick={() => onReorder(ro.cafeId)} style={{ background: 'var(--cc-card)', border: '1px solid var(--cc-line)', borderRadius: 16, padding: 14, display: 'flex', alignItems: 'center', gap: 13, cursor: 'pointer', marginBottom: 10 }}>
-            <div style={{ width: 46, height: 46, borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 800, flex: 'none', background: ro.color, color: ro.fg }}>{ro.initial}</div>
+            <div style={{ width: 46, height: 46, borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 800, flex: 'none', overflow: 'hidden', background: ro.logo ? '#fff' : ro.color, color: ro.fg, border: ro.logo ? '1px solid var(--cc-line)' : 'none' }}>
+              {ro.logo ? <img src={ro.logo} alt={ro.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : ro.initial}
+            </div>
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontSize: 15, fontWeight: 700, letterSpacing: '-.3px' }}>{ro.name}</div>
               <div style={{ fontSize: 13, color: 'var(--cc-ink2)', marginTop: 3, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{ro.summary}</div>

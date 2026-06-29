@@ -10,6 +10,7 @@ import {
   RECENT_ORDERS,
   CAP_PEOPLE,
   HISTORY_SEED,
+  CAFE_SIZE_OPTIONS,
 } from './data'
 import { computeTotals, buildNamedFor, buildPlainFor } from './selectors'
 import { parseVoiceOrders } from './voiceParser'
@@ -48,7 +49,7 @@ function mergeItemIntoPeople(people, personInfo, item) {
     return [...people, { ...personInfo, items: [{ ...item, id: makeId('it') }] }]
   }
   const target = people[idx]
-  const itemIdx = target.items.findIndex((it) => it.name === item.name && it.temp === item.temp && (it.note || '') === (item.note || ''))
+  const itemIdx = target.items.findIndex((it) => it.name === item.name && it.temp === item.temp && (it.note || '') === (item.note || '') && (it.size || '') === (item.size || ''))
   let items
   if (itemIdx === -1) {
     items = [...target.items, { ...item, id: makeId('it') }]
@@ -87,6 +88,7 @@ export default function App() {
   const [menuCat, setMenuCat] = useState(0)
   const [menuTemp, setMenuTemp] = useState({})
   const [menuNote, setMenuNote] = useState({})
+  const [menuSize, setMenuSize] = useState({})
   const [cart, setCart] = useState({})
   const [favs, setFavs] = useState({ starbucks: true, mega: true, twosome: false, ediya: true, compose: false, paik: false })
   const [selectedCafeId, setSelectedCafeId] = useState('starbucks')
@@ -112,7 +114,6 @@ export default function App() {
   const [partDone, setPartDone] = useState({ 나: true, 김민준: true, 이서연: false, 박지후: false })
   const [myName, setMyName] = useState('취합 담당자')
   const [cafeQuery, setCafeQuery] = useState('')
-  const [cafeSearchFocus, setCafeSearchFocus] = useState(false)
   const [menuQuery, setMenuQuery] = useState('')
   const [frameScale, setFrameScale] = useState(1)
   const [frameOffsetX, setFrameOffsetX] = useState(0)
@@ -605,11 +606,21 @@ export default function App() {
   function setMenuNoteFor(menuId, note) {
     setMenuNote((prev) => ({ ...prev, [menuId]: note }))
   }
+  function setSize(menuId, size) {
+    setMenuSize((prev) => ({ ...prev, [menuId]: size }))
+  }
   function addCart(menu, temp) {
     const note = (menuNote[menu.id] || '').trim()
+    const cafeSizeOpts = CAFE_SIZE_OPTIONS[selectedCafeId]
+    const size =
+      cafeSizeOpts?.type === 'named'
+        ? menuSize[menu.id] || cafeSizeOpts.default
+        : cafeSizeOpts?.type === 'temperature_based'
+        ? cafeSizeOpts.options[temp]
+        : ''
     setCart((prev) => ({ ...prev, [menu.id]: (prev[menu.id] || 0) + 1 }))
     setPeople((prev) =>
-      mergeItemIntoPeople(prev, { id: 'me', name: '나', isMe: true, color: '#1F6E50', fg: '#fff' }, { name: menu.name, temp, qty: 1, price: menu.price, note }),
+      mergeItemIntoPeople(prev, { id: 'me', name: '나', isMe: true, color: '#1F6E50', fg: '#fff' }, { name: menu.name, temp, qty: 1, price: menu.price, note, size }),
     )
     setMenuNote((prev) => ({ ...prev, [menu.id]: '' }))
     showToast(`${menu.name} 담았어요 🎉`)
@@ -699,14 +710,7 @@ export default function App() {
               hasOrders={hasOrders}
               totalQty={totalQty}
               onGoMy={() => go('my')}
-              onGoCafe={() => {
-                setCafeSearchFocus(false)
-                go('cafe')
-              }}
-              onGoCafeSearch={() => {
-                setCafeSearchFocus(true)
-                go('cafe')
-              }}
+              onGoCafe={() => go('cafe')}
               onOpenVoice={openVoice}
               onOpenCapture={openCapture}
               onGoCollect={() => go('collect')}
@@ -721,11 +725,7 @@ export default function App() {
               favs={favs}
               cafeQuery={cafeQuery}
               onCafeQueryChange={setCafeQuery}
-              autoFocusSearch={cafeSearchFocus}
-              onBack={() => {
-                setCafeSearchFocus(false)
-                go('home')
-              }}
+              onBack={() => go('home')}
               onGoMap={() => go('map')}
               onOpenCafe={openCafe}
               onToggleFav={toggleFav}
@@ -744,6 +744,9 @@ export default function App() {
               onSetTemp={setTemp}
               menuNote={menuNote}
               onMenuNoteChange={setMenuNoteFor}
+              menuSize={menuSize}
+              onSetSize={setSize}
+              sizeOptions={CAFE_SIZE_OPTIONS[selectedCafeId]}
               cartCount={cartCount}
               cartTotal={cartTotal}
               onAddCart={addCart}

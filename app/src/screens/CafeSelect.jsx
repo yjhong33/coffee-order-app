@@ -1,13 +1,6 @@
-import { useEffect, useRef } from 'react'
 import { ChevronLeft, SearchIcon, StarIcon, HeartIcon } from '../icons'
 
-export default function CafeSelect({ cafes, favs, cafeQuery, onCafeQueryChange, onBack, onGoMap, onOpenCafe, onToggleFav, autoFocusSearch }) {
-  const inputRef = useRef(null)
-
-  useEffect(() => {
-    if (autoFocusSearch) inputRef.current?.focus()
-  }, [autoFocusSearch])
-
+export default function CafeSelect({ cafes, favs, cafeQuery, onCafeQueryChange, onBack, onGoMap, onOpenCafe, onToggleFav }) {
   return (
     <div style={{ padding: '0 0 40px', animation: 'cc-fade .2s ease' }}>
       <div style={{ position: 'sticky', top: 0, zIndex: 5, background: 'var(--cc-cream)', padding: '54px 20px 8px' }}>
@@ -20,7 +13,6 @@ export default function CafeSelect({ cafes, favs, cafeQuery, onCafeQueryChange, 
         <div style={{ marginTop: 12, background: '#fff', border: '1px solid var(--cc-line)', borderRadius: 13, height: 46, display: 'flex', alignItems: 'center', gap: 10, padding: '0 14px' }}>
           <SearchIcon size={19} />
           <input
-            ref={inputRef}
             value={cafeQuery}
             onChange={(e) => onCafeQueryChange(e.target.value)}
             placeholder="카페 검색"
@@ -37,7 +29,9 @@ export default function CafeSelect({ cafes, favs, cafeQuery, onCafeQueryChange, 
           const isFav = !!favs[cafe.id]
           return (
             <div key={cafe.id} onClick={() => onOpenCafe(cafe.id)} style={{ background: 'var(--cc-card)', border: '1px solid var(--cc-line)', borderRadius: 16, padding: 14, display: 'flex', alignItems: 'center', gap: 14, cursor: 'pointer', marginBottom: 11 }}>
-              <div style={{ width: 52, height: 52, borderRadius: 15, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 21, fontWeight: 800, flex: 'none', background: cafe.color, color: cafe.fg }}>{cafe.initial}</div>
+              <div style={{ width: 52, height: 52, borderRadius: 15, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 21, fontWeight: 800, flex: 'none', overflow: 'hidden', background: cafe.logo ? '#fff' : cafe.color, color: cafe.fg, border: cafe.logo ? '1px solid var(--cc-line)' : 'none' }}>
+                {cafe.logo ? <img src={cafe.logo} alt={cafe.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : cafe.initial}
+              </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontSize: 16, fontWeight: 700, letterSpacing: '-.3px' }}>{cafe.name}</div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 5, fontSize: 13, color: 'var(--cc-ink2)' }}>

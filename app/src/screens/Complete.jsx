@@ -69,7 +69,7 @@ export default function Complete({ completeView, onSetView, completeText, totalQ
               boxShadow: !named ? '0 1px 3px rgba(0,0,0,.08)' : 'none',
             }}
           >
-            직원 전달용
+            메뉴만
           </div>
         </div>
         <div style={{ fontSize: 13, color: 'var(--cc-ink3)', marginTop: 8, lineHeight: 1.4 }}>{hint}</div>
