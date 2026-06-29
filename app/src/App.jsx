@@ -273,6 +273,10 @@ export default function App() {
   }
 
   function openCafe(cafeId) {
+    if (!CAFES.find((c) => c.id === cafeId)) {
+      showToast('아직 등록되지 않은 카페예요')
+      return
+    }
     setSelectedCafeId(cafeId)
     setMemoMode(false)
     go('menu')

@@ -2,6 +2,24 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { ChevronLeft, ChevronRight, MapLines, LocateIcon } from '../icons'
 import { loadKakaoMaps } from '../kakaoMap'
 
+const BRAND_KEYWORDS = {
+  starbucks: ['스타벅스'],
+  mega: ['메가커피', '메가MGC', '메가엠지씨'],
+  twosome: ['투썸플레이스', '투썸'],
+  ediya: ['이디야'],
+  compose: ['컴포즈커피', '컴포즈'],
+  paik: ['빽다방'],
+}
+
+function matchBrand(placeName, cafes) {
+  for (const [id, keywords] of Object.entries(BRAND_KEYWORDS)) {
+    if (keywords.some((kw) => placeName.includes(kw))) {
+      return cafes.find((c) => c.id === id)
+    }
+  }
+  return null
+}
+
 export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, onOpenCafe }) {
   const mapDivRef = useRef(null)
   const mapRef = useRef(null)
@@ -13,17 +31,46 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
   const [locating, setLocating] = useState(false)
   const [locateError, setLocateError] = useState('')
   const [userPos, setUserPos] = useState(null)
+  const [locationDenied, setLocationDenied] = useState(false)
+  const [nearbyCafes, setNearbyCafes] = useState([])
 
-  const baseLat = cafes[0]?.lat
-  const baseLng = cafes[0]?.lng
-  const displayCafes = useMemo(() => {
-    if (!userPos || baseLat == null || baseLng == null) return cafes
-    return cafes.map((cafe) =>
-      cafe.lat == null || cafe.lng == null
-        ? cafe
-        : { ...cafe, lat: userPos.lat + (cafe.lat - baseLat), lng: userPos.lng + (cafe.lng - baseLng) },
+  useEffect(() => {
+    if (!mapReady || !userPos || !window.kakao?.maps?.services) return
+    const kakao = window.kakao
+    const places = new kakao.maps.services.Places()
+    const location = new kakao.maps.LatLng(userPos.lat, userPos.lng)
+    places.categorySearch(
+      'CE7',
+      (results, status) => {
+        if (status !== kakao.maps.services.Status.OK) {
+          setNearbyCafes([])
+          return
+        }
+        const mapped = results.map((place) => {
+          const matched = matchBrand(place.place_name, cafes)
+          return {
+            id: matched ? matched.id : `kakao-${place.id}`,
+            name: place.place_name,
+            lat: parseFloat(place.y),
+            lng: parseFloat(place.x),
+            dist: `${place.distance}m`,
+            wait: matched?.wait ?? '',
+            logo: matched?.logo,
+            color: matched?.color ?? '#8B7355',
+            fg: matched?.fg ?? '#fff',
+            initial: matched?.initial ?? place.place_name[0],
+          }
+        })
+        setNearbyCafes(mapped)
+      },
+      { location, radius: 1000, sort: kakao.maps.services.SortBy.DISTANCE },
     )
-  }, [cafes, userPos, baseLat, baseLng])
+  }, [mapReady, userPos, cafes])
+
+  const displayCafes = useMemo(() => {
+    if (!mapFailed && !locationDenied && userPos && nearbyCafes.length > 0) return nearbyCafes
+    return cafes
+  }, [mapFailed, locationDenied, userPos, nearbyCafes, cafes])
 
   useEffect(() => {
     let cancelled = false
@@ -42,12 +89,15 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
     }
   }, [])
 
-  // auto-detect the user's real position so the demo cafe cluster relocates near them
+  // auto-request location on entering the map so nearby real cafes can be searched
   useEffect(() => {
-    if (!navigator.geolocation) return
+    if (!navigator.geolocation) {
+      setLocationDenied(true)
+      return
+    }
     navigator.geolocation.getCurrentPosition(
       (pos) => setUserPos({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
-      () => {},
+      () => setLocationDenied(true),
       { enableHighAccuracy: true, timeout: 8000 },
     )
   }, [])
@@ -206,11 +256,11 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
         )}
       </div>
       <div style={{ padding: '16px 20px' }}>
-        <div style={{ fontSize: 17, fontWeight: 700, marginBottom: 12 }}>내 주변 카페 {cafes.length}곳</div>
-        {cafes.length === 0 && (
+        <div style={{ fontSize: 17, fontWeight: 700, marginBottom: 12 }}>내 주변 카페 {displayCafes.length}곳</div>
+        {displayCafes.length === 0 && (
           <div style={{ textAlign: 'center', fontSize: 14, color: 'var(--cc-ink3)', padding: '24px 0' }}>검색 결과가 없어요</div>
         )}
-        {cafes.map((cafe) => (
+        {displayCafes.map((cafe) => (
           <div key={cafe.id} onClick={() => onOpenCafe(cafe.id)} style={{ background: 'var(--cc-card)', border: '1px solid var(--cc-line)', borderRadius: 15, padding: 12, display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer', marginBottom: 10 }}>
             <div style={{ width: 44, height: 44, borderRadius: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 800, flex: 'none', overflow: 'hidden', background: cafe.logo ? '#fff' : cafe.color, color: cafe.fg, border: cafe.logo ? '1px solid var(--cc-line)' : 'none' }}>
               {cafe.logo ? <img src={cafe.logo} alt={cafe.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : cafe.initial}
