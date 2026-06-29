@@ -112,7 +112,7 @@ export default function Menu({ cafe, categories, menuCat, onSelectCat, menus, me
               <CupIcon size={24} />
               <span style={{ position: 'absolute', top: -6, right: -7, minWidth: 18, height: 18, borderRadius: 9, background: 'var(--cc-gold)', color: '#fff', fontSize: 11, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 4px' }}>{cartCount}</span>
             </div>
-            <span style={{ fontSize: 15, fontWeight: 700, color: '#fff' }}>주문 취합하기</span>
+            <span style={{ fontSize: 15, fontWeight: 700, color: '#fff' }}>메뉴 확인하기</span>
           </div>
           <span style={{ fontSize: 16, fontWeight: 800, color: '#fff' }}>{won(cartTotal)}</span>
         </div>

@@ -35,7 +35,7 @@ export default function Home({
             <div style={{ fontSize: 24, fontWeight: 700, color: '#fff', letterSpacing: '-.6px', marginTop: 6, lineHeight: 1.28 }}>
               오늘 커피,
               <br />
-              한 번에 모아볼까요?
+              한 번에 주문해 볼까요?
             </div>
           </div>
           <div onClick={onGoMy} style={{ width: 42, height: 42, borderRadius: 14, background: 'rgba(255,255,255,.16)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flex: 'none' }}>
@@ -47,6 +47,24 @@ export default function Home({
           <span style={{ fontSize: 15, color: 'var(--cc-ink3)', fontWeight: 500 }}>카페 이름이나 메뉴를 검색해 보세요</span>
         </div>
       </div>
+
+      {resumeScreen && (
+        <div style={{ padding: '14px 20px 0' }}>
+          <div onClick={onResume} style={{ background: 'var(--cc-green-deep)', borderRadius: 16, padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 13, cursor: 'pointer', boxShadow: '0 8px 20px rgba(18,63,45,.22)' }}>
+            <div style={{ width: 38, height: 38, borderRadius: '50%', background: 'rgba(255,255,255,.14)', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none', position: 'relative' }}>
+              <span style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: '#37C77C', animation: 'cc-ping 1.8s ease-out infinite', opacity: 0.5 }}></span>
+              <span style={{ position: 'relative' }}>
+                <CupIcon />
+              </span>
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: '#8FE3B6', letterSpacing: '.2px' }}>정리하던 주문이 있어요</div>
+              <div style={{ fontSize: 15, fontWeight: 700, color: '#fff', marginTop: 2, letterSpacing: '-.3px' }}>이어서 정리하기</div>
+            </div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: '#fff', background: 'rgba(255,255,255,.16)', padding: '8px 13px', borderRadius: 10, flex: 'none' }}>이어하기</div>
+          </div>
+        </div>
+      )}
 
       <div style={{ padding: '18px 20px 0' }}>
         <div
@@ -70,23 +88,23 @@ export default function Home({
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ fontSize: 17, fontWeight: 700, color: '#fff', letterSpacing: '-.4px' }}>주변 카페 찾기</div>
-            <div style={{ fontSize: 13, color: 'rgba(255,255,255,.85)', marginTop: 3 }}>지금 위치에서 가까운 카페부터 보여드려요</div>
+            <div style={{ fontSize: 13, color: 'rgba(255,255,255,.85)', marginTop: 3, lineHeight: 1.4 }}>카페를 정하고 메뉴까지 골라 주문해요</div>
           </div>
           <ChevronRight />
         </div>
       </div>
 
       <div style={{ padding: '14px 20px 0' }}>
-        <div style={{ background: 'var(--cc-card)', border: '1px solid var(--cc-line)', borderRadius: 18, padding: 16 }}>
+        <div style={{ background: '#fff', border: '1.5px solid var(--cc-green)', borderRadius: 18, padding: 16 }}>
           <div onClick={onEnterMemo} style={{ display: 'flex', alignItems: 'center', gap: 13, cursor: 'pointer' }}>
-            <div style={{ width: 40, height: 40, borderRadius: 13, background: 'var(--cc-band)', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none' }}>
+            <div style={{ width: 40, height: 40, borderRadius: 13, background: 'var(--cc-green-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none' }}>
               <GridIcon />
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 15, fontWeight: 700, letterSpacing: '-.3px' }}>간단하게 주문 메모하기</div>
+              <div style={{ fontSize: 15, fontWeight: 700, letterSpacing: '-.3px', color: 'var(--cc-green-strong)' }}>간단하게 주문 메모하기</div>
               <div style={{ fontSize: 12, color: 'var(--cc-ink2)', marginTop: 4, lineHeight: 1.45 }}>카페 선택 없이 메뉴만 빠르게 기록해요</div>
             </div>
-            <ChevronRight color="#9A9082" size={20} />
+            <ChevronRight color="#1F6E50" size={20} />
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 16 }}>
             <div
@@ -106,18 +124,6 @@ export default function Home({
           </div>
         </div>
       </div>
-
-      {resumeScreen && (
-        <div style={{ padding: '14px 20px 0' }}>
-          <div onClick={onResume} style={{ background: 'var(--cc-gold-soft)', border: '1px solid var(--cc-gold)', borderRadius: 18, padding: '15px 16px', display: 'flex', alignItems: 'center', gap: 13, cursor: 'pointer' }}>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 13, fontWeight: 700, color: '#9A6F26' }}>이어서 정리하기</div>
-              <div style={{ fontSize: 12, color: 'var(--cc-ink2)', marginTop: 3 }}>하던 작업이 남아 있어요</div>
-            </div>
-            <ChevronRight color="#9A6F26" size={20} />
-          </div>
-        </div>
-      )}
 
       {hasOrders && (
         <div style={{ padding: '18px 20px 0' }}>

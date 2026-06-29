@@ -1,4 +1,4 @@
-import { SpinnerIcon } from '../icons'
+import { CupIcon } from '../icons'
 
 export default function Loading() {
   return (
@@ -10,12 +10,25 @@ export default function Loading() {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: 16,
-        background: 'var(--cc-cream)',
+        gap: 18,
+        background: 'var(--cc-green-deep)',
       }}
     >
-      <SpinnerIcon />
-      <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--cc-ink2)', letterSpacing: '-.3px' }}>CALLCOFFEE</div>
+      <div
+        style={{
+          width: 88,
+          height: 88,
+          borderRadius: 20,
+          background: 'rgba(255,255,255,0.14)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <CupIcon size={40} color="#fff" />
+      </div>
+      <div style={{ fontSize: 22, fontWeight: 800, color: '#fff', letterSpacing: '-.5px' }}>CallCoffee</div>
+      <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.7)' }}>커피 주문, 한 번에 모아서</div>
     </div>
   )
 }

@@ -28,6 +28,9 @@ export default function History({ history, expandedHistory, onToggle, historyVie
           )}
           <div style={{ fontSize: 19, fontWeight: 700, letterSpacing: '-.4px' }}>주문 내역</div>
         </div>
+        <div style={{ fontSize: 12.5, color: 'var(--cc-ink2)', marginTop: 8, lineHeight: 1.5 }}>
+          언제 무엇을 주문했는지 모아봤어요. 카드를 누르면 매장에 전달할 양식을 다시 볼 수 있어요.
+        </div>
       </div>
 
       <div style={{ padding: '6px 20px 0' }}>
@@ -53,7 +56,10 @@ export default function History({ history, expandedHistory, onToggle, historyVie
                 <div onClick={() => onToggle(h.id)} style={{ display: 'flex', alignItems: 'center', gap: 13, cursor: 'pointer' }}>
                   <div style={{ width: 46, height: 46, borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 17, fontWeight: 800, flex: 'none', background: h.color, color: h.fg }}>{h.initial}</div>
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: 14, fontWeight: 700, letterSpacing: '-.3px' }}>{h.label}</div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <span style={{ fontSize: 14, fontWeight: 700, letterSpacing: '-.3px' }}>{h.label}</span>
+                      {h.justNow && <span style={{ fontSize: 10, fontWeight: 800, color: 'var(--cc-green)', background: 'var(--cc-green-soft)', padding: '2px 6px', borderRadius: 6, flex: 'none' }}>방금 주문</span>}
+                    </div>
                     <div style={{ fontSize: 12, color: 'var(--cc-ink2)', marginTop: 3, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{summary}</div>
                   </div>
                   <div style={{ textAlign: 'right', flex: 'none' }}>
@@ -80,7 +86,7 @@ export default function History({ history, expandedHistory, onToggle, historyVie
                           boxShadow: named ? '0 1px 3px rgba(0,0,0,.08)' : 'none',
                         }}
                       >
-                        이름별로
+                        이름 포함
                       </div>
                       <div
                         onClick={() => onSetView(h.id, 'plain')}
@@ -97,7 +103,7 @@ export default function History({ history, expandedHistory, onToggle, historyVie
                           boxShadow: !named ? '0 1px 3px rgba(0,0,0,.08)' : 'none',
                         }}
                       >
-                        메뉴만
+                        직원 전달용
                       </div>
                     </div>
                     <div style={{ marginTop: 10, background: '#fff', border: '1px solid var(--cc-line)', borderRadius: 14, padding: 14, whiteSpace: 'pre-wrap', fontSize: 13, lineHeight: 1.6 }}>

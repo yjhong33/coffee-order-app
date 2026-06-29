@@ -570,6 +570,7 @@ export default function App() {
               onSetTemp={setPTemp}
               onRegister={registerParticipant}
               onBack={() => go('share')}
+              cafeName={memoMode ? '메뉴 메모' : selectedCafe.name}
             />
           )}
           {screen === 'history' && (

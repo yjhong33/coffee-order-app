@@ -40,7 +40,7 @@ export default function Complete({ completeView, onSetView, completeText, onCopy
               boxShadow: named ? '0 1px 3px rgba(0,0,0,.08)' : 'none',
             }}
           >
-            이름별로
+            이름 포함
           </div>
           <div
             onClick={() => onSetView('plain')}
@@ -57,16 +57,16 @@ export default function Complete({ completeView, onSetView, completeText, onCopy
               boxShadow: !named ? '0 1px 3px rgba(0,0,0,.08)' : 'none',
             }}
           >
-            메뉴만
+            직원 전달용
           </div>
         </div>
         <div style={{ fontSize: 12, color: 'var(--cc-ink3)', marginTop: 8, lineHeight: 1.4 }}>{hint}</div>
 
         <div style={{ marginTop: 14, background: '#fff', border: '1px solid var(--cc-line)', borderRadius: 16, padding: 16, whiteSpace: 'pre-wrap', fontSize: 14, lineHeight: 1.6, letterSpacing: '-.2px' }}>{completeText}</div>
 
-        <div onClick={onCopy} style={{ marginTop: 14, background: 'var(--cc-band)', borderRadius: 14, padding: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, cursor: 'pointer' }}>
-          <GridIcon size={18} />
-          <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--cc-ink2)' }}>양식 복사하기</span>
+        <div onClick={onCopy} style={{ marginTop: 14, background: '#fff', border: '1.5px solid var(--cc-green)', borderRadius: 14, padding: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, cursor: 'pointer' }}>
+          <GridIcon size={18} color="#1F6E50" />
+          <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--cc-green)' }}>이 양식 복사하기</span>
         </div>
 
         <div onClick={onGoShare} style={{ marginTop: 18, background: 'var(--cc-green)', borderRadius: 15, height: 56, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 10px 24px rgba(31,110,80,.30)' }}>

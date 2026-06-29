@@ -1,21 +1,34 @@
 import { ChevronLeft } from '../icons'
 
-export default function Participant({ pName, onNameChange, pMenu, onMenuChange, pTemp, onSetTemp, onRegister, onBack }) {
+export default function Participant({ pName, onNameChange, pMenu, onMenuChange, pTemp, onSetTemp, onRegister, onBack, cafeName }) {
   const hot = pTemp === 'HOT'
   const ice = pTemp === 'ICE'
 
   return (
     <div style={{ padding: '0 0 40px', animation: 'cc-fade .2s ease' }}>
-      <div style={{ position: 'sticky', top: 0, zIndex: 5, background: 'var(--cc-cream)', padding: '54px 20px 12px' }}>
+      <div
+        style={{
+          padding: '54px 20px 22px',
+          background: 'linear-gradient(160deg,#2C6BB0,#1A4FA0)',
+          borderRadius: '0 0 22px 22px',
+          position: 'relative',
+          overflow: 'hidden',
+        }}
+      >
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <div onClick={onBack} style={{ width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', marginLeft: -8 }}>
-            <ChevronLeft />
+            <ChevronLeft color="#fff" />
           </div>
-          <div style={{ fontSize: 19, fontWeight: 700, letterSpacing: '-.4px' }}>참여자 등록</div>
+          <span style={{ fontSize: 11, fontWeight: 800, color: '#fff', background: 'rgba(255,255,255,.18)', padding: '3px 9px', borderRadius: 7, letterSpacing: '.2px' }}>참여자</span>
+          <div style={{ flex: 1 }}></div>
+          <div onClick={onBack} style={{ fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,.85)', cursor: 'pointer' }}>담당자 시점 →</div>
         </div>
+        <div style={{ fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,.75)', marginTop: 14 }}>함께 커피 주문해요 ☕</div>
+        <div style={{ fontSize: 21, fontWeight: 800, color: '#fff', marginTop: 4, letterSpacing: '-.4px' }}>{cafeName}</div>
+        <div style={{ fontSize: 12.5, color: 'rgba(255,255,255,.8)', marginTop: 6 }}>내 주문만 등록하면 끝이에요</div>
       </div>
 
-      <div style={{ padding: '8px 20px 0' }}>
+      <div style={{ padding: '16px 20px 0' }}>
         <div style={{ fontSize: 13, color: 'var(--cc-ink2)', lineHeight: 1.5, marginBottom: 14 }}>이름과 메뉴를 입력하면 그룹 주문에 바로 등록돼요.</div>
 
         <div style={{ marginBottom: 14 }}>
@@ -78,8 +91,11 @@ export default function Participant({ pName, onNameChange, pMenu, onMenuChange, 
           </div>
         </div>
 
-        <div onClick={onRegister} style={{ background: 'var(--cc-green)', borderRadius: 15, height: 54, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 10px 24px rgba(31,110,80,.30)' }}>
-          <span style={{ fontSize: 15, fontWeight: 700, color: '#fff' }}>등록하기</span>
+        <div onClick={onRegister} style={{ background: '#1A4FA0', borderRadius: 15, height: 54, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 10px 24px rgba(26,79,160,.30)' }}>
+          <span style={{ fontSize: 15, fontWeight: 700, color: '#fff' }}>내 주문 등록하기</span>
+        </div>
+        <div style={{ fontSize: 12, color: 'var(--cc-ink3)', textAlign: 'center', marginTop: 10, lineHeight: 1.45 }}>
+          등록하면 담당자 화면에 바로 '확인 완료'로 떠요
         </div>
       </div>
     </div>

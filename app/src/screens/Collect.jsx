@@ -11,7 +11,7 @@ export default function Collect({ people, totalQty, totalPrice, memoMode, onBack
           <div onClick={onBack} style={{ width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', marginLeft: -8 }}>
             <ChevronLeft />
           </div>
-          <div style={{ fontSize: 19, fontWeight: 700, letterSpacing: '-.4px' }}>{memoMode ? '메뉴 메모' : '주문 취합'}</div>
+          <div style={{ fontSize: 19, fontWeight: 700, letterSpacing: '-.4px' }}>{memoMode ? '메뉴 메모' : '추가 주문'}</div>
         </div>
         {!memoMode && (
           <>
@@ -22,26 +22,32 @@ export default function Collect({ people, totalQty, totalPrice, memoMode, onBack
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, fontWeight: 700, marginTop: 7 }}>
               <span style={{ color: 'var(--cc-green)' }}>① 메뉴 선택</span>
-              <span style={{ color: 'var(--cc-green)' }}>② 취합 확인</span>
-              <span style={{ color: 'var(--cc-ink3)' }}>③ 공유</span>
+              <span style={{ color: 'var(--cc-green)' }}>② 메뉴 확인</span>
+              <span style={{ color: 'var(--cc-ink3)' }}>③ 공유·주문</span>
             </div>
           </>
         )}
       </div>
 
       <div style={{ padding: '6px 20px 0' }}>
-        <div style={{ display: 'flex', gap: 9, marginBottom: 14 }}>
-          <div onClick={onOpenVoice} style={{ flex: 1, background: 'var(--cc-green-soft)', borderRadius: 13, padding: 11, display: 'flex', alignItems: 'center', gap: 9, cursor: 'pointer' }}>
-            <MicIcon size={19} />
-            <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--cc-green-strong)' }}>음성 추가</span>
+        {memoMode && (
+          <div style={{ background: 'var(--cc-green-soft)', borderRadius: 13, padding: '12px 14px', display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+            <GridIcon size={20} />
+            <span style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--cc-green-strong)', lineHeight: 1.45 }}>간단하게 메뉴만 기록해요 — 카페는 나중에 정해도 돼요</span>
           </div>
-          <div onClick={onOpenCapture} style={{ flex: 1, background: 'var(--cc-gold-soft)', borderRadius: 13, padding: 11, display: 'flex', alignItems: 'center', gap: 9, cursor: 'pointer' }}>
-            <CaptureIcon size={19} />
-            <span style={{ fontSize: 13, fontWeight: 700, color: '#9A6F26' }}>캡처 추가</span>
+        )}
+        <div style={{ display: 'flex', gap: 8, marginBottom: 14 }}>
+          <div onClick={onOpenManual} style={{ flex: 1, background: 'var(--cc-green)', borderRadius: 13, padding: 11, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7, cursor: 'pointer', boxShadow: '0 6px 14px rgba(31,110,80,.24)' }}>
+            <PlusIcon size={18} />
+            <span style={{ fontSize: 12.5, fontWeight: 700, color: '#fff' }}>직접 입력</span>
           </div>
-          <div onClick={onOpenManual} style={{ flex: 1, background: 'var(--cc-band)', borderRadius: 13, padding: 11, display: 'flex', alignItems: 'center', gap: 9, cursor: 'pointer' }}>
-            <GridIcon size={19} color="var(--cc-ink2)" />
-            <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--cc-ink2)' }}>직접 입력</span>
+          <div onClick={onOpenVoice} style={{ flex: 1, background: 'var(--cc-green-soft)', borderRadius: 13, padding: 11, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7, cursor: 'pointer' }}>
+            <MicIcon size={18} />
+            <span style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--cc-green-strong)' }}>음성</span>
+          </div>
+          <div onClick={onOpenCapture} style={{ flex: 1, background: 'var(--cc-gold-soft)', borderRadius: 13, padding: 11, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7, cursor: 'pointer' }}>
+            <CaptureIcon size={18} />
+            <span style={{ fontSize: 12.5, fontWeight: 700, color: '#9A6F26' }}>캡처</span>
           </div>
         </div>
 
@@ -98,11 +104,9 @@ export default function Collect({ people, totalQty, totalPrice, memoMode, onBack
             <div style={{ width: 72, height: 72, borderRadius: 24, background: 'var(--cc-band)', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <CupIcon color="#C9BFB0" size={36} />
             </div>
-            <div style={{ fontSize: 15, fontWeight: 700, marginTop: 16 }}>아직 취합된 주문이 없어요</div>
+            <div style={{ fontSize: 15, fontWeight: 700, marginTop: 16 }}>아직 기록된 주문이 없어요</div>
             <div style={{ fontSize: 13, color: 'var(--cc-ink2)', marginTop: 6, lineHeight: 1.5 }}>
-              음성이나 캡처로 주문을 받아보세요.
-              <br />
-              말로 받아도, 카톡 캡처를 올려도 됩니다.
+              직접 입력·음성·캡처로 메뉴를 기록해 보세요.
             </div>
           </div>
         )}
@@ -115,7 +119,7 @@ export default function Collect({ people, totalQty, totalPrice, memoMode, onBack
             <span style={{ fontSize: 18, fontWeight: 800, letterSpacing: '-.4px' }}>{won(totalPrice)}</span>
           </div>
           <div onClick={onFinish} style={{ background: 'var(--cc-green)', borderRadius: 15, height: 56, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, cursor: 'pointer', boxShadow: '0 10px 24px rgba(31,110,80,.30)' }}>
-            <span style={{ fontSize: 16, fontWeight: 700, color: '#fff' }}>완료하기</span>
+            <span style={{ fontSize: 16, fontWeight: 700, color: '#fff' }}>주문하러 가기</span>
             <ChevronRight />
           </div>
         </div>

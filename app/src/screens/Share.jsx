@@ -84,7 +84,7 @@ export default function Share({ participants, confirmedCount, onBack, onCopyLink
         <div style={{ marginTop: 20 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
             <div style={{ fontSize: 14, fontWeight: 700 }}>참여자 확인 현황</div>
-            <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--cc-green)', background: 'var(--cc-green-soft)', padding: '4px 9px', borderRadius: 8 }}>{confirmedCount}/{participants.length} 확인</div>
+            <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--cc-green)', background: 'var(--cc-green-soft)', padding: '4px 9px', borderRadius: 8 }}>{confirmedCount}/{participants.length} 확인 · 실시간</div>
           </div>
           {participants.map((pt) => {
             const avatarText = pt.name === '나' ? '나' : pt.name.slice(-2)
