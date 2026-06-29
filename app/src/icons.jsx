@@ -67,6 +67,16 @@ export function CupIcon({ color = '#fff', size = 20 }) {
   )
 }
 
+export function MugIcon({ color = '#fff', size = 20 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M5 9h11v4a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4Z"></path>
+      <path d="M16 10h2.2a2 2 0 0 1 0 4H16"></path>
+      <path d="M8 3v2M11 3v2"></path>
+    </svg>
+  )
+}
+
 export function PastryIcon({ color = '#B98B3E', size = 34 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
