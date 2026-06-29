@@ -520,6 +520,7 @@ export default function App() {
               onAddCart={addCart}
               onBack={() => go('cafe')}
               onGoCollect={() => go('collect')}
+              onOpenVoice={openVoice}
             />
           )}
           {(screen === 'collect' || screen === 'memo') && (

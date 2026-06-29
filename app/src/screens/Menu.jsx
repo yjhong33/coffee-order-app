@@ -1,7 +1,7 @@
-import { ChevronLeft, PastryIcon, PlusIcon, CupIcon, SearchIcon } from '../icons'
+import { ChevronLeft, PastryIcon, PlusIcon, CupIcon, SearchIcon, MicIcon } from '../icons'
 import { won } from '../data'
 
-export default function Menu({ cafe, categories, menuCat, onSelectCat, menus, menuQuery, onMenuQueryChange, menuTemp, onSetTemp, cartCount, cartTotal, onAddCart, onBack, onGoCollect }) {
+export default function Menu({ cafe, categories, menuCat, onSelectCat, menus, menuQuery, onMenuQueryChange, menuTemp, onSetTemp, cartCount, cartTotal, onAddCart, onBack, onGoCollect, onOpenVoice }) {
   return (
     <div style={{ padding: '0 0 150px', animation: 'cc-fade .2s ease' }}>
       <div style={{ position: 'sticky', top: 0, zIndex: 5, background: 'var(--cc-cream)', padding: '54px 20px 0' }}>
@@ -20,6 +20,11 @@ export default function Menu({ cafe, categories, menuCat, onSelectCat, menus, me
             placeholder="메뉴 검색"
             style={{ flex: 1, fontSize: 14, color: 'var(--cc-ink)', border: 'none', outline: 'none', background: 'transparent' }}
           />
+        </div>
+        <div onClick={onOpenVoice} style={{ marginTop: 12, background: 'var(--cc-green-soft)', borderRadius: 13, height: 46, display: 'flex', alignItems: 'center', gap: 10, padding: '0 8px 0 14px', cursor: 'pointer' }}>
+          <MicIcon color="var(--cc-green)" size={18} />
+          <span style={{ flex: 1, fontSize: 13, fontWeight: 600, color: 'var(--cc-green)' }}>말로도 주문할 수 있어요 — “아이스 아메리카노요”</span>
+          <span style={{ fontSize: 12, fontWeight: 800, color: '#fff', background: 'var(--cc-green)', padding: '8px 12px', borderRadius: 9, flex: 'none' }}>음성</span>
         </div>
         <div className="cc-scroll" style={{ display: 'flex', gap: 8, overflowX: 'auto', padding: '14px 0 12px' }}>
           {categories.map((label, i) => (
