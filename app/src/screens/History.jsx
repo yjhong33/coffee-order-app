@@ -1,4 +1,5 @@
-import { ChevronLeft, CupIcon, GridIcon } from '../icons'
+import { useState } from 'react'
+import { ChevronLeft, CupIcon, GridIcon, TrashIcon, CloseIcon } from '../icons'
 import { buildNamedFor, buildPlainFor, computeTotals } from '../selectors'
 
 function relTime(ts) {
@@ -14,8 +15,9 @@ function relTime(ts) {
   return `${Math.floor(d / day)}일 전 · ${time}`
 }
 
-export default function History({ history, expandedHistory, onToggle, historyView, onSetView, onCopy, onBack }) {
+export default function History({ history, expandedHistory, onToggle, historyView, onSetView, onCopy, onDelete, onBack }) {
   const hasHistory = history.length > 0
+  const [confirmId, setConfirmId] = useState(null)
 
   return (
     <div style={{ padding: '0 0 96px', animation: 'cc-fade .2s ease' }}>
@@ -68,7 +70,56 @@ export default function History({ history, expandedHistory, onToggle, historyVie
                     <div style={{ fontSize: 12, color: 'var(--cc-ink3)' }}>{relTime(h.ts)}</div>
                     <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--cc-ink3)', marginTop: 4 }}>{totalQty}잔</div>
                   </div>
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setConfirmId(h.id)
+                    }}
+                    style={{ width: 32, height: 32, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flex: 'none' }}
+                  >
+                    <TrashIcon size={16} />
+                  </div>
                 </div>
+
+                {confirmId === h.id && (
+                  <div
+                    style={{
+                      marginTop: 12,
+                      background: 'var(--cc-hot-bg)',
+                      borderRadius: 12,
+                      padding: '10px 12px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 10,
+                    }}
+                  >
+                    <span style={{ flex: 1, fontSize: 13.5, fontWeight: 600, color: 'var(--cc-hot)' }}>이 주문 내역을 삭제할까요?</span>
+                    <div
+                      onClick={() => setConfirmId(null)}
+                      style={{ width: 30, height: 30, borderRadius: 9, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flex: 'none' }}
+                    >
+                      <CloseIcon size={15} color="var(--cc-ink3)" />
+                    </div>
+                    <div
+                      onClick={() => {
+                        setConfirmId(null)
+                        onDelete(h.id)
+                      }}
+                      style={{
+                        fontSize: 13,
+                        fontWeight: 700,
+                        color: '#fff',
+                        background: 'var(--cc-hot)',
+                        padding: '8px 14px',
+                        borderRadius: 9,
+                        cursor: 'pointer',
+                        flex: 'none',
+                      }}
+                    >
+                      삭제
+                    </div>
+                  </div>
+                )}
 
                 {expanded && (
                   <div style={{ marginTop: 14 }}>

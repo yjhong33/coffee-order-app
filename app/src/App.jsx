@@ -589,6 +589,11 @@ export default function App() {
   function setHistoryView(id, view) {
     setHistoryViewMap((prev) => ({ ...prev, [id]: view }))
   }
+  function deleteHistory(id) {
+    setHistory((prev) => prev.filter((h) => h.id !== id))
+    setExpandedHistory((prev) => (prev === id ? null : prev))
+    showToast('주문 내역을 삭제했어요')
+  }
   async function copyHistory(h) {
     const view = historyView[h.id] || 'named'
     const text = view === 'named' ? buildNamedFor(h.people) : buildPlainFor(h.people)
@@ -828,6 +833,7 @@ export default function App() {
               historyView={historyView}
               onSetView={setHistoryView}
               onCopy={copyHistory}
+              onDelete={deleteHistory}
             />
           )}
           {screen === 'map' && (
