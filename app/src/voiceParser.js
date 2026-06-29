@@ -41,3 +41,40 @@ export function parseVoiceOrder(rawText, menus) {
   }
   return { matched: true, name: foundMenu.name, temp: temp || 'ICE', qty, price: foundMenu.price }
 }
+
+const NAME_PARTICLES = /(은요|는요|이는|은|는|이|가|도)$/
+const SEGMENT_SPLIT = /,|그리고|이랑|랑\s|하고\s/g
+const KEYWORD_HINT = /아이스|차갑|시원|핫|뜨겁|따뜻|잔|아아|뜨아|아바|뜨바|아라떼|뜨라떼|한|두|세|네|다섯/
+
+function splitVoiceSegments(rawText) {
+  return (rawText || '')
+    .split(SEGMENT_SPLIT)
+    .map((s) => s.trim())
+    .filter(Boolean)
+}
+
+function extractName(segment, menus) {
+  const words = segment.trim().split(/\s+/).filter(Boolean)
+  if (words.length < 2) return { personName: null, rest: segment }
+  const first = words[0]
+  const firstFlat = first.replace(/\s/g, '')
+  const isMenuLike = menus.some((m) => {
+    const norm = m.name.replace(/\s/g, '')
+    return norm.includes(firstFlat) || firstFlat.includes(norm)
+  })
+  if (isMenuLike || KEYWORD_HINT.test(firstFlat)) {
+    return { personName: null, rest: segment }
+  }
+  const personName = firstFlat.replace(NAME_PARTICLES, '')
+  return { personName: personName || null, rest: words.slice(1).join(' ') }
+}
+
+export function parseVoiceOrders(rawText, menus) {
+  const segments = splitVoiceSegments(rawText)
+  if (segments.length === 0) return []
+  return segments.map((seg) => {
+    const { personName, rest } = extractName(seg, menus)
+    const parsed = parseVoiceOrder(rest, menus)
+    return { ...parsed, personName, raw: seg }
+  })
+}

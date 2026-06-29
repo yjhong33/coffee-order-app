@@ -13,7 +13,7 @@ import {
   HISTORY_SEED,
 } from './data'
 import { computeTotals, buildNamedFor, buildPlainFor } from './selectors'
-import { parseVoiceOrder } from './voiceParser'
+import { parseVoiceOrders } from './voiceParser'
 import Home from './screens/Home'
 import CafeSelect from './screens/CafeSelect'
 import Menu from './screens/Menu'
@@ -74,8 +74,7 @@ export default function App() {
   const [overlay, setOverlay] = useState(null)
   const [voicePhase, setVoicePhase] = useState('listening')
   const [voiceTranscript, setVoiceTranscript] = useState('')
-  const [voiceOrder, setVoiceOrder] = useState(null)
-  const [voiceName, setVoiceName] = useState('')
+  const [voiceOrders, setVoiceOrders] = useState([])
   const [voiceError, setVoiceError] = useState('')
   const [capStep, setCapStep] = useState('upload')
   const [analyzeIdx, setAnalyzeIdx] = useState(0)
@@ -110,6 +109,8 @@ export default function App() {
 
   const scrollRef = useRef(null)
   const recognitionRef = useRef(null)
+  const voiceListeningRef = useRef(false)
+  const voiceTranscriptRef = useRef('')
   const capTimerRef = useRef(null)
   const toastTimerRef = useRef(null)
   const loadTimerRef = useRef(null)
@@ -233,9 +234,9 @@ export default function App() {
   function openVoice() {
     setOverlay('voice')
     setVoiceTranscript('')
-    setVoiceOrder(null)
+    setVoiceOrders([])
     setVoiceError('')
-    setVoiceName('나')
+    voiceTranscriptRef.current = ''
 
     if (!SpeechRecognitionAPI) {
       setVoicePhase('listening')
@@ -245,55 +246,97 @@ export default function App() {
     recognitionRef.current?.stop()
     const recognition = new SpeechRecognitionAPI()
     recognition.lang = 'ko-KR'
+    recognition.continuous = true
     recognition.interimResults = true
     recognition.maxAlternatives = 1
     recognitionRef.current = recognition
 
     recognition.onresult = (event) => {
-      let text = ''
-      let isFinal = false
-      for (let i = 0; i < event.results.length; i++) {
-        text += event.results[i][0].transcript
-        if (event.results[i].isFinal) isFinal = true
-      }
-      setVoiceTranscript(text)
-      if (isFinal) {
-        const parsed = parseVoiceOrder(text, MENUS)
-        if (parsed.matched) {
-          setVoiceOrder(parsed)
-          setVoicePhase('done')
+      let interim = ''
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const t = event.results[i][0].transcript
+        if (event.results[i].isFinal) {
+          voiceTranscriptRef.current = `${voiceTranscriptRef.current} ${t}`.trim()
         } else {
-          setVoiceError('메뉴를 인식하지 못했어요')
-          setVoicePhase('failed')
+          interim += t
+        }
+      }
+      setVoiceTranscript(`${voiceTranscriptRef.current} ${interim}`.trim())
+    }
+    recognition.onerror = (e) => {
+      if (e.error === 'no-speech' || e.error === 'aborted') return
+      setVoiceError('음성을 인식하지 못했어요')
+      setVoicePhase('failed')
+      voiceListeningRef.current = false
+    }
+    recognition.onend = () => {
+      if (voiceListeningRef.current) {
+        try {
+          recognition.start()
+        } catch {
+          /* already running */
         }
       }
     }
-    recognition.onerror = () => {
-      setVoiceError('음성을 인식하지 못했어요')
-      setVoicePhase('failed')
-    }
-    recognition.onend = () => {
-      setVoicePhase((prev) => (prev === 'listening' ? 'failed' : prev))
-    }
 
+    voiceListeningRef.current = true
     setVoicePhase('listening')
     recognition.start()
   }
+  function finishVoiceListening() {
+    voiceListeningRef.current = false
+    recognitionRef.current?.stop()
+    const text = voiceTranscriptRef.current.trim()
+    if (!text) {
+      setVoiceError('음성을 인식하지 못했어요')
+      setVoicePhase('failed')
+      return
+    }
+    const parsedList = parseVoiceOrders(text, MENUS).filter((p) => p.matched)
+    if (parsedList.length === 0) {
+      setVoiceError('메뉴를 인식하지 못했어요')
+      setVoicePhase('failed')
+      return
+    }
+    setVoiceOrders(
+      parsedList.map((p, i) => ({
+        id: makeId('vo'),
+        name: p.personName || (i === 0 ? '나' : ''),
+        menu: p.name,
+        temp: p.temp,
+        qty: p.qty,
+        price: p.price,
+      })),
+    )
+    setVoicePhase('done')
+  }
   function retryVoice() {
+    voiceListeningRef.current = false
     recognitionRef.current?.stop()
     openVoice()
   }
+  function updateVoiceOrder(id, field, value) {
+    setVoiceOrders((prev) => prev.map((o) => (o.id === id ? { ...o, [field]: value } : o)))
+  }
+  function removeVoiceOrder(id) {
+    setVoiceOrders((prev) => prev.filter((o) => o.id !== id))
+  }
   function approveVoice() {
-    if (!voiceOrder) return
-    setPeople((prev) =>
-      mergeItemIntoPeople(
-        prev,
-        { id: makeId('p'), name: voiceName || '나', isMe: voiceName === '나', color: '#5B8C7A', fg: '#fff' },
-        { name: voiceOrder.name, temp: voiceOrder.temp, qty: voiceOrder.qty, price: voiceOrder.price },
-      ),
-    )
+    if (voiceOrders.length === 0) return
+    setPeople((prev) => {
+      let next = prev
+      voiceOrders.forEach((o) => {
+        const name = o.name.trim() || '나'
+        next = mergeItemIntoPeople(
+          next,
+          { id: makeId('p'), name, isMe: name === '나', color: '#5B8C7A', fg: '#fff' },
+          { name: o.menu, temp: o.temp, qty: o.qty, price: o.price },
+        )
+      })
+      return next
+    })
     setOverlay(null)
-    showToast(`${voiceName || '나'} 님 주문이 추가됐어요 🎉`)
+    showToast(`${voiceOrders.length}건의 주문이 취합에 추가됐어요 🎉`)
   }
 
   // ---- capture overlay ----
@@ -344,6 +387,7 @@ export default function App() {
     showToast('4명의 주문을 취합에 추가했어요 🎉')
   }
   function closeOverlay() {
+    voiceListeningRef.current = false
     recognitionRef.current?.stop()
     clearInterval(capTimerRef.current)
     setOverlay(null)
@@ -603,10 +647,11 @@ export default function App() {
           <VoiceOverlay
             phase={voicePhase}
             transcript={voiceTranscript}
-            order={voiceOrder}
-            name={voiceName}
-            onNameChange={setVoiceName}
+            orders={voiceOrders}
+            onUpdateOrder={updateVoiceOrder}
+            onRemoveOrder={removeVoiceOrder}
             onClose={closeOverlay}
+            onFinishListening={finishVoiceListening}
             onApprove={approveVoice}
             onRetry={retryVoice}
             supported={!!SpeechRecognitionAPI}
