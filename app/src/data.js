@@ -58,13 +58,6 @@ export const INITIAL_PEOPLE = [
   { id: 'p3', name: '박지후', color: '#C77B9E', fg: '#fff', items: [{ id: 'i4', name: '바닐라 라떼', temp: 'ICE', qty: 1, price: 5500 }] },
 ]
 
-export const PARTICIPANT_STATUS = [
-  { name: '나', order: '아이스 아메리카노 1잔', ok: true, bg: '#1F6E50' },
-  { name: '김민준', order: '돌체 라떼 HOT 1잔', ok: true, bg: '#E8A13C' },
-  { name: '이서연', order: '아이스 아메리카노 2잔', ok: false, bg: '#6A8CC7' },
-  { name: '박지후', order: '확인 대기 중', ok: false, bg: '#C77B9E' },
-]
-
 export const RECENT_ORDERS = [
   { initial: 'S', color: '#00704A', fg: '#fff', cafeId: 'starbucks', name: '스타벅스 강남R점', summary: '아메리카노 외 3잔 · 18,100원', date: '2일 전' },
   { initial: 'M', color: '#FFC400', fg: '#3A2E00', cafeId: 'mega', name: '메가커피 역삼점', summary: '카페라떼 외 5잔 · 21,500원', date: '지난주' },

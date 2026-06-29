@@ -1,6 +1,7 @@
-import { ChevronLeft, LinkIcon, KakaoIcon, GridIcon, QrSample, ChevronRight, PersonIcon, RefreshIcon } from '../icons'
+import { ChevronLeft, LinkIcon, KakaoIcon, GridIcon, ChevronRight, PersonIcon, RefreshIcon } from '../icons'
+import QrCode from '../components/QrCode'
 
-export default function Share({ participants, confirmedCount, onBack, onCopyLink, onCopyCode, onShareKakao, onFinish, onGoParticipant, onRefresh }) {
+export default function Share({ participants, confirmedCount, joinUrl, onBack, onCopyLink, onShareKakao, onFinish, onGoParticipant, onRefresh }) {
   return (
     <div style={{ padding: '0 0 40px', animation: 'cc-fade .2s ease' }}>
       <div style={{ position: 'sticky', top: 0, zIndex: 5, background: 'var(--cc-cream)', padding: '54px 20px 12px' }}>
@@ -19,10 +20,8 @@ export default function Share({ participants, confirmedCount, onBack, onCopyLink
 
       <div style={{ padding: '8px 20px 0' }}>
         <div style={{ background: 'var(--cc-card)', border: '1px solid var(--cc-line)', borderRadius: 18, padding: 18, textAlign: 'center' }}>
-          <div style={{ fontSize: 13, color: 'var(--cc-ink2)', fontWeight: 600 }}>참여 코드</div>
-          <div style={{ fontSize: 34, fontWeight: 800, letterSpacing: 6, color: 'var(--cc-green)', marginTop: 6 }}>C4F9</div>
-          <div style={{ width: 150, height: 150, margin: '16px auto 0', borderRadius: 18, background: '#fff', border: '1px solid var(--cc-line)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 14 }}>
-            <QrSample />
+          <div style={{ width: 150, height: 150, margin: '0 auto', borderRadius: 18, background: '#fff', border: '1px solid var(--cc-line)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 14 }}>
+            {joinUrl ? <QrCode value={joinUrl} /> : <div style={{ fontSize: 11, color: 'var(--cc-ink3)' }}>QR 생성 중...</div>}
           </div>
           <div style={{ fontSize: 12, color: 'var(--cc-ink3)', marginTop: 12 }}>QR을 찍으면 바로 참여할 수 있어요</div>
         </div>
@@ -56,7 +55,7 @@ export default function Share({ participants, confirmedCount, onBack, onCopyLink
                 </div>
                 <div style={{ padding: '12px 14px' }}>
                   <div style={{ fontSize: 13, fontWeight: 700 }}>스타벅스 강남R점 그룹 주문</div>
-                  <div style={{ fontSize: 12, color: 'var(--cc-ink2)', marginTop: 3, lineHeight: 1.4 }}>버튼을 눌러 내 메뉴를 추가하거나 확인하세요. 코드 C4F9</div>
+                  <div style={{ fontSize: 12, color: 'var(--cc-ink2)', marginTop: 3, lineHeight: 1.4 }}>버튼을 눌러 내 메뉴를 추가하거나 확인하세요.</div>
                   <div style={{ marginTop: 11, background: 'var(--cc-band)', borderRadius: 9, textAlign: 'center', padding: 9, fontSize: 13, fontWeight: 700, color: 'var(--cc-green)' }}>주문 참여하기</div>
                 </div>
               </div>

@@ -1,8 +1,30 @@
 import { ChevronLeft } from '../icons'
 
-export default function Participant({ pName, onNameChange, pMenu, onMenuChange, pTemp, onSetTemp, onRegister, onBack, cafeName }) {
+export default function Participant({ pName, onNameChange, pMenu, onMenuChange, pTemp, onSetTemp, onRegister, onBack, cafeName, isHost = true, registered = false, error = '' }) {
   const hot = pTemp === 'HOT'
   const ice = pTemp === 'ICE'
+
+  if (error) {
+    return (
+      <div style={{ padding: '90px 24px', textAlign: 'center', animation: 'cc-fade .2s ease' }}>
+        <div style={{ fontSize: 15, fontWeight: 700 }}>{error}</div>
+      </div>
+    )
+  }
+
+  if (registered) {
+    return (
+      <div style={{ padding: '90px 24px', textAlign: 'center', animation: 'cc-fade .2s ease' }}>
+        <div style={{ fontSize: 40 }}>🎉</div>
+        <div style={{ fontSize: 17, fontWeight: 800, marginTop: 14 }}>주문이 등록됐어요</div>
+        <div style={{ fontSize: 13, color: 'var(--cc-ink2)', marginTop: 8, lineHeight: 1.5 }}>
+          담당자가 모아서 카페에 전달할 거예요.
+          <br />
+          이 화면은 그대로 닫아도 괜찮아요.
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div style={{ padding: '0 0 40px', animation: 'cc-fade .2s ease' }}>
@@ -16,12 +38,14 @@ export default function Participant({ pName, onNameChange, pMenu, onMenuChange, 
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <div onClick={onBack} style={{ width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', marginLeft: -8 }}>
-            <ChevronLeft color="#fff" />
-          </div>
+          {isHost && (
+            <div onClick={onBack} style={{ width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', marginLeft: -8 }}>
+              <ChevronLeft color="#fff" />
+            </div>
+          )}
           <span style={{ fontSize: 11, fontWeight: 800, color: '#fff', background: 'rgba(255,255,255,.18)', padding: '3px 9px', borderRadius: 7, letterSpacing: '.2px' }}>참여자</span>
           <div style={{ flex: 1 }}></div>
-          <div onClick={onBack} style={{ fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,.85)', cursor: 'pointer' }}>담당자 시점 →</div>
+          {isHost && <div onClick={onBack} style={{ fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,.85)', cursor: 'pointer' }}>담당자 시점 →</div>}
         </div>
         <div style={{ fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,.75)', marginTop: 14 }}>함께 커피 주문해요 ☕</div>
         <div style={{ fontSize: 21, fontWeight: 800, color: '#fff', marginTop: 4, letterSpacing: '-.4px' }}>{cafeName}</div>

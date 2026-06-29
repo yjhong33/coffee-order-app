@@ -7,7 +7,6 @@ import {
   ANALYZE_STEPS,
   PREFS,
   INITIAL_PEOPLE,
-  PARTICIPANT_STATUS,
   RECENT_ORDERS,
   CAP_PEOPLE,
   HISTORY_SEED,
@@ -69,6 +68,12 @@ function capturePersonToItem(p) {
 }
 
 export default function App() {
+  const [joinId] = useState(() => {
+    const m = typeof window !== 'undefined' ? window.location.pathname.match(/^\/join\/([A-Za-z0-9]{4,})/) : null
+    return m ? m[1] : null
+  })
+  const isGuest = !!joinId
+
   const [loading, setLoading] = useState(true)
   const [screen, setScreen] = useState('home')
   const [overlay, setOverlay] = useState(null)
@@ -100,16 +105,21 @@ export default function App() {
   const [manualNote, setManualNote] = useState('')
   const [manualTemp, setManualTemp] = useState('ICE')
   const [manualQty, setManualQty] = useState(1)
-  const [pName, setPName] = useState('박지후')
-  const [pMenu, setPMenu] = useState('바닐라 라떼')
+  const [pName, setPName] = useState(() => (joinId ? '' : '박지후'))
+  const [pMenu, setPMenu] = useState(() => (joinId ? '' : '바닐라 라떼'))
   const [pTemp, setPTemp] = useState('ICE')
   const [partDone, setPartDone] = useState({ 나: true, 김민준: true, 이서연: false, 박지후: false })
   const [cafeQuery, setCafeQuery] = useState('')
   const [cafeSearchFocus, setCafeSearchFocus] = useState(false)
   const [menuQuery, setMenuQuery] = useState('')
-  const [participants, setParticipants] = useState(PARTICIPANT_STATUS)
   const [frameScale, setFrameScale] = useState(1)
   const [frameOffsetX, setFrameOffsetX] = useState(0)
+
+  // ---- real cross-device sharing (Upstash-backed) ----
+  const [sessionId, setSessionId] = useState(null)
+  const [remoteCafeName, setRemoteCafeName] = useState('')
+  const [guestRegistered, setGuestRegistered] = useState(false)
+  const [guestError, setGuestError] = useState(false)
 
   const scrollRef = useRef(null)
   const recognitionRef = useRef(null)
@@ -139,15 +149,22 @@ export default function App() {
   // ---- initial load / resume restore ----
   useEffect(() => {
     let saved = null
-    try {
-      const raw = localStorage.getItem(SESSION_KEY)
-      if (raw) saved = JSON.parse(raw)
-    } catch {
-      // ignore malformed session
+    if (!joinId) {
+      try {
+        const raw = localStorage.getItem(SESSION_KEY)
+        if (raw) saved = JSON.parse(raw)
+      } catch {
+        // ignore malformed session
+      }
+      lastDeepRef.current = saved && saved.lastDeep ? saved.lastDeep : null
     }
-    lastDeepRef.current = saved && saved.lastDeep ? saved.lastDeep : null
 
     loadTimerRef.current = setTimeout(() => {
+      if (joinId) {
+        setScreen('participant')
+        setLoading(false)
+        return
+      }
       if (saved) {
         if (Array.isArray(saved.people) && saved.people.length) setPeople(saved.people)
         if (Array.isArray(saved.history)) setHistory(saved.history)
@@ -163,9 +180,21 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // ---- guest: fetch the shared session's cafe name on join ----
+  useEffect(() => {
+    if (!joinId) return
+    fetch(`/api/session/${joinId}`)
+      .then((r) => {
+        if (!r.ok) throw new Error('not found')
+        return r.json()
+      })
+      .then((data) => setRemoteCafeName(data.cafeName || '주문'))
+      .catch(() => setGuestError(true))
+  }, [joinId])
+
   // ---- persist session to localStorage ----
   useEffect(() => {
-    if (loading) return
+    if (loading || joinId) return
     if (DEEP_SCREENS.includes(screen)) lastDeepRef.current = screen
     try {
       localStorage.setItem(
@@ -181,7 +210,42 @@ export default function App() {
     } catch {
       // storage unavailable — skip persistence silently
     }
-  }, [loading, screen, people, memoMode, selectedCafeId, history])
+  }, [loading, screen, people, memoMode, selectedCafeId, history, joinId])
+
+  // ---- host: push local order state to the shared session whenever it changes ----
+  useEffect(() => {
+    if (!sessionId || isGuest) return
+    fetch(`/api/session/${sessionId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ people }),
+    }).catch(() => {
+      // network hiccup — next change will retry the push
+    })
+  }, [people, sessionId, isGuest])
+
+  // ---- host: poll the shared session for participants who joined via QR/link ----
+  async function pullSession(id) {
+    try {
+      const res = await fetch(`/api/session/${id}`)
+      if (!res.ok) return
+      const data = await res.json()
+      setPeople((prev) => {
+        const existingIds = new Set(prev.map((p) => p.id))
+        const newOnes = (data.people || []).filter((p) => !existingIds.has(p.id))
+        if (!newOnes.length) return prev
+        showToast(`${newOnes.map((p) => p.name).join(', ')} 님이 참여했어요 🎉`)
+        return [...prev, ...newOnes]
+      })
+    } catch {
+      // network hiccup — next poll will retry
+    }
+  }
+  useEffect(() => {
+    if (!sessionId || isGuest || !['share', 'collect', 'complete'].includes(screen)) return
+    const t = setInterval(() => pullSession(sessionId), 4000)
+    return () => clearInterval(t)
+  }, [sessionId, screen, isGuest])
 
   useEffect(() => {
     return () => {
@@ -252,17 +316,36 @@ export default function App() {
     showToast('주문이 완료됐어요 🎉')
     go('home')
   }
-  function refreshParticipants() {
-    setParticipants((prev) => {
-      const idx = prev.findIndex((p) => !p.ok)
-      if (idx === -1) {
-        showToast('모든 참여자가 확인을 완료했어요 🎉')
-        return prev
+  // ---- real-time share session ----
+  async function ensureSession() {
+    if (sessionId) return sessionId
+    try {
+      const cafeName = memoMode ? '메뉴 메모' : selectedCafe.name
+      const res = await fetch('/api/session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cafeName, people }),
+      })
+      const data = await res.json()
+      if (data.id) {
+        setSessionId(data.id)
+        return data.id
       }
-      const next = prev.map((p, i) => (i === idx ? { ...p, ok: true } : p))
-      showToast(`${next[idx].name} 님 확인이 업데이트됐어요`)
-      return next
-    })
+    } catch {
+      showToast('공유 링크 생성에 실패했어요. 다시 시도해주세요')
+    }
+    return null
+  }
+  async function goShare() {
+    await ensureSession()
+    go('share')
+  }
+  function manualRefresh() {
+    if (!sessionId) {
+      showToast('공유 후 새로고침할 수 있어요')
+      return
+    }
+    pullSession(sessionId)
   }
 
   // ---- voice overlay ----
@@ -468,9 +551,34 @@ export default function App() {
 
   // ---- participant ----
   function registerParticipant() {
-    setPartDone((prev) => ({ ...prev, [pName]: true }))
+    const name = pName.trim() || '손님'
+    const menuName = pMenu.trim()
+    if (!menuName) {
+      showToast('메뉴를 입력해 주세요')
+      return
+    }
+    const item = { name: menuName, temp: pTemp, qty: 1, price: 4500 }
+
+    if (isGuest && joinId) {
+      const color = CAP_PEOPLE_COLORS[Math.floor(Math.random() * CAP_PEOPLE_COLORS.length)]
+      const person = { id: makeId('gp'), name, color, fg: '#fff', items: [{ ...item, id: makeId('gi') }] }
+      fetch(`/api/session/${joinId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ people: [person] }),
+      })
+        .then(() => {
+          setGuestRegistered(true)
+          showToast(`${name} 님 주문이 등록됐어요 🎉`)
+        })
+        .catch(() => showToast('등록에 실패했어요. 다시 시도해주세요'))
+      return
+    }
+
+    setPeople((prev) => mergeItemIntoPeople(prev, { id: makeId('p'), name, isMe: name === '나', color: '#5B8C7A', fg: '#fff' }, item))
+    setPartDone((prev) => ({ ...prev, [name]: true }))
     go('share')
-    showToast(`${pName} 님 주문이 등록됐어요 🎉`)
+    showToast(`${name} 님 주문이 등록됐어요 🎉`)
   }
 
   // ---- history ----
@@ -547,7 +655,8 @@ export default function App() {
   const cartTotal = Object.entries(cart).reduce((a, [id, n]) => a + (MENUS.find((m) => m.id === id)?.price || 0) * n, 0)
   const { totalQty, totalPrice } = computeTotals(people)
   const hasOrders = people.length > 0
-  const confirmedCount = participants.filter((p) => p.ok).length
+  const confirmedCount = people.length
+  const joinUrl = sessionId && typeof window !== 'undefined' ? `${window.location.origin}/join/${sessionId}` : ''
 
   const showTabs = TABBED_SCREENS.includes(screen) && !overlay && !loading
 
@@ -650,7 +759,7 @@ export default function App() {
               onRemoveItem={removeItem}
               onChangeNote={changeNote}
               onFinish={finish}
-              onGoShare={() => go('share')}
+              onGoShare={goShare}
             />
           )}
           {screen === 'complete' && (
@@ -666,14 +775,23 @@ export default function App() {
           )}
           {screen === 'share' && (
             <Share
-              participants={participants}
+              participants={people.map((p) => ({
+                name: p.name,
+                order: p.items.map((it) => `${it.temp === 'HOT' ? '핫' : '아이스'} ${it.name} ${it.qty}잔`).join(', '),
+                ok: true,
+                bg: p.color,
+              }))}
               confirmedCount={confirmedCount}
+              joinUrl={joinUrl}
               onBack={() => go('collect')}
-              onCopyLink={() => copyText('https://callcoffee.app/join/C4F9', '참여 링크를 복사했어요')}
+              onCopyLink={() => copyText(joinUrl, '참여 링크를 복사했어요')}
               onShareKakao={() => showToast('카카오톡으로 공유했어요 🎉')}
-              onFinish={() => go('home')}
+              onFinish={() => {
+                setSessionId(null)
+                go('home')
+              }}
               onGoParticipant={() => go('participant')}
-              onRefresh={refreshParticipants}
+              onRefresh={manualRefresh}
             />
           )}
           {screen === 'participant' && (
@@ -686,7 +804,10 @@ export default function App() {
               onSetTemp={setPTemp}
               onRegister={registerParticipant}
               onBack={() => go('share')}
-              cafeName={memoMode ? '메뉴 메모' : selectedCafe.name}
+              cafeName={isGuest ? remoteCafeName || '불러오는 중...' : memoMode ? '메뉴 메모' : selectedCafe.name}
+              isHost={!isGuest}
+              registered={isGuest && guestRegistered}
+              error={isGuest && guestError ? '주문을 찾을 수 없어요. 링크를 다시 확인해주세요.' : ''}
             />
           )}
           {screen === 'history' && (
