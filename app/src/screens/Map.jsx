@@ -1,13 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
-import { ChevronLeft, ChevronRight, MapLines } from '../icons'
+import { ChevronLeft, ChevronRight, MapLines, LocateIcon } from '../icons'
 import { loadKakaoMaps } from '../kakaoMap'
 
 export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, onOpenCafe }) {
   const mapDivRef = useRef(null)
   const mapRef = useRef(null)
   const overlaysRef = useRef([])
+  const meOverlayRef = useRef(null)
   const [mapReady, setMapReady] = useState(false)
   const [mapFailed, setMapFailed] = useState(false)
+  const [locating, setLocating] = useState(false)
+  const [locateError, setLocateError] = useState('')
 
   useEffect(() => {
     let cancelled = false
@@ -55,6 +58,42 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
     })
   }, [mapReady, cafes, onOpenCafe])
 
+  function locateMe() {
+    if (mapFailed) {
+      setLocateError('데모 지도에서는 현재 위치를 표시할 수 없어요')
+      setTimeout(() => setLocateError(''), 2000)
+      return
+    }
+    if (!navigator.geolocation) {
+      setLocateError('이 브라우저는 위치 정보를 지원하지 않아요')
+      setTimeout(() => setLocateError(''), 2000)
+      return
+    }
+    setLocating(true)
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setLocating(false)
+        const kakao = window.kakao
+        if (!kakao || !mapRef.current) return
+        const position = new kakao.maps.LatLng(pos.coords.latitude, pos.coords.longitude)
+        mapRef.current.panTo(position)
+        if (meOverlayRef.current) meOverlayRef.current.setMap(null)
+        const el = document.createElement('div')
+        el.style.cssText =
+          'width:20px;height:20px;border-radius:50%;background:#3B82C4;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.3);'
+        const overlay = new kakao.maps.CustomOverlay({ position, content: el, yAnchor: 0.5, zIndex: 10 })
+        overlay.setMap(mapRef.current)
+        meOverlayRef.current = overlay
+      },
+      () => {
+        setLocating(false)
+        setLocateError('위치 권한을 확인해주세요')
+        setTimeout(() => setLocateError(''), 2000)
+      },
+      { enableHighAccuracy: true, timeout: 8000 },
+    )
+  }
+
   const showFallback = mapFailed
 
   return (
@@ -73,6 +112,49 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
         </div>
 
         {!showFallback && <div ref={mapDivRef} style={{ position: 'absolute', inset: 0 }}></div>}
+
+        <div
+          onClick={locateMe}
+          style={{
+            position: 'absolute',
+            right: 16,
+            bottom: showFallback ? 50 : 16,
+            zIndex: 3,
+            width: 44,
+            height: 44,
+            borderRadius: 13,
+            background: '#fff',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            boxShadow: '0 4px 12px rgba(40,30,15,.18)',
+            opacity: locating ? 0.6 : 1,
+          }}
+        >
+          <LocateIcon />
+        </div>
+
+        {locateError && (
+          <div
+            style={{
+              position: 'absolute',
+              left: '50%',
+              bottom: showFallback ? 100 : 70,
+              transform: 'translateX(-50%)',
+              zIndex: 4,
+              fontSize: 13,
+              fontWeight: 600,
+              color: '#fff',
+              background: 'rgba(40,30,15,.85)',
+              padding: '8px 14px',
+              borderRadius: 10,
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {locateError}
+          </div>
+        )}
 
         {showFallback && (
           <>
