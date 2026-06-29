@@ -730,7 +730,7 @@ export default function App() {
               hasOrders={hasOrders}
               totalQty={totalQty}
               onGoMy={() => go('my')}
-              onGoCafe={() => go('cafe')}
+              onGoCafe={() => go('map')}
               onOpenVoice={openVoice}
               onOpenCapture={openCapture}
               onGoCollect={() => go('collect')}
@@ -863,6 +863,7 @@ export default function App() {
               cafeQuery={cafeQuery}
               onQueryChange={setCafeQuery}
               onBack={() => go('cafe')}
+              onGoList={() => go('cafe')}
               onOpenCafe={openCafe}
               onEnterMemo={enterMemo}
             />

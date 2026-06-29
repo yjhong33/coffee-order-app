@@ -38,7 +38,7 @@ function distMeters(lat1, lng1, lat2, lng2) {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 }
 
-export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, onOpenCafe, onEnterMemo }) {
+export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, onGoList, onOpenCafe, onEnterMemo }) {
   const mapDivRef = useRef(null)
   const mapRef = useRef(null)
   const overlaysRef = useRef([])
@@ -252,6 +252,26 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
           />
         </div>
 
+        {onGoList && (
+          <div
+            style={{
+              position: 'absolute',
+              top: 102,
+              left: 20,
+              right: 20,
+              zIndex: 3,
+              display: 'flex',
+              background: '#fff',
+              borderRadius: 11,
+              padding: 4,
+              boxShadow: '0 4px 12px rgba(40,30,15,.10)',
+            }}
+          >
+            <div onClick={onGoList} style={{ flex: 1, textAlign: 'center', fontSize: 14, fontWeight: 700, padding: 8, borderRadius: 8, cursor: 'pointer', color: 'var(--cc-ink3)' }}>목록</div>
+            <div style={{ flex: 1, textAlign: 'center', fontSize: 14, fontWeight: 700, padding: 8, borderRadius: 8, cursor: 'pointer', background: 'var(--cc-band)', color: 'var(--cc-green)' }}>지도</div>
+          </div>
+        )}
+
         {!showFallback && <div ref={mapDivRef} style={{ position: 'absolute', inset: 0 }}></div>}
 
         {!showFallback && mapMoved && (
@@ -259,7 +279,7 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
             onClick={researchHere}
             style={{
               position: 'absolute',
-              top: 108,
+              top: onGoList ? 158 : 108,
               left: '50%',
               transform: 'translateX(-50%)',
               zIndex: 3,
