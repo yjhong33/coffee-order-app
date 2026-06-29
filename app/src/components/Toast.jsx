@@ -9,7 +9,7 @@ export default function Toast({ message }) {
         zIndex: 50,
         background: 'var(--cc-green-deep)',
         color: '#fff',
-        fontSize: 14,
+        fontSize: 15,
         fontWeight: 600,
         padding: '13px 20px',
         borderRadius: 13,

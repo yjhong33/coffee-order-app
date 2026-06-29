@@ -26,9 +26,9 @@ export default function History({ history, expandedHistory, onToggle, historyVie
               <ChevronLeft />
             </div>
           )}
-          <div style={{ fontSize: 19, fontWeight: 700, letterSpacing: '-.4px' }}>주문 내역</div>
+          <div style={{ fontSize: 20, fontWeight: 700, letterSpacing: '-.4px' }}>주문 내역</div>
         </div>
-        <div style={{ fontSize: 12.5, color: 'var(--cc-ink2)', marginTop: 8, lineHeight: 1.5 }}>
+        <div style={{ fontSize: 13.5, color: 'var(--cc-ink2)', marginTop: 8, lineHeight: 1.5 }}>
           언제 무엇을 주문했는지 모아봤어요. 카드를 누르면 매장에 전달할 양식을 다시 볼 수 있어요.
         </div>
       </div>
@@ -54,17 +54,17 @@ export default function History({ history, expandedHistory, onToggle, historyVie
                 }}
               >
                 <div onClick={() => onToggle(h.id)} style={{ display: 'flex', alignItems: 'center', gap: 13, cursor: 'pointer' }}>
-                  <div style={{ width: 46, height: 46, borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 17, fontWeight: 800, flex: 'none', background: h.color, color: h.fg }}>{h.initial}</div>
+                  <div style={{ width: 46, height: 46, borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 800, flex: 'none', background: h.color, color: h.fg }}>{h.initial}</div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                      <span style={{ fontSize: 14, fontWeight: 700, letterSpacing: '-.3px' }}>{h.label}</span>
-                      {h.justNow && <span style={{ fontSize: 10, fontWeight: 800, color: 'var(--cc-green)', background: 'var(--cc-green-soft)', padding: '2px 6px', borderRadius: 6, flex: 'none' }}>방금 주문</span>}
+                      <span style={{ fontSize: 15, fontWeight: 700, letterSpacing: '-.3px' }}>{h.label}</span>
+                      {h.justNow && <span style={{ fontSize: 11, fontWeight: 800, color: 'var(--cc-green)', background: 'var(--cc-green-soft)', padding: '2px 6px', borderRadius: 6, flex: 'none' }}>방금 주문</span>}
                     </div>
-                    <div style={{ fontSize: 12, color: 'var(--cc-ink2)', marginTop: 3, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{summary}</div>
+                    <div style={{ fontSize: 13, color: 'var(--cc-ink2)', marginTop: 3, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{summary}</div>
                   </div>
                   <div style={{ textAlign: 'right', flex: 'none' }}>
-                    <div style={{ fontSize: 11, color: 'var(--cc-ink3)' }}>{relTime(h.ts)}</div>
-                    <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--cc-ink3)', marginTop: 4 }}>{totalQty}잔</div>
+                    <div style={{ fontSize: 12, color: 'var(--cc-ink3)' }}>{relTime(h.ts)}</div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--cc-ink3)', marginTop: 4 }}>{totalQty}잔</div>
                   </div>
                 </div>
 
@@ -76,7 +76,7 @@ export default function History({ history, expandedHistory, onToggle, historyVie
                         style={{
                           flex: 1,
                           textAlign: 'center',
-                          fontSize: 12,
+                          fontSize: 13,
                           fontWeight: 700,
                           padding: 8,
                           borderRadius: 8,
@@ -93,7 +93,7 @@ export default function History({ history, expandedHistory, onToggle, historyVie
                         style={{
                           flex: 1,
                           textAlign: 'center',
-                          fontSize: 12,
+                          fontSize: 13,
                           fontWeight: 700,
                           padding: 8,
                           borderRadius: 8,
@@ -106,12 +106,12 @@ export default function History({ history, expandedHistory, onToggle, historyVie
                         직원 전달용
                       </div>
                     </div>
-                    <div style={{ marginTop: 10, background: '#fff', border: '1px solid var(--cc-line)', borderRadius: 14, padding: 14, whiteSpace: 'pre-wrap', fontSize: 13, lineHeight: 1.6 }}>
+                    <div style={{ marginTop: 10, background: '#fff', border: '1px solid var(--cc-line)', borderRadius: 14, padding: 14, whiteSpace: 'pre-wrap', fontSize: 14, lineHeight: 1.6 }}>
                       {named ? buildNamedFor(h.people) : buildPlainFor(h.people)}
                     </div>
                     <div onClick={() => onCopy(h)} style={{ marginTop: 10, background: 'var(--cc-band)', borderRadius: 12, padding: 11, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7, cursor: 'pointer' }}>
                       <GridIcon size={16} />
-                      <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--cc-ink2)' }}>양식 복사하기</span>
+                      <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--cc-ink2)' }}>양식 복사하기</span>
                     </div>
                   </div>
                 )}
@@ -123,8 +123,8 @@ export default function History({ history, expandedHistory, onToggle, historyVie
             <div style={{ width: 72, height: 72, borderRadius: 24, background: 'var(--cc-band)', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <CupIcon color="#C9BFB0" size={36} />
             </div>
-            <div style={{ fontSize: 15, fontWeight: 700, marginTop: 16 }}>아직 주문 내역이 없어요</div>
-            <div style={{ fontSize: 13, color: 'var(--cc-ink2)', marginTop: 6, lineHeight: 1.5 }}>
+            <div style={{ fontSize: 16, fontWeight: 700, marginTop: 16 }}>아직 주문 내역이 없어요</div>
+            <div style={{ fontSize: 14, color: 'var(--cc-ink2)', marginTop: 6, lineHeight: 1.5 }}>
               주문을 완료하면 여기에 기록돼요.
             </div>
           </div>

@@ -30,8 +30,8 @@ export default function Home({
         <div style={{ position: 'absolute', right: 40, top: 70, width: 90, height: 90, borderRadius: '50%', background: 'rgba(255,255,255,.05)' }}></div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', position: 'relative' }}>
           <div>
-            <div style={{ fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,.7)', letterSpacing: '-.2px' }}>반가워요, 오늘도 커피 한 잔 ☕</div>
-            <div style={{ fontSize: 24, fontWeight: 700, color: '#fff', letterSpacing: '-.6px', marginTop: 6, lineHeight: 1.28 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: 'rgba(255,255,255,.7)', letterSpacing: '-.2px' }}>반가워요, 오늘도 커피 한 잔 ☕</div>
+            <div style={{ fontSize: 25, fontWeight: 700, color: '#fff', letterSpacing: '-.6px', marginTop: 6, lineHeight: 1.28 }}>
               오늘 커피,
               <br />
               한 번에 주문해 볼까요?
@@ -43,7 +43,7 @@ export default function Home({
         </div>
         <div onClick={onGoCafeSearch} style={{ marginTop: 18, background: '#fff', borderRadius: 14, height: 48, display: 'flex', alignItems: 'center', gap: 10, padding: '0 14px', cursor: 'pointer', boxShadow: '0 6px 16px rgba(10,40,28,.18)' }}>
           <SearchIcon />
-          <span style={{ fontSize: 15, color: 'var(--cc-ink3)', fontWeight: 500 }}>카페 이름이나 메뉴를 검색해 보세요</span>
+          <span style={{ fontSize: 16, color: 'var(--cc-ink3)', fontWeight: 500 }}>카페 이름이나 메뉴를 검색해 보세요</span>
         </div>
       </div>
 
@@ -57,10 +57,10 @@ export default function Home({
               </span>
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: '#8FE3B6', letterSpacing: '.2px' }}>진행 중인 그룹 주문</div>
-              <div style={{ fontSize: 15, fontWeight: 700, color: '#fff', marginTop: 2, letterSpacing: '-.3px' }}>스타벅스 강남R점 · 총 {totalQty}잔</div>
+              <div style={{ fontSize: 12, fontWeight: 700, color: '#8FE3B6', letterSpacing: '.2px' }}>진행 중인 그룹 주문</div>
+              <div style={{ fontSize: 16, fontWeight: 700, color: '#fff', marginTop: 2, letterSpacing: '-.3px' }}>스타벅스 강남R점 · 총 {totalQty}잔</div>
             </div>
-            <div style={{ fontSize: 12, fontWeight: 700, color: '#fff', background: 'rgba(255,255,255,.16)', padding: '7px 11px', borderRadius: 9 }}>이어서 정리</div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: '#fff', background: 'rgba(255,255,255,.16)', padding: '7px 11px', borderRadius: 9 }}>이어서 정리</div>
           </div>
         </div>
       )}
@@ -86,8 +86,8 @@ export default function Home({
             <PinIcon />
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontSize: 17, fontWeight: 700, color: '#fff', letterSpacing: '-.4px' }}>주변 카페 찾기</div>
-            <div style={{ fontSize: 13, color: 'rgba(255,255,255,.85)', marginTop: 3, lineHeight: 1.4 }}>카페를 정하고 메뉴까지 골라 주문해요</div>
+            <div style={{ fontSize: 18, fontWeight: 700, color: '#fff', letterSpacing: '-.4px' }}>주변 카페 찾기</div>
+            <div style={{ fontSize: 14, color: 'rgba(255,255,255,.85)', marginTop: 3, lineHeight: 1.4 }}>카페를 정하고 메뉴까지 골라 주문해요</div>
           </div>
           <ChevronRight />
         </div>
@@ -100,8 +100,8 @@ export default function Home({
               <GridIcon />
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 15, fontWeight: 700, letterSpacing: '-.3px', color: 'var(--cc-green-strong)' }}>간단하게 주문 메모하기</div>
-              <div style={{ fontSize: 12, color: 'var(--cc-ink2)', marginTop: 4, lineHeight: 1.45 }}>카페 선택 없이 메뉴만 빠르게 기록해요</div>
+              <div style={{ fontSize: 16, fontWeight: 700, letterSpacing: '-.3px', color: 'var(--cc-green-strong)' }}>간단하게 주문 메모하기</div>
+              <div style={{ fontSize: 13, color: 'var(--cc-ink2)', marginTop: 4, lineHeight: 1.45 }}>카페 선택 없이 메뉴만 빠르게 기록해요</div>
             </div>
             <ChevronRight color="#1F6E50" size={20} />
           </div>
@@ -111,14 +111,14 @@ export default function Home({
               style={{ background: 'var(--cc-green-soft)', borderRadius: 14, height: 46, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, cursor: 'pointer' }}
             >
               <MicIcon color="var(--cc-green)" />
-              <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--cc-green)' }}>음성으로</span>
+              <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--cc-green)' }}>음성으로</span>
             </div>
             <div
               onClick={onOpenCapture}
               style={{ background: 'var(--cc-gold-soft)', borderRadius: 14, height: 46, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, cursor: 'pointer' }}
             >
               <CaptureIcon />
-              <span style={{ fontSize: 14, fontWeight: 700, color: '#9A6F26' }}>캡처로</span>
+              <span style={{ fontSize: 15, fontWeight: 700, color: '#9A6F26' }}>캡처로</span>
             </div>
           </div>
         </div>
@@ -126,8 +126,8 @@ export default function Home({
 
       <div style={{ padding: '24px 0 0' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', padding: '0 20px' }}>
-          <div style={{ fontSize: 17, fontWeight: 700, letterSpacing: '-.4px' }}>즐겨찾는 카페</div>
-          <div onClick={onGoCafe} style={{ fontSize: 13, color: 'var(--cc-ink3)', fontWeight: 600, cursor: 'pointer' }}>
+          <div style={{ fontSize: 18, fontWeight: 700, letterSpacing: '-.4px' }}>즐겨찾는 카페</div>
+          <div onClick={onGoCafe} style={{ fontSize: 14, color: 'var(--cc-ink3)', fontWeight: 600, cursor: 'pointer' }}>
             전체보기
           </div>
         </div>
@@ -147,7 +147,7 @@ export default function Home({
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    fontSize: 23,
+                    fontSize: 24,
                     fontWeight: 800,
                     boxShadow: '0 4px 12px rgba(40,30,15,.10)',
                     background: cafe.color,
@@ -156,9 +156,9 @@ export default function Home({
                 >
                   {cafe.initial}
                 </div>
-                <div style={{ fontSize: 12, fontWeight: 600, marginTop: 8, letterSpacing: '-.3px', lineHeight: 1.3, overflow: 'hidden', textOverflow: 'ellipsis' }}>{brand}</div>
-                {branch && <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--cc-ink2)', letterSpacing: '-.2px', lineHeight: 1.3, overflow: 'hidden', textOverflow: 'ellipsis' }}>{branch}</div>}
-                <div style={{ fontSize: 11, color: 'var(--cc-ink3)', marginTop: 2 }}>{cafe.dist}</div>
+                <div style={{ fontSize: 13, fontWeight: 600, marginTop: 8, letterSpacing: '-.3px', lineHeight: 1.3, overflow: 'hidden', textOverflow: 'ellipsis' }}>{brand}</div>
+                {branch && <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--cc-ink2)', letterSpacing: '-.2px', lineHeight: 1.3, overflow: 'hidden', textOverflow: 'ellipsis' }}>{branch}</div>}
+                <div style={{ fontSize: 12, color: 'var(--cc-ink3)', marginTop: 2 }}>{cafe.dist}</div>
               </div>
             )
           })}
@@ -166,17 +166,17 @@ export default function Home({
       </div>
 
       <div style={{ padding: '18px 20px 0' }}>
-        <div style={{ fontSize: 17, fontWeight: 700, letterSpacing: '-.4px', marginBottom: 12 }}>최근 주문</div>
+        <div style={{ fontSize: 18, fontWeight: 700, letterSpacing: '-.4px', marginBottom: 12 }}>최근 주문</div>
         {recentOrders.map((ro) => (
           <div key={ro.cafeId} onClick={() => onReorder(ro.cafeId)} style={{ background: 'var(--cc-card)', border: '1px solid var(--cc-line)', borderRadius: 16, padding: 14, display: 'flex', alignItems: 'center', gap: 13, cursor: 'pointer', marginBottom: 10 }}>
-            <div style={{ width: 46, height: 46, borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 17, fontWeight: 800, flex: 'none', background: ro.color, color: ro.fg }}>{ro.initial}</div>
+            <div style={{ width: 46, height: 46, borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 800, flex: 'none', background: ro.color, color: ro.fg }}>{ro.initial}</div>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 14, fontWeight: 700, letterSpacing: '-.3px' }}>{ro.name}</div>
-              <div style={{ fontSize: 12, color: 'var(--cc-ink2)', marginTop: 3, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{ro.summary}</div>
+              <div style={{ fontSize: 15, fontWeight: 700, letterSpacing: '-.3px' }}>{ro.name}</div>
+              <div style={{ fontSize: 13, color: 'var(--cc-ink2)', marginTop: 3, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{ro.summary}</div>
             </div>
             <div style={{ textAlign: 'right', flex: 'none' }}>
-              <div style={{ fontSize: 11, color: 'var(--cc-ink3)' }}>{ro.date}</div>
-              <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--cc-green)', marginTop: 6, border: '1px solid var(--cc-green-soft)', background: 'var(--cc-green-soft)', padding: '5px 10px', borderRadius: 9 }}>재주문</div>
+              <div style={{ fontSize: 12, color: 'var(--cc-ink3)' }}>{ro.date}</div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--cc-green)', marginTop: 6, border: '1px solid var(--cc-green-soft)', background: 'var(--cc-green-soft)', padding: '5px 10px', borderRadius: 9 }}>재주문</div>
             </div>
           </div>
         ))}

@@ -11,14 +11,14 @@ export default function Complete({ completeView, onSetView, completeText, totalQ
           <div onClick={onBack} style={{ width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', marginLeft: -8 }}>
             <ChevronLeft />
           </div>
-          <div style={{ fontSize: 19, fontWeight: 700, letterSpacing: '-.4px' }}>주문 완료</div>
+          <div style={{ fontSize: 20, fontWeight: 700, letterSpacing: '-.4px' }}>주문 완료</div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 14 }}>
           <div style={{ flex: 1, height: 5, borderRadius: 3, background: 'var(--cc-green)' }}></div>
           <div style={{ flex: 1, height: 5, borderRadius: 3, background: 'var(--cc-green)' }}></div>
           <div style={{ flex: 1, height: 5, borderRadius: 3, background: 'var(--cc-green)' }}></div>
         </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, fontWeight: 700, marginTop: 7 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, fontWeight: 700, marginTop: 7 }}>
           <span style={{ color: 'var(--cc-green)' }}>① 메뉴 선택</span>
           <span style={{ color: 'var(--cc-green)' }}>② 메뉴 확인</span>
           <span style={{ color: 'var(--cc-green)' }}>③ 공유·주문</span>
@@ -31,8 +31,8 @@ export default function Complete({ completeView, onSetView, completeText, totalQ
             <CheckIcon color="#fff" size={18} strokeWidth="2.4" />
           </div>
           <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--cc-green-strong)' }}>총 {totalQty}잔, 정리 끝!</div>
-            <div style={{ fontSize: 12, color: 'var(--cc-ink2)', marginTop: 2 }}>아래 양식을 복사해 공유하세요</div>
+            <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--cc-green-strong)' }}>총 {totalQty}잔, 정리 끝!</div>
+            <div style={{ fontSize: 13, color: 'var(--cc-ink2)', marginTop: 2 }}>아래 양식을 복사해 공유하세요</div>
           </div>
         </div>
 
@@ -42,7 +42,7 @@ export default function Complete({ completeView, onSetView, completeText, totalQ
             style={{
               flex: 1,
               textAlign: 'center',
-              fontSize: 13,
+              fontSize: 14,
               fontWeight: 700,
               padding: 9,
               borderRadius: 8,
@@ -59,7 +59,7 @@ export default function Complete({ completeView, onSetView, completeText, totalQ
             style={{
               flex: 1,
               textAlign: 'center',
-              fontSize: 13,
+              fontSize: 14,
               fontWeight: 700,
               padding: 9,
               borderRadius: 8,
@@ -72,17 +72,17 @@ export default function Complete({ completeView, onSetView, completeText, totalQ
             직원 전달용
           </div>
         </div>
-        <div style={{ fontSize: 12, color: 'var(--cc-ink3)', marginTop: 8, lineHeight: 1.4 }}>{hint}</div>
+        <div style={{ fontSize: 13, color: 'var(--cc-ink3)', marginTop: 8, lineHeight: 1.4 }}>{hint}</div>
 
-        <div style={{ marginTop: 14, background: '#fff', border: '1px solid var(--cc-line)', borderRadius: 16, padding: 16, whiteSpace: 'pre-wrap', fontSize: 14, lineHeight: 1.6, letterSpacing: '-.2px' }}>{completeText}</div>
+        <div style={{ marginTop: 14, background: '#fff', border: '1px solid var(--cc-line)', borderRadius: 16, padding: 16, whiteSpace: 'pre-wrap', fontSize: 15, lineHeight: 1.6, letterSpacing: '-.2px' }}>{completeText}</div>
 
         <div onClick={onCopy} style={{ marginTop: 14, background: '#fff', border: '1.5px solid var(--cc-green)', borderRadius: 14, padding: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, cursor: 'pointer' }}>
           <GridIcon size={18} color="#1F6E50" />
-          <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--cc-green)' }}>이 양식 복사하기</span>
+          <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--cc-green)' }}>이 양식 복사하기</span>
         </div>
 
         <div onClick={onComplete} style={{ marginTop: 18, background: 'var(--cc-green-deep)', borderRadius: 15, height: 56, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 10px 24px rgba(31,110,80,.30)' }}>
-          <span style={{ fontSize: 16, fontWeight: 700, color: '#fff' }}>주문을 완료할게요~</span>
+          <span style={{ fontSize: 17, fontWeight: 700, color: '#fff' }}>주문을 완료할게요~</span>
         </div>
       </div>
     </div>

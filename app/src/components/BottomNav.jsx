@@ -29,7 +29,7 @@ export default function BottomNav({ screen, onGo }) {
             style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, padding: '5px 0', cursor: 'pointer' }}
           >
             <t.Icon color={color} size={24} />
-            <span style={{ fontSize: 10.5, fontWeight: 700, color }}>{t.label}</span>
+            <span style={{ fontSize: 11.5, fontWeight: 700, color }}>{t.label}</span>
           </div>
         )
       })}

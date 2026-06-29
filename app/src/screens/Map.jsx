@@ -12,7 +12,7 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
             value={cafeQuery}
             onChange={(e) => onQueryChange(e.target.value)}
             placeholder="주변 카페 검색"
-            style={{ flex: 1, background: '#fff', border: 'none', outline: 'none', borderRadius: 13, height: 44, padding: '0 14px', fontSize: 14, color: 'var(--cc-ink)', boxShadow: '0 4px 12px rgba(40,30,15,.10)' }}
+            style={{ flex: 1, background: '#fff', border: 'none', outline: 'none', borderRadius: 13, height: 44, padding: '0 14px', fontSize: 15, color: 'var(--cc-ink)', boxShadow: '0 4px 12px rgba(40,30,15,.10)' }}
           />
         </div>
         <MapLines />
@@ -20,21 +20,21 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
         <div style={{ position: 'absolute', left: '52%', top: '46%', transform: 'translate(-50%,-50%)', width: 60, height: 60, borderRadius: '50%', background: 'rgba(59,130,196,.18)' }}></div>
         {mapPins.map((pin) => (
           <div key={pin.id} onClick={() => onOpenCafe(pin.id)} style={{ position: 'absolute', left: pin.x, top: pin.y, transform: 'translate(-50%,-100%)', cursor: 'pointer', textAlign: 'center' }}>
-            <div style={{ width: 40, height: 40, borderRadius: '14px 14px 14px 4px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15, fontWeight: 800, boxShadow: '0 4px 12px rgba(0,0,0,.22)', background: pin.color, color: pin.fg }}>{pin.initial}</div>
+            <div style={{ width: 40, height: 40, borderRadius: '14px 14px 14px 4px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, fontWeight: 800, boxShadow: '0 4px 12px rgba(0,0,0,.22)', background: pin.color, color: pin.fg }}>{pin.initial}</div>
           </div>
         ))}
       </div>
       <div style={{ padding: '16px 20px' }}>
-        <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 12 }}>내 주변 카페 {cafes.length}곳</div>
+        <div style={{ fontSize: 17, fontWeight: 700, marginBottom: 12 }}>내 주변 카페 {cafes.length}곳</div>
         {cafes.length === 0 && (
-          <div style={{ textAlign: 'center', fontSize: 13, color: 'var(--cc-ink3)', padding: '24px 0' }}>검색 결과가 없어요</div>
+          <div style={{ textAlign: 'center', fontSize: 14, color: 'var(--cc-ink3)', padding: '24px 0' }}>검색 결과가 없어요</div>
         )}
         {cafes.map((cafe) => (
           <div key={cafe.id} onClick={() => onOpenCafe(cafe.id)} style={{ background: 'var(--cc-card)', border: '1px solid var(--cc-line)', borderRadius: 15, padding: 12, display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer', marginBottom: 10 }}>
-            <div style={{ width: 44, height: 44, borderRadius: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 17, fontWeight: 800, flex: 'none', background: cafe.color, color: cafe.fg }}>{cafe.initial}</div>
+            <div style={{ width: 44, height: 44, borderRadius: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 800, flex: 'none', background: cafe.color, color: cafe.fg }}>{cafe.initial}</div>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 14, fontWeight: 700 }}>{cafe.name}</div>
-              <div style={{ fontSize: 12, color: 'var(--cc-ink2)', marginTop: 2 }}>{cafe.dist} · 대기 {cafe.wait}</div>
+              <div style={{ fontSize: 15, fontWeight: 700 }}>{cafe.name}</div>
+              <div style={{ fontSize: 13, color: 'var(--cc-ink2)', marginTop: 2 }}>{cafe.dist} · 대기 {cafe.wait}</div>
             </div>
             <ChevronRight color="#C9BFB0" strokeWidth="2.2" />
           </div>

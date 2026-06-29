@@ -788,7 +788,7 @@ export default function App() {
               onShareKakao={() => showToast('카카오톡으로 공유했어요 🎉')}
               onFinish={() => {
                 setSessionId(null)
-                go('home')
+                finish()
               }}
               onGoParticipant={() => go('participant')}
               onRefresh={manualRefresh}
