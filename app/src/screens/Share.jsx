@@ -24,7 +24,7 @@ export default function Share({ participants, confirmedCount, onBack, onCopyLink
           <div style={{ width: 150, height: 150, margin: '16px auto 0', borderRadius: 18, background: '#fff', border: '1px solid var(--cc-line)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 14 }}>
             <QrSample />
           </div>
-          <div style={{ fontSize: 12, color: 'var(--cc-ink3)', marginTop: 12 }}>QR을 찍거나 코드를 입력하면 바로 참여할 수 있어요</div>
+          <div style={{ fontSize: 12, color: 'var(--cc-ink3)', marginTop: 12 }}>QR을 찍으면 바로 참여할 수 있어요</div>
         </div>
 
         <div style={{ display: 'flex', gap: 10, marginTop: 14 }}>
@@ -39,12 +39,6 @@ export default function Share({ participants, confirmedCount, onBack, onCopyLink
               <KakaoIcon />
             </div>
             <div style={{ fontSize: 12, fontWeight: 700, color: '#3C1E1E' }}>카카오톡 공유</div>
-          </div>
-          <div onClick={onCopyCode} style={{ flex: 1, background: 'var(--cc-card)', border: '1px solid var(--cc-line)', borderRadius: 14, padding: '14px 10px', textAlign: 'center', cursor: 'pointer' }}>
-            <div style={{ marginBottom: 6 }}>
-              <GridIcon />
-            </div>
-            <div style={{ fontSize: 12, fontWeight: 700 }}>코드 복사</div>
           </div>
         </div>
 

@@ -11,7 +11,10 @@ export default function Collect({ people, totalQty, totalPrice, memoMode, onBack
           <div onClick={onBack} style={{ width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', marginLeft: -8 }}>
             <ChevronLeft />
           </div>
-          <div style={{ fontSize: 19, fontWeight: 700, letterSpacing: '-.4px' }}>{memoMode ? '메뉴 메모' : '추가 주문'}</div>
+          <div style={{ fontSize: 19, fontWeight: 700, letterSpacing: '-.4px' }}>
+            {memoMode ? '메뉴 메모' : '메뉴 확인'}
+            {!memoMode && <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--cc-ink3)', marginLeft: 6 }}>(추가 주문)</span>}
+          </div>
         </div>
         {!memoMode && (
           <>

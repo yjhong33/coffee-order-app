@@ -285,17 +285,25 @@ export default function App() {
     }
     recognition.onerror = (e) => {
       if (e.error === 'no-speech' || e.error === 'aborted') return
-      setVoiceError('음성을 인식하지 못했어요')
+      if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
+        setVoiceError('마이크 권한을 허용해주세요')
+      } else {
+        setVoiceError('음성을 인식하지 못했어요')
+      }
       setVoicePhase('failed')
       voiceListeningRef.current = false
     }
     recognition.onend = () => {
-      if (voiceListeningRef.current) {
-        try {
-          recognition.start()
-        } catch {
-          /* already running */
-        }
+      if (voiceListeningRef.current && recognitionRef.current === recognition) {
+        setTimeout(() => {
+          if (voiceListeningRef.current && recognitionRef.current === recognition) {
+            try {
+              recognition.start()
+            } catch {
+              /* already running */
+            }
+          }
+        }, 250)
       }
     }
 
@@ -510,6 +518,7 @@ export default function App() {
   const favCafes = CAFES.filter((c) => favs[c.id])
   const mapPins = CAFES.map((c, i) => ({ ...c, x: MAP_POS[i][0], y: MAP_POS[i][1] }))
   const filteredCafes = cafeQuery.trim() ? CAFES.filter((c) => c.name.includes(cafeQuery.trim())) : CAFES
+  const filteredMapPins = cafeQuery.trim() ? mapPins.filter((c) => c.name.includes(cafeQuery.trim())) : mapPins
   const menuQueryTrimmed = menuQuery.trim()
   const menus = menuQueryTrimmed
     ? MENUS.filter((m) => m.name.includes(menuQueryTrimmed))
@@ -630,7 +639,6 @@ export default function App() {
               confirmedCount={confirmedCount}
               onBack={() => go('collect')}
               onCopyLink={() => copyText('https://callcoffee.app/join/C4F9', '참여 링크를 복사했어요')}
-              onCopyCode={() => copyText('C4F9', '참여 코드 C4F9를 복사했어요')}
               onShareKakao={() => showToast('카카오톡으로 공유했어요 🎉')}
               onFinish={() => go('home')}
               onGoParticipant={() => go('participant')}
@@ -660,7 +668,16 @@ export default function App() {
               onCopy={copyHistory}
             />
           )}
-          {screen === 'map' && <Map cafes={CAFES} mapPins={mapPins} onBack={() => go('cafe')} onOpenCafe={openCafe} />}
+          {screen === 'map' && (
+            <Map
+              cafes={filteredCafes}
+              mapPins={filteredMapPins}
+              cafeQuery={cafeQuery}
+              onQueryChange={setCafeQuery}
+              onBack={() => go('cafe')}
+              onOpenCafe={openCafe}
+            />
+          )}
           {screen === 'my' && <My recentOrders={RECENT_ORDERS} prefs={PREFS} prefSel={prefSel} onSelectPref={selectPref} onReorder={openCafe} />}
         </div>
 

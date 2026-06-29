@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight, MapLines } from '../icons'
 
-export default function Map({ cafes, mapPins, onBack, onOpenCafe }) {
+export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, onOpenCafe }) {
   return (
     <div style={{ animation: 'cc-fade .2s ease', height: '100%' }}>
       <div style={{ position: 'relative', height: '62vh', background: 'linear-gradient(160deg,#E5EAE0,#D8E0D2)', overflow: 'hidden' }}>
@@ -8,7 +8,12 @@ export default function Map({ cafes, mapPins, onBack, onOpenCafe }) {
           <div onClick={onBack} style={{ width: 40, height: 40, borderRadius: 13, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 4px 12px rgba(40,30,15,.12)' }}>
             <ChevronLeft />
           </div>
-          <div style={{ flex: 1, background: '#fff', borderRadius: 13, height: 44, display: 'flex', alignItems: 'center', padding: '0 14px', fontSize: 14, color: 'var(--cc-ink3)', boxShadow: '0 4px 12px rgba(40,30,15,.10)' }}>주변 카페 검색</div>
+          <input
+            value={cafeQuery}
+            onChange={(e) => onQueryChange(e.target.value)}
+            placeholder="주변 카페 검색"
+            style={{ flex: 1, background: '#fff', border: 'none', outline: 'none', borderRadius: 13, height: 44, padding: '0 14px', fontSize: 14, color: 'var(--cc-ink)', boxShadow: '0 4px 12px rgba(40,30,15,.10)' }}
+          />
         </div>
         <MapLines />
         <div style={{ position: 'absolute', left: '52%', top: '46%', transform: 'translate(-50%,-50%)', width: 20, height: 20, borderRadius: '50%', background: '#3B82C4', border: '3px solid #fff', boxShadow: '0 2px 8px rgba(0,0,0,.2)' }}></div>
@@ -21,6 +26,9 @@ export default function Map({ cafes, mapPins, onBack, onOpenCafe }) {
       </div>
       <div style={{ padding: '16px 20px' }}>
         <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 12 }}>내 주변 카페 {cafes.length}곳</div>
+        {cafes.length === 0 && (
+          <div style={{ textAlign: 'center', fontSize: 13, color: 'var(--cc-ink3)', padding: '24px 0' }}>검색 결과가 없어요</div>
+        )}
         {cafes.map((cafe) => (
           <div key={cafe.id} onClick={() => onOpenCafe(cafe.id)} style={{ background: 'var(--cc-card)', border: '1px solid var(--cc-line)', borderRadius: 15, padding: 12, display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer', marginBottom: 10 }}>
             <div style={{ width: 44, height: 44, borderRadius: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 17, fontWeight: 800, flex: 'none', background: cafe.color, color: cafe.fg }}>{cafe.initial}</div>
