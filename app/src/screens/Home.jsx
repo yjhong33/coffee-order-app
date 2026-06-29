@@ -76,39 +76,34 @@ export default function Home({
         </div>
       </div>
 
-      <div style={{ padding: '14px 20px 0', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-        <div onClick={onOpenVoice} style={{ background: 'var(--cc-card)', border: '1px solid var(--cc-line)', borderRadius: 18, padding: 16, cursor: 'pointer' }}>
-          <div style={{ width: 40, height: 40, borderRadius: 13, background: 'var(--cc-green-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <MicIcon />
-          </div>
-          <div style={{ fontSize: 15, fontWeight: 700, marginTop: 11, letterSpacing: '-.3px' }}>음성으로 받기</div>
-          <div style={{ fontSize: 12, color: 'var(--cc-ink2)', marginTop: 4, lineHeight: 1.45 }}>
-            “저는 아이스 아메리카노요” 말하면
-            <div>&nbsp;자동으로 정리해요.</div>
-          </div>
-        </div>
-        <div onClick={onOpenCapture} style={{ background: 'var(--cc-card)', border: '1px solid var(--cc-line)', borderRadius: 18, padding: 16, cursor: 'pointer' }}>
-          <div style={{ width: 40, height: 40, borderRadius: 13, background: 'var(--cc-gold-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <CaptureIcon />
-          </div>
-          <div style={{ fontSize: 15, fontWeight: 700, marginTop: 11, letterSpacing: '-.3px' }}>캡처로 분석</div>
-          <div style={{ fontSize: 12, color: 'var(--cc-ink2)', marginTop: 4, lineHeight: 1.45 }}>
-            대화 이미지를 올리면
-            <div>사람별로 정리해요.</div>
-          </div>
-        </div>
-      </div>
-
       <div style={{ padding: '14px 20px 0' }}>
-        <div onClick={onEnterMemo} style={{ background: 'var(--cc-card)', border: '1px solid var(--cc-line)', borderRadius: 18, padding: 16, display: 'flex', alignItems: 'center', gap: 13, cursor: 'pointer' }}>
-          <div style={{ width: 40, height: 40, borderRadius: 13, background: 'var(--cc-band)', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none' }}>
-            <GridIcon />
+        <div style={{ background: 'var(--cc-card)', border: '1px solid var(--cc-line)', borderRadius: 18, padding: 16 }}>
+          <div onClick={onEnterMemo} style={{ display: 'flex', alignItems: 'center', gap: 13, cursor: 'pointer' }}>
+            <div style={{ width: 40, height: 40, borderRadius: 13, background: 'var(--cc-band)', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none' }}>
+              <GridIcon />
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: 15, fontWeight: 700, letterSpacing: '-.3px' }}>간단하게 주문 메모하기</div>
+              <div style={{ fontSize: 12, color: 'var(--cc-ink2)', marginTop: 4, lineHeight: 1.45 }}>카페 선택 없이 메뉴만 빠르게 기록해요</div>
+            </div>
+            <ChevronRight color="#9A9082" size={20} />
           </div>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontSize: 15, fontWeight: 700, letterSpacing: '-.3px' }}>메뉴 메모</div>
-            <div style={{ fontSize: 12, color: 'var(--cc-ink2)', marginTop: 4, lineHeight: 1.45 }}>카페를 정하기 전에 메뉴부터 빠르게 적어둬요</div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 16 }}>
+            <div
+              onClick={onOpenVoice}
+              style={{ background: 'var(--cc-green-soft)', borderRadius: 14, height: 46, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, cursor: 'pointer' }}
+            >
+              <MicIcon color="var(--cc-green)" />
+              <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--cc-green)' }}>음성으로</span>
+            </div>
+            <div
+              onClick={onOpenCapture}
+              style={{ background: 'var(--cc-gold-soft)', borderRadius: 14, height: 46, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, cursor: 'pointer' }}
+            >
+              <CaptureIcon />
+              <span style={{ fontSize: 14, fontWeight: 700, color: '#9A6F26' }}>캡처로</span>
+            </div>
           </div>
-          <ChevronRight color="#9A9082" size={20} />
         </div>
       </div>
 
