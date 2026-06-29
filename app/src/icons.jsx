@@ -127,6 +127,15 @@ export function HeartIcon({ filled, size = 22 }) {
   )
 }
 
+export function RefreshIcon({ color = '#1F6E50', size = 16, strokeWidth = '2.2' }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M20 11A8 8 0 0 0 6.3 6.3L4 8.6M4 13a8 8 0 0 0 13.7 4.7L20 15.4"></path>
+      <path d="M4 4v4.6h4.6M20 20v-4.6h-4.6"></path>
+    </svg>
+  )
+}
+
 export function CheckIcon({ color = '#1F6E50', size = 30, strokeWidth = '2.4' }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">

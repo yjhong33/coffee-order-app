@@ -1,6 +1,6 @@
-import { ChevronLeft, LinkIcon, KakaoIcon, GridIcon, QrSample, ChevronRight, PersonIcon } from '../icons'
+import { ChevronLeft, LinkIcon, KakaoIcon, GridIcon, QrSample, ChevronRight, PersonIcon, RefreshIcon } from '../icons'
 
-export default function Share({ participants, confirmedCount, onBack, onCopyLink, onCopyCode, onShareKakao, onFinish, onGoParticipant }) {
+export default function Share({ participants, confirmedCount, onBack, onCopyLink, onCopyCode, onShareKakao, onFinish, onGoParticipant, onRefresh }) {
   return (
     <div style={{ padding: '0 0 40px', animation: 'cc-fade .2s ease' }}>
       <div style={{ position: 'sticky', top: 0, zIndex: 5, background: 'var(--cc-cream)', padding: '54px 20px 12px' }}>
@@ -75,7 +75,7 @@ export default function Share({ participants, confirmedCount, onBack, onCopyLink
             <PersonIcon color="#1F6E50" size={20} />
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontSize: 14, fontWeight: 700 }}>참여자 등록</div>
+            <div style={{ fontSize: 14, fontWeight: 700 }}>직접 등록</div>
             <div style={{ fontSize: 12, color: 'var(--cc-ink2)', marginTop: 2 }}>직접 이름과 메뉴를 등록할 수 있어요</div>
           </div>
           <ChevronRight color="#9A9082" size={18} />
@@ -84,7 +84,12 @@ export default function Share({ participants, confirmedCount, onBack, onCopyLink
         <div style={{ marginTop: 20 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
             <div style={{ fontSize: 14, fontWeight: 700 }}>참여자 확인 현황</div>
-            <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--cc-green)', background: 'var(--cc-green-soft)', padding: '4px 9px', borderRadius: 8 }}>{confirmedCount}/{participants.length} 확인 · 실시간</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <div onClick={onRefresh} style={{ width: 28, height: 28, borderRadius: '50%', background: 'var(--cc-card)', border: '1px solid var(--cc-line)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                <RefreshIcon />
+              </div>
+              <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--cc-green)', background: 'var(--cc-green-soft)', padding: '4px 9px', borderRadius: 8 }}>{confirmedCount}/{participants.length} 확인 · 실시간</div>
+            </div>
           </div>
           {participants.map((pt) => {
             const avatarText = pt.name === '나' ? '나' : pt.name.slice(-2)

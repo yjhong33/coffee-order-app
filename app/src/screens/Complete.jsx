@@ -1,6 +1,6 @@
 import { ChevronLeft, CheckIcon, GridIcon } from '../icons'
 
-export default function Complete({ completeView, onSetView, completeText, onCopy, onBack, onGoShare }) {
+export default function Complete({ completeView, onSetView, completeText, totalQty, onCopy, onBack, onComplete }) {
   const named = completeView === 'named'
   const hint = named ? '누가 무엇을 시켰는지 한눈에 보여요' : '이름을 빼고 메뉴·수량만 — 매장 직원에게 그대로 전달하세요'
 
@@ -27,10 +27,12 @@ export default function Complete({ completeView, onSetView, completeText, onCopy
 
       <div style={{ padding: '8px 20px 0' }}>
         <div style={{ background: 'var(--cc-green-soft)', borderRadius: 14, padding: '13px 15px', display: 'flex', alignItems: 'center', gap: 10 }}>
-          <CheckIcon size={22} strokeWidth="2.2" />
+          <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'var(--cc-green)', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none' }}>
+            <CheckIcon color="#fff" size={18} strokeWidth="2.4" />
+          </div>
           <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--cc-green-strong)' }}>취합이 끝났어요</div>
-            <div style={{ fontSize: 12, color: 'var(--cc-ink2)', marginTop: 2 }}>아래에서 양식을 확인하고 복사하세요</div>
+            <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--cc-green-strong)' }}>총 {totalQty}잔, 정리 끝!</div>
+            <div style={{ fontSize: 12, color: 'var(--cc-ink2)', marginTop: 2 }}>아래 양식을 복사해 공유하세요</div>
           </div>
         </div>
 
@@ -79,8 +81,8 @@ export default function Complete({ completeView, onSetView, completeText, onCopy
           <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--cc-green)' }}>이 양식 복사하기</span>
         </div>
 
-        <div onClick={onGoShare} style={{ marginTop: 18, background: 'var(--cc-green)', borderRadius: 15, height: 56, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 10px 24px rgba(31,110,80,.30)' }}>
-          <span style={{ fontSize: 16, fontWeight: 700, color: '#fff' }}>공유하고 참여 받기</span>
+        <div onClick={onComplete} style={{ marginTop: 18, background: 'var(--cc-green-deep)', borderRadius: 15, height: 56, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 10px 24px rgba(31,110,80,.30)' }}>
+          <span style={{ fontSize: 16, fontWeight: 700, color: '#fff' }}>주문을 완료할게요~</span>
         </div>
       </div>
     </div>

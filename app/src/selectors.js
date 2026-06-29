@@ -17,7 +17,10 @@ export function computeTotals(people) {
 }
 
 export function buildNamedFor(people) {
-  const lines = people.map((p) => `${p.name}: ${p.items.map((it) => `${it.temp} ${it.name} ${it.qty}잔`).join(', ')}`)
+  const lines = people.map((p) => {
+    const itemLines = p.items.map((it) => `  ${it.temp} ${it.name} ${it.qty}잔`).join('\n')
+    return `${p.name}:\n${itemLines}`
+  })
   const { totalQty, totalPrice } = computeTotals(people)
   return `${lines.join('\n')}\n\n합계 ${totalQty}잔 · ${won(totalPrice)}`
 }

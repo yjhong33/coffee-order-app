@@ -106,6 +106,7 @@ export default function App() {
   const [cafeQuery, setCafeQuery] = useState('')
   const [cafeSearchFocus, setCafeSearchFocus] = useState(false)
   const [menuQuery, setMenuQuery] = useState('')
+  const [participants, setParticipants] = useState(PARTICIPANT_STATUS)
 
   const scrollRef = useRef(null)
   const recognitionRef = useRef(null)
@@ -228,6 +229,25 @@ export default function App() {
     setResumeScreen(null)
     lastDeepRef.current = null
     go('complete')
+  }
+  function completeOrder() {
+    setPeople([])
+    setResumeScreen(null)
+    lastDeepRef.current = null
+    showToast('주문이 완료됐어요 🎉')
+    go('home')
+  }
+  function refreshParticipants() {
+    setParticipants((prev) => {
+      const idx = prev.findIndex((p) => !p.ok)
+      if (idx === -1) {
+        showToast('모든 참여자가 확인을 완료했어요 🎉')
+        return prev
+      }
+      const next = prev.map((p, i) => (i === idx ? { ...p, ok: true } : p))
+      showToast(`${next[idx].name} 님 확인이 업데이트됐어요`)
+      return next
+    })
   }
 
   // ---- voice overlay ----
@@ -498,7 +518,7 @@ export default function App() {
   const cartTotal = Object.entries(cart).reduce((a, [id, n]) => a + (MENUS.find((m) => m.id === id)?.price || 0) * n, 0)
   const { totalQty, totalPrice } = computeTotals(people)
   const hasOrders = people.length > 0
-  const confirmedCount = PARTICIPANT_STATUS.filter((p) => p.ok).length
+  const confirmedCount = participants.filter((p) => p.ok).length
 
   const showTabs = TABBED_SCREENS.includes(screen) && !overlay && !loading
 
@@ -598,14 +618,15 @@ export default function App() {
               completeView={completeView}
               onSetView={setCompleteView}
               completeText={completeView === 'named' ? buildNamedFor(people) : buildPlainFor(people)}
+              totalQty={totalQty}
               onCopy={copyComplete}
               onBack={() => go('collect')}
-              onGoShare={() => go('share')}
+              onComplete={completeOrder}
             />
           )}
           {screen === 'share' && (
             <Share
-              participants={PARTICIPANT_STATUS}
+              participants={participants}
               confirmedCount={confirmedCount}
               onBack={() => go('collect')}
               onCopyLink={() => copyText('https://callcoffee.app/join/C4F9', '참여 링크를 복사했어요')}
@@ -613,6 +634,7 @@ export default function App() {
               onShareKakao={() => showToast('카카오톡으로 공유했어요 🎉')}
               onFinish={() => go('home')}
               onGoParticipant={() => go('participant')}
+              onRefresh={refreshParticipants}
             />
           )}
           {screen === 'participant' && (
