@@ -1,4 +1,5 @@
-const QTY_WORDS = { 한: 1, 두: 2, 세: 3, 네: 4, 다섯: 5 }
+const QTY_WORDS = { 한: 1, 두: 2, 세: 3, 네: 4, 다섯: 5, 여섯: 6, 일곱: 7, 여덜: 8, 여덟: 8, 아홉: 9, 열: 10 }
+const FILLER_SUFFIXES = /(주세요|부탁드려요|부탁해요|할게요|해주세요|주문이요|주문할게요|주문|이요|요)$/
 
 const ABBREVIATIONS = [
   { re: /아아/, name: '아메리카노', temp: 'ICE' },
@@ -28,9 +29,13 @@ export function parseVoiceOrder(rawText, menus) {
   if (!foundMenu) {
     foundMenu = normMenus.find((m) => text.includes(m.norm))
   }
+  if (!foundMenu) {
+    const stripped = text.replace(FILLER_SUFFIXES, '')
+    foundMenu = normMenus.find((m) => stripped.includes(m.norm) || m.norm.includes(stripped))
+  }
 
   let qty = 1
-  const qtyMatch = text.match(/(\d+|한|두|세|네|다섯)잔/)
+  const qtyMatch = text.match(/(\d+|한|두|세|네|다섯|여섯|일곱|여덜|여덟|아홉|열)잔/)
   if (qtyMatch) {
     const token = qtyMatch[1]
     qty = QTY_WORDS[token] || parseInt(token, 10) || 1

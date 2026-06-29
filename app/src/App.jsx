@@ -403,12 +403,16 @@ export default function App() {
       voiceListeningRef.current = false
     }
     recognition.onend = () => {
-      // continuous:true keeps this single session alive through pauses; if the
-      // browser ends it anyway, we don't auto-restart (that re-triggers the mic
-      // permission prompt on some mobile browsers). Whatever was captured so far
-      // stays available for "다 말했어요, 정리하기".
-      if (recognitionRef.current === recognition) {
-        voiceListeningRef.current = false
+      // mobile browsers can end the session after a pause even with continuous:true.
+      // If the user hasn't explicitly stopped (voiceListeningRef still true) and no
+      // permission error occurred, restart it so capture keeps going seamlessly.
+      if (recognitionRef.current !== recognition) return
+      if (voiceListeningRef.current) {
+        try {
+          recognition.start()
+        } catch {
+          voiceListeningRef.current = false
+        }
       }
     }
 
@@ -554,6 +558,9 @@ export default function App() {
   }
   function changeNote(personId, itemId, note) {
     setPeople((prev) => prev.map((p) => (p.id !== personId ? p : { ...p, items: p.items.map((it) => (it.id === itemId ? { ...it, note } : it)) })))
+  }
+  function changeTemp(personId, itemId, temp) {
+    setPeople((prev) => prev.map((p) => (p.id !== personId ? p : { ...p, items: p.items.map((it) => (it.id === itemId ? { ...it, temp } : it)) })))
   }
 
   // ---- participant ----
@@ -781,6 +788,7 @@ export default function App() {
               onChangeQty={changeQty}
               onRemoveItem={removeItem}
               onChangeNote={changeNote}
+              onChangeTemp={changeTemp}
               onFinish={finish}
               onGoShare={goShare}
               memoMenus={memoMenus}

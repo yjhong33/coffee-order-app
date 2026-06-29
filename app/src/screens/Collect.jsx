@@ -13,6 +13,7 @@ export default function Collect({
   onChangeQty,
   onRemoveItem,
   onChangeNote,
+  onChangeTemp,
   onFinish,
   onGoShare,
   memoMenus,
@@ -118,12 +119,14 @@ export default function Collect({
                     <div key={it.id} style={{ padding: '9px 0', borderTop: '1px solid var(--cc-line)' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                         <span
+                          onClick={() => onChangeTemp && onChangeTemp(p.id, it.id, it.temp === 'HOT' ? 'ICE' : 'HOT')}
                           style={{
                             fontSize: 12,
                             fontWeight: 800,
                             padding: '3px 7px',
                             borderRadius: 6,
                             flex: 'none',
+                            cursor: onChangeTemp ? 'pointer' : 'default',
                             background: it.temp === 'HOT' ? 'var(--cc-hot-bg)' : 'var(--cc-ice-bg)',
                             color: it.temp === 'HOT' ? 'var(--cc-hot)' : 'var(--cc-ice)',
                           }}

@@ -29,6 +29,15 @@ function matchBrand(placeName, cafes) {
   return null
 }
 
+function distMeters(lat1, lng1, lat2, lng2) {
+  const R = 6371000
+  const toRad = (d) => (d * Math.PI) / 180
+  const dLat = toRad(lat2 - lat1)
+  const dLng = toRad(lng2 - lng1)
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+}
+
 export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, onOpenCafe, onEnterMemo }) {
   const mapDivRef = useRef(null)
   const mapRef = useRef(null)
@@ -44,6 +53,7 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
   const [nearbyCafes, setNearbyCafes] = useState([])
   const [searchCenter, setSearchCenter] = useState(null)
   const [mapMoved, setMapMoved] = useState(false)
+  const [selectedPlace, setSelectedPlace] = useState(null)
 
   function searchNearby(center) {
     if (!window.kakao?.maps?.services) return
@@ -58,18 +68,25 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
         }
         const mapped = results.map((place) => {
           const matched = matchBrand(place.place_name, cafes)
+          const lat = parseFloat(place.y)
+          const lng = parseFloat(place.x)
+          const realDist = userPos ? Math.round(distMeters(userPos.lat, userPos.lng, lat, lng)) : place.distance
           return {
             id: matched ? matched.id : `kakao-${place.id}`,
             name: place.place_name,
-            lat: parseFloat(place.y),
-            lng: parseFloat(place.x),
-            dist: `${place.distance}m`,
+            lat,
+            lng,
+            dist: `${realDist}m`,
             wait: matched?.wait ?? '',
             logo: matched?.logo,
             color: matched?.color ?? '#8B7355',
             fg: matched?.fg ?? '#fff',
             initial: matched?.initial ?? place.place_name[0],
             registered: !!matched,
+            category: place.category_name?.split('>').pop()?.trim() || '카페',
+            phone: place.phone || '',
+            address: place.road_address_name || place.address_name || '',
+            placeUrl: place.place_url || '',
           }
         })
         setNearbyCafes(mapped)
@@ -174,7 +191,7 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
           el.textContent = cafe.initial
         }
       }
-      el.onclick = () => (isUnregistered ? onEnterMemo() : onOpenCafe(cafe.id))
+      el.onclick = () => (isUnregistered ? setSelectedPlace(cafe) : onOpenCafe(cafe.id))
       const overlay = new kakao.maps.CustomOverlay({ position, content: el, yAnchor: 1 })
       overlay.setMap(mapRef.current)
       overlaysRef.current.push(overlay)
@@ -221,8 +238,8 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
   const showFallback = mapFailed
 
   return (
-    <div style={{ animation: 'cc-fade .2s ease', height: '100%' }}>
-      <div style={{ position: 'relative', height: '62vh', background: 'linear-gradient(160deg,#E5EAE0,#D8E0D2)', overflow: 'hidden' }}>
+    <div style={{ animation: 'cc-fade .2s ease', height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ position: 'relative', height: '62vh', flex: 'none', background: 'linear-gradient(160deg,#E5EAE0,#D8E0D2)', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: 54, left: 20, right: 20, zIndex: 3, display: 'flex', alignItems: 'center', gap: 10 }}>
           <div onClick={onBack} style={{ width: 40, height: 40, borderRadius: 13, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 4px 12px rgba(40,30,15,.12)' }}>
             <ChevronLeft />
@@ -322,7 +339,7 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
           </>
         )}
       </div>
-      <div style={{ padding: '16px 20px' }}>
+      <div className="cc-scroll" style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: '16px 20px' }}>
         <div style={{ fontSize: 17, fontWeight: 700, marginBottom: 12 }}>내 주변 카페 {displayCafes.length}곳</div>
         {displayCafes.length === 0 && (
           <div style={{ textAlign: 'center', fontSize: 14, color: 'var(--cc-ink3)', padding: '24px 0' }}>검색 결과가 없어요</div>
@@ -332,7 +349,7 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
           return (
             <div
               key={cafe.id}
-              onClick={() => (isUnregistered ? onEnterMemo() : onOpenCafe(cafe.id))}
+              onClick={() => (isUnregistered ? setSelectedPlace(cafe) : onOpenCafe(cafe.id))}
               style={{ background: 'var(--cc-card)', border: '1px solid var(--cc-line)', borderRadius: 15, padding: 12, display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer', marginBottom: 10 }}
             >
               <div style={{ width: 44, height: 44, borderRadius: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 800, flex: 'none', overflow: 'hidden', background: isUnregistered ? 'transparent' : cafe.logo ? '#fff' : cafe.color, color: cafe.fg, border: cafe.logo ? '1px solid var(--cc-line)' : 'none' }}>
@@ -347,6 +364,99 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
           )
         })}
       </div>
+
+      {selectedPlace && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 30,
+            background: 'rgba(20,16,10,.35)',
+            display: 'flex',
+            alignItems: 'flex-end',
+          }}
+          onClick={() => setSelectedPlace(null)}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              width: '100%',
+              maxWidth: 480,
+              margin: '0 auto',
+              background: '#fff',
+              borderRadius: '20px 20px 0 0',
+              padding: '20px 20px 24px',
+              boxShadow: '0 -8px 24px rgba(0,0,0,.18)',
+              animation: 'cc-fade .18s ease',
+            }}
+          >
+            <div style={{ width: 36, height: 4, borderRadius: 3, background: 'var(--cc-line)', margin: '0 auto 16px' }}></div>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginBottom: 14 }}>
+              <div style={{ width: 48, height: 48, borderRadius: 14, flex: 'none', overflow: 'hidden' }} dangerouslySetInnerHTML={{ __html: DEFAULT_MARKER_SVG }}></div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 17, fontWeight: 800, marginBottom: 3 }}>{selectedPlace.name}</div>
+                <div style={{ fontSize: 13, color: 'var(--cc-ink3)' }}>
+                  {selectedPlace.category} {selectedPlace.dist ? `· ${selectedPlace.dist}` : ''}
+                </div>
+              </div>
+              <div onClick={() => setSelectedPlace(null)} style={{ fontSize: 20, color: 'var(--cc-ink3)', cursor: 'pointer', padding: 4 }}>×</div>
+            </div>
+            {selectedPlace.address && (
+              <div style={{ fontSize: 13.5, color: 'var(--cc-ink2)', marginBottom: 8, lineHeight: 1.5 }}>{selectedPlace.address}</div>
+            )}
+            {selectedPlace.phone && (
+              <div style={{ fontSize: 13.5, color: 'var(--cc-ink2)', marginBottom: 16 }}>{selectedPlace.phone}</div>
+            )}
+            <div style={{ display: 'flex', gap: 8 }}>
+              {selectedPlace.placeUrl && (
+                <a
+                  href={selectedPlace.placeUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    flex: 1,
+                    textAlign: 'center',
+                    height: 48,
+                    borderRadius: 13,
+                    border: '1px solid var(--cc-line)',
+                    color: 'var(--cc-ink)',
+                    fontSize: 14.5,
+                    fontWeight: 700,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    textDecoration: 'none',
+                  }}
+                >
+                  카카오맵에서 보기
+                </a>
+              )}
+              <div
+                onClick={() => {
+                  setSelectedPlace(null)
+                  onEnterMemo()
+                }}
+                style={{
+                  flex: 1,
+                  textAlign: 'center',
+                  height: 48,
+                  borderRadius: 13,
+                  background: 'var(--cc-green-strong)',
+                  color: '#fff',
+                  fontSize: 14.5,
+                  fontWeight: 700,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                }}
+              >
+                간단하게 주문하기
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
