@@ -49,6 +49,7 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
   const [locating, setLocating] = useState(false)
   const [locateError, setLocateError] = useState('')
   const [userPos, setUserPos] = useState(null)
+  const userPosRef = useRef(null)
   const [locationDenied, setLocationDenied] = useState(false)
   const [nearbyCafes, setNearbyCafes] = useState([])
   const [searchCenter, setSearchCenter] = useState(null)
@@ -71,7 +72,8 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
           const matched = matchBrand(place.place_name, cafes)
           const lat = parseFloat(place.y)
           const lng = parseFloat(place.x)
-          const realDist = userPos ? Math.round(distMeters(userPos.lat, userPos.lng, lat, lng)) : place.distance
+          const pos = userPosRef.current
+          const realDist = pos ? Math.round(distMeters(pos.lat, pos.lng, lat, lng)) : place.distance
           return {
             id: matched ? matched.id : `kakao-${place.id}`,
             name: place.place_name,
@@ -123,9 +125,9 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
   }
 
   const displayCafes = useMemo(() => {
-    if (!mapFailed && !locationDenied && searchCenter && nearbyCafes.length > 0) return nearbyCafes
+    if (!mapFailed && searchCenter && nearbyCafes.length > 0) return nearbyCafes
     return cafes
-  }, [mapFailed, locationDenied, searchCenter, nearbyCafes, cafes])
+  }, [mapFailed, searchCenter, nearbyCafes, cafes])
 
   useEffect(() => {
     let cancelled = false
@@ -151,7 +153,7 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
       return
     }
     navigator.geolocation.getCurrentPosition(
-      (pos) => setUserPos({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+      (pos) => { const p = { lat: pos.coords.latitude, lng: pos.coords.longitude }; userPosRef.current = p; setUserPos(p) },
       () => setLocationDenied(true),
       { enableHighAccuracy: true, timeout: 8000 },
     )
@@ -216,7 +218,9 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
         setLocating(false)
         const kakao = window.kakao
         if (!kakao || !mapRef.current) return
-        setUserPos({ lat: pos.coords.latitude, lng: pos.coords.longitude })
+        const p = { lat: pos.coords.latitude, lng: pos.coords.longitude }
+        userPosRef.current = p
+        setUserPos(p)
         const position = new kakao.maps.LatLng(pos.coords.latitude, pos.coords.longitude)
         mapRef.current.panTo(position)
         if (meOverlayRef.current) meOverlayRef.current.setMap(null)
