@@ -776,7 +776,7 @@ export default function App() {
         height: '100dvh',
         position: 'relative',
         overflow: 'hidden',
-        background: '#E7E1D6',
+        background: 'var(--cc-page)',
       }}
     >
       <div

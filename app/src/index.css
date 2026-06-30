@@ -25,6 +25,49 @@
   --cc-hot-bg: #fbeae5;
   --cc-ice: #3b82c4;
   --cc-ice-bg: #e7f0f8;
+  /* chrome / surfaces */
+  --cc-page: #e7e1d6;
+  --cc-surface: #ffffff;
+  --cc-tabbar: #ffffff;
+  --cc-tab-inactive: #b6ab9b;
+  --cc-shadow: rgba(40, 30, 15, 0.16);
+  --cc-shadow-strong: rgba(40, 30, 15, 0.22);
+}
+
+:root[data-theme='dark'] {
+  --primary-normal: #36b07f;
+  --cc-green: #2f9e72;
+  --cc-green-strong: #46b487;
+  --cc-green-soft: #18271f;
+  --cc-green-deep: #0e3527;
+  --cc-gold: #d4a55a;
+  --cc-gold-soft: #2c2616;
+  --cc-cream: #161618;
+  --cc-band: #2a2a2e;
+  --cc-card: #1f1f23;
+  --cc-ink: #f1f0ed;
+  --cc-ink2: #aaa49b;
+  --cc-ink3: #7b766e;
+  --cc-line: #323238;
+  --cc-hot: #f07a63;
+  --cc-hot-bg: #3a221d;
+  --cc-ice: #5aa6e0;
+  --cc-ice-bg: #16263a;
+  --cc-page: #0e0e10;
+  --cc-surface: #1f1f23;
+  --cc-tabbar: #18181b;
+  --cc-tab-inactive: #7b766e;
+  --cc-shadow: rgba(0, 0, 0, 0.5);
+  --cc-shadow-strong: rgba(0, 0, 0, 0.6);
+}
+
+/* Animated cross-fade between light and dark (enabled after first paint by
+   ThemeProvider). Only color-ish props transition, so transform-based
+   animations are untouched. */
+.theme-anim *,
+.theme-anim *::before,
+.theme-anim *::after {
+  transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease, fill 0.4s ease, stroke 0.4s ease;
 }
 
 * {
@@ -36,7 +79,7 @@ html,
 body {
   margin: 0;
   padding: 0;
-  background: #e7e1d6;
+  background: var(--cc-page);
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
@@ -57,6 +100,22 @@ button {
 .cc-scroll::-webkit-scrollbar {
   width: 0;
   height: 0;
+}
+
+/* tap feedback: subtle scale-down while pressed */
+.cc-press {
+  transition: transform 0.12s ease, background-color 0.4s ease, box-shadow 0.4s ease;
+}
+.cc-press:active {
+  transform: scale(0.975);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-anim *,
+  .theme-anim *::before,
+  .theme-anim *::after {
+    transition: none !important;
+  }
 }
 
 @keyframes cc-spin {

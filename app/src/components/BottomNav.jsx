@@ -13,15 +13,15 @@ export default function BottomNav({ screen, onGo }) {
       style={{
         flex: 'none',
         display: 'flex',
-        background: '#fff',
+        background: 'var(--cc-tabbar)',
         borderTop: '1px solid var(--cc-line)',
         padding: '8px 8px calc(8px + env(safe-area-inset-bottom))',
-        boxShadow: '0 -4px 16px rgba(40,30,15,.04)',
+        boxShadow: '0 -4px 16px var(--cc-shadow)',
       }}
     >
       {TABS.map((t) => {
         const active = screen === t.id
-        const color = active ? 'var(--cc-green)' : '#B6AB9B'
+        const color = active ? 'var(--cc-green)' : 'var(--cc-tab-inactive)'
         return (
           <div
             key={t.id}
