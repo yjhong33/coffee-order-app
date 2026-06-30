@@ -1,4 +1,4 @@
-import { PersonIcon, PinIcon, ChevronRight, MicIcon, CaptureIcon, CupIcon, GridIcon } from '../icons'
+import { PersonIcon, PinIcon, ChevronRight, CupIcon } from '../icons'
 
 export default function Home({
   favCafes,
@@ -13,6 +13,7 @@ export default function Home({
   onOpenCafe,
   onReorder,
   onEnterMemo,
+  onOpenSmartMemo,
 }) {
   return (
     <div style={{ padding: '0 0 96px', animation: 'cc-fade .25s ease' }}>
@@ -88,34 +89,26 @@ export default function Home({
         </div>
       </div>
 
-      <div style={{ padding: '14px 20px 0' }}>
-        <div style={{ background: '#fff', border: '1.5px solid var(--cc-green)', borderRadius: 18, padding: 16 }}>
-          <div onClick={onEnterMemo} style={{ display: 'flex', alignItems: 'center', gap: 13, cursor: 'pointer' }}>
-            <div style={{ width: 40, height: 40, borderRadius: 13, background: 'var(--cc-green-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none' }}>
-              <GridIcon />
-            </div>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 16, fontWeight: 700, letterSpacing: '-.3px', color: 'var(--cc-green-strong)' }}>간단하게 주문하기</div>
-              <div style={{ fontSize: 13, color: 'var(--cc-ink2)', marginTop: 4, lineHeight: 1.45 }}>카페 선택 없이 메뉴만 빠르게 기록해요</div>
-            </div>
-            <ChevronRight color="#1F6E50" size={20} />
+      <div style={{ padding: '10px 20px 0' }}>
+        <div
+          onClick={onOpenSmartMemo}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 11,
+            cursor: 'pointer',
+            background: 'var(--cc-green-soft)',
+            border: '1px solid var(--cc-green-soft)',
+            borderRadius: 14,
+            padding: '12px 14px',
+          }}
+        >
+          <span style={{ fontSize: 18, flex: 'none' }}>✨</span>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: 14.5, fontWeight: 700, letterSpacing: '-.3px', color: 'var(--cc-green-strong)' }}>아무렇게나 적어도 정리해드려요</div>
+            <div style={{ fontSize: 12.5, color: 'var(--cc-ink2)', marginTop: 2 }}>카페 없이 메모·음성·캡처로 빠르게 기록</div>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 16 }}>
-            <div
-              onClick={onOpenVoice}
-              style={{ background: 'var(--cc-green-soft)', borderRadius: 14, height: 46, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, cursor: 'pointer' }}
-            >
-              <MicIcon color="var(--cc-green)" />
-              <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--cc-green)' }}>음성으로</span>
-            </div>
-            <div
-              onClick={onOpenCapture}
-              style={{ background: 'var(--cc-gold-soft)', borderRadius: 14, height: 46, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, cursor: 'pointer' }}
-            >
-              <CaptureIcon />
-              <span style={{ fontSize: 15, fontWeight: 700, color: '#9A6F26' }}>캡처로</span>
-            </div>
-          </div>
+          <ChevronRight color="#1F6E50" size={18} />
         </div>
       </div>
 

@@ -28,6 +28,7 @@ import My from './screens/My'
 import VoiceOverlay from './overlays/VoiceOverlay'
 import CaptureOverlay from './overlays/CaptureOverlay'
 import ManualAddOverlay from './overlays/ManualAddOverlay'
+import SmartMemoOverlay from './overlays/SmartMemoOverlay'
 import BottomNav from './components/BottomNav'
 import Toast from './components/Toast'
 
@@ -116,6 +117,9 @@ export default function App() {
   const [cafeQuery, setCafeQuery] = useState('')
   const [menuQuery, setMenuQuery] = useState('')
   const [memoQuery, setMemoQuery] = useState('')
+  const [memoText, setMemoText] = useState('')
+  const [memoParsed, setMemoParsed] = useState(false)
+  const [memoOrders, setMemoOrders] = useState([])
   const [frameScale, setFrameScale] = useState(1)
   const [frameOffsetX, setFrameOffsetX] = useState(0)
 
@@ -290,6 +294,67 @@ export default function App() {
   }
   function resume() {
     if (resumeScreen) go(resumeScreen)
+  }
+
+  // ---- smart memo (free-text → auto-organize) ----
+  function openSmartMemo() {
+    setMemoText('')
+    setMemoParsed(false)
+    setMemoOrders([])
+    setOverlay('smartmemo')
+  }
+  function parseSmartMemo() {
+    const text = memoText.trim()
+    if (!text) {
+      showToast('주문을 적어주세요')
+      return
+    }
+    const parsedList = parseVoiceOrders(text, MENUS).filter((p) => p.matched)
+    if (parsedList.length === 0) {
+      showToast('메뉴를 인식하지 못했어요')
+      return
+    }
+    setMemoOrders(
+      parsedList.map((p, i) => ({
+        id: makeId('sm'),
+        name: p.personName || (i === 0 ? '나' : ''),
+        menu: p.name,
+        temp: p.temp,
+        qty: p.qty,
+        price: p.price,
+      })),
+    )
+    setMemoParsed(true)
+  }
+  function updateMemoOrder(id, field, value) {
+    setMemoOrders((prev) => prev.map((o) => (o.id === id ? { ...o, [field]: value } : o)))
+  }
+  function removeMemoOrder(id) {
+    setMemoOrders((prev) => prev.filter((o) => o.id !== id))
+  }
+  function resetSmartMemo() {
+    setMemoParsed(false)
+    setMemoOrders([])
+  }
+  function approveSmartMemo() {
+    if (memoOrders.length === 0) return
+    const count = memoOrders.length
+    setPeople((prev) => {
+      let next = prev
+      memoOrders.forEach((o) => {
+        const name = o.name.trim() || '나'
+        next = mergeItemIntoPeople(
+          next,
+          { id: makeId('p'), name, isMe: name === '나', color: '#5B8C7A', fg: '#fff' },
+          { name: o.menu, temp: o.temp, qty: o.qty, price: o.price },
+        )
+      })
+      return next
+    })
+    setMemoMode(true)
+    setOverlay(null)
+    showToast(`${count}건 정리했어요 🎉`)
+    go('memo')
   }
   function quickAdd(menu, temp = 'ICE', qty = 1, size = '') {
     const label = size ? `${menu.name} (${size})` : menu.name
@@ -738,6 +803,7 @@ export default function App() {
               onOpenCafe={openCafe}
               onReorder={openCafe}
               onEnterMemo={enterMemo}
+              onOpenSmartMemo={openSmartMemo}
             />
           )}
           {screen === 'cafe' && (
@@ -916,6 +982,22 @@ export default function App() {
             onDec={() => setManualQty((q) => Math.max(1, q - 1))}
             onClose={closeOverlay}
             onAdd={addManual}
+          />
+        )}
+        {overlay === 'smartmemo' && (
+          <SmartMemoOverlay
+            text={memoText}
+            onTextChange={setMemoText}
+            parsed={memoParsed}
+            orders={memoOrders}
+            onParse={parseSmartMemo}
+            onUpdateOrder={updateMemoOrder}
+            onRemoveOrder={removeMemoOrder}
+            onApprove={approveSmartMemo}
+            onReset={resetSmartMemo}
+            onClose={closeOverlay}
+            onOpenVoice={openVoice}
+            onOpenCapture={openCapture}
           />
         )}
 
