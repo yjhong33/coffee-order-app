@@ -14,6 +14,7 @@ import {
 } from './data'
 import { computeTotals, buildNamedFor, buildPlainFor } from './selectors'
 import { parseVoiceOrders } from './voiceParser'
+import { parseMemoLines } from './memoParser'
 import Home from './screens/Home'
 import CafeSelect from './screens/CafeSelect'
 import Menu from './screens/Menu'
@@ -309,25 +310,36 @@ export default function App() {
       showToast('주문을 적어주세요')
       return
     }
-    const parsedList = parseVoiceOrders(text, MENUS).filter((p) => p.matched)
+    const parsedList = parseMemoLines(text, MENUS)
     if (parsedList.length === 0) {
       showToast('메뉴를 인식하지 못했어요')
       return
     }
     setMemoOrders(
-      parsedList.map((p, i) => ({
+      parsedList.map((p) => ({
         id: makeId('sm'),
-        name: p.personName || (i === 0 ? '나' : ''),
         menu: p.name,
         temp: p.temp,
         qty: p.qty,
         price: p.price,
+        needsOption: p.needsOption,
+        fixedTemp: p.fixedTemp,
       })),
     )
     setMemoParsed(true)
   }
   function updateMemoOrder(id, field, value) {
-    setMemoOrders((prev) => prev.map((o) => (o.id === id ? { ...o, [field]: value } : o)))
+    setMemoOrders((prev) =>
+      prev.map((o) => {
+        if (o.id !== id) return o
+        const next = { ...o, [field]: value }
+        if (field === 'temp' && value) next.needsOption = false
+        return next
+      }),
+    )
+  }
+  function changeMemoQty(id, delta) {
+    setMemoOrders((prev) => prev.map((o) => (o.id === id ? { ...o, qty: Math.max(1, o.qty + delta) } : o)))
   }
   function removeMemoOrder(id) {
     setMemoOrders((prev) => prev.filter((o) => o.id !== id))
@@ -338,14 +350,17 @@ export default function App() {
   }
   function approveSmartMemo() {
     if (memoOrders.length === 0) return
+    if (memoOrders.some((o) => o.needsOption || !o.temp)) {
+      showToast('온도(아이스/핫)를 선택해 주세요')
+      return
+    }
     const count = memoOrders.length
     setPeople((prev) => {
       let next = prev
       memoOrders.forEach((o) => {
-        const name = o.name.trim() || '나'
         next = mergeItemIntoPeople(
           next,
-          { id: makeId('p'), name, isMe: name === '나', color: '#5B8C7A', fg: '#fff' },
+          { id: 'me', name: '나', isMe: true, color: '#1F6E50', fg: '#fff' },
           { name: o.menu, temp: o.temp, qty: o.qty, price: o.price },
         )
       })
@@ -992,6 +1007,7 @@ export default function App() {
             orders={memoOrders}
             onParse={parseSmartMemo}
             onUpdateOrder={updateMemoOrder}
+            onChangeQty={changeMemoQty}
             onRemoveOrder={removeMemoOrder}
             onApprove={approveSmartMemo}
             onReset={resetSmartMemo}
