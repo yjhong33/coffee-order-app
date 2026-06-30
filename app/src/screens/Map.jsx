@@ -57,6 +57,37 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
   const [selectedPlace, setSelectedPlace] = useState(null)  // unregistered cafe sheet
   const [selectedCafeInfo, setSelectedCafeInfo] = useState(null)  // registered cafe sheet
 
+  // draggable list sheet: map height in px (null → default 72vh)
+  const rootRef = useRef(null)
+  const [mapH, setMapH] = useState(null)
+  const dragRef = useRef(null)
+
+  function onHandleDown(e) {
+    const total = rootRef.current?.clientHeight || 0
+    if (!total) return
+    const current = mapH != null ? mapH : total * 0.72
+    dragRef.current = { startY: e.clientY, startH: current, total }
+    e.currentTarget.setPointerCapture?.(e.pointerId)
+  }
+  function onHandleMove(e) {
+    const d = dragRef.current
+    if (!d) return
+    const next = d.startH + (e.clientY - d.startY)
+    const min = d.total * 0.2
+    const max = d.total * 0.78
+    setMapH(Math.max(min, Math.min(max, next)))
+  }
+  function onHandleUp(e) {
+    if (!dragRef.current) return
+    dragRef.current = null
+    e.currentTarget.releasePointerCapture?.(e.pointerId)
+  }
+
+  // keep the Kakao map correctly sized when the sheet is dragged
+  useEffect(() => {
+    if (mapH != null && mapRef.current?.relayout) mapRef.current.relayout()
+  }, [mapH])
+
   function searchNearby(center) {
     if (!window.kakao?.maps?.services) return
     const kakao = window.kakao
@@ -243,8 +274,8 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
   const showFallback = mapFailed
 
   return (
-    <div style={{ animation: 'cc-fade .2s ease', height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <div style={{ position: 'relative', height: '72vh', flex: 'none', background: 'linear-gradient(160deg,#E5EAE0,#D8E0D2)', overflow: 'hidden' }}>
+    <div ref={rootRef} style={{ animation: 'cc-fade .2s ease', height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ position: 'relative', height: mapH != null ? mapH : '72vh', flex: 'none', background: 'linear-gradient(160deg,#E5EAE0,#D8E0D2)', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: 54, left: 20, right: 20, zIndex: 3, display: 'flex', alignItems: 'center', gap: 10 }}>
           <div onClick={onBack} style={{ width: 40, height: 40, borderRadius: 13, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 4px 12px rgba(40,30,15,.12)' }}>
             <ChevronLeft />
@@ -354,30 +385,41 @@ export default function Map({ cafes, mapPins, cafeQuery, onQueryChange, onBack, 
           </>
         )}
       </div>
-      <div className="cc-scroll" style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: '16px 20px' }}>
-        <div style={{ fontSize: 17, fontWeight: 700, marginBottom: 12 }}>내 주변 카페 {displayCafes.length}곳</div>
-        {displayCafes.length === 0 && (
-          <div style={{ textAlign: 'center', fontSize: 14, color: 'var(--cc-ink3)', padding: '24px 0' }}>검색 결과가 없어요</div>
-        )}
-        {displayCafes.map((cafe) => {
-          const isUnregistered = cafe.id.startsWith('kakao-') && !cafe.registered
-          return (
-            <div
-              key={cafe.id}
-              onClick={() => (isUnregistered ? setSelectedPlace(cafe) : setSelectedCafeInfo(cafe))}
-              style={{ background: 'var(--cc-card)', border: '1px solid var(--cc-line)', borderRadius: 15, padding: 12, display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer', marginBottom: 10 }}
-            >
-              <div style={{ width: 44, height: 44, borderRadius: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 800, flex: 'none', overflow: 'hidden', background: isUnregistered ? 'transparent' : cafe.logo ? '#fff' : cafe.color, color: cafe.fg, border: cafe.logo ? '1px solid var(--cc-line)' : 'none' }}>
-                {isUnregistered ? <DefaultCafeMarker size={44} /> : cafe.logo ? <img src={cafe.logo} alt={cafe.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : cafe.initial}
+      <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', background: 'var(--cc-cream)', borderRadius: '18px 18px 0 0', position: 'relative', zIndex: 2, boxShadow: '0 -6px 18px var(--cc-shadow)' }}>
+        <div
+          onPointerDown={onHandleDown}
+          onPointerMove={onHandleMove}
+          onPointerUp={onHandleUp}
+          onPointerCancel={onHandleUp}
+          style={{ flex: 'none', padding: '10px 20px 8px', cursor: 'grab', touchAction: 'none', userSelect: 'none' }}
+        >
+          <div style={{ width: 40, height: 5, borderRadius: 3, background: 'var(--cc-line)', margin: '0 auto 10px' }}></div>
+          <div style={{ fontSize: 17, fontWeight: 700 }}>내 주변 카페 {displayCafes.length}곳</div>
+        </div>
+        <div className="cc-scroll" style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: '4px 20px 16px' }}>
+          {displayCafes.length === 0 && (
+            <div style={{ textAlign: 'center', fontSize: 14, color: 'var(--cc-ink3)', padding: '24px 0' }}>검색 결과가 없어요</div>
+          )}
+          {displayCafes.map((cafe) => {
+            const isUnregistered = cafe.id.startsWith('kakao-') && !cafe.registered
+            return (
+              <div
+                key={cafe.id}
+                onClick={() => (isUnregistered ? setSelectedPlace(cafe) : setSelectedCafeInfo(cafe))}
+                style={{ background: 'var(--cc-card)', border: '1px solid var(--cc-line)', borderRadius: 15, padding: 12, display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer', marginBottom: 10 }}
+              >
+                <div style={{ width: 44, height: 44, borderRadius: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 800, flex: 'none', overflow: 'hidden', background: isUnregistered ? 'transparent' : cafe.logo ? '#fff' : cafe.color, color: cafe.fg, border: cafe.logo ? '1px solid var(--cc-line)' : 'none' }}>
+                  {isUnregistered ? <DefaultCafeMarker size={44} /> : cafe.logo ? <img src={cafe.logo} alt={cafe.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : cafe.initial}
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 15, fontWeight: 700 }}>{cafe.name}</div>
+                  <div style={{ fontSize: 13, color: 'var(--cc-ink2)', marginTop: 2 }}>현 위치에서 {cafe.dist}</div>
+                </div>
+                <ChevronRight color="#C9BFB0" strokeWidth="2.2" />
               </div>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: 15, fontWeight: 700 }}>{cafe.name}</div>
-                <div style={{ fontSize: 13, color: 'var(--cc-ink2)', marginTop: 2 }}>{cafe.dist} · 대기 {cafe.wait}</div>
-              </div>
-              <ChevronRight color="#C9BFB0" strokeWidth="2.2" />
-            </div>
-          )
-        })}
+            )
+          })}
+        </div>
       </div>
 
       {/* ── registered cafe info sheet ── */}
