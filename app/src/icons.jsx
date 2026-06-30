@@ -235,24 +235,6 @@ export function SpinnerIcon({ size = 64 }) {
   )
 }
 
-export function SparkleIcon({ color = '#1F6E50', size = 22 }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill={color}>
-      <path d="M12 2.6l1.9 5.1 5.1 1.9-5.1 1.9L12 16.6l-1.9-5.1L5 9.6l5.1-1.9z"></path>
-      <path d="M18.4 14.3l.85 2.25 2.25.85-2.25.85-.85 2.25-.85-2.25-2.25-.85 2.25-.85z"></path>
-    </svg>
-  )
-}
-
-export function ClockIcon({ color = '#1F6E50', size = 16, strokeWidth = '1.9' }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="8.5"></circle>
-      <path d="M12 7.5V12l3 1.8"></path>
-    </svg>
-  )
-}
-
 export function HomeTabIcon({ color, size = 24 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
