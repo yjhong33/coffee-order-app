@@ -45,6 +45,29 @@ function makeId(prefix) {
   return `${prefix}-${Date.now()}-${idSeq}`
 }
 
+// Speech recognition (esp. on mobile) often re-emits the same phrase, producing
+// transcripts like "아이스 아이스 아메리카노 아이스 아메리카노". Collapse any
+// immediately-repeated run of words (longest run first) back down to one copy.
+function dedupeTranscript(text) {
+  let words = (text || '').split(/\s+/).filter(Boolean)
+  let changed = true
+  while (changed) {
+    changed = false
+    for (let n = Math.floor(words.length / 2); n >= 1 && !changed; n--) {
+      for (let i = 0; i + 2 * n <= words.length; i++) {
+        const a = words.slice(i, i + n).join(' ')
+        const b = words.slice(i + n, i + 2 * n).join(' ')
+        if (a === b) {
+          words = [...words.slice(0, i + n), ...words.slice(i + 2 * n)]
+          changed = true
+          break
+        }
+      }
+    }
+  }
+  return words.join(' ')
+}
+
 function mergeItemIntoPeople(people, personInfo, item) {
   const idx = people.findIndex((p) => (personInfo.isMe ? p.isMe : p.name === personInfo.name))
   if (idx === -1) {
@@ -133,7 +156,7 @@ export default function App() {
   const scrollRef = useRef(null)
   const recognitionRef = useRef(null)
   const voiceListeningRef = useRef(false)
-  const voiceTranscriptRef = useRef('')
+  const voiceFinalsRef = useRef([])
   const capTimerRef = useRef(null)
   const toastTimerRef = useRef(null)
   const loadTimerRef = useRef(null)
@@ -446,7 +469,7 @@ export default function App() {
     setVoiceTranscript('')
     setVoiceOrders([])
     setVoiceError('')
-    voiceTranscriptRef.current = ''
+    voiceFinalsRef.current = []
 
     if (!SpeechRecognitionAPI) {
       setVoicePhase('listening')
@@ -462,16 +485,21 @@ export default function App() {
     recognitionRef.current = recognition
 
     recognition.onresult = (event) => {
+      // Only final results become order data; interim text is shown for reference
+      // but never stored. Skip a final segment if it duplicates the previous one
+      // (some engines re-deliver the same phrase across restarts).
       let interim = ''
       for (let i = event.resultIndex; i < event.results.length; i++) {
-        const t = event.results[i][0].transcript
+        const t = event.results[i][0].transcript.trim()
         if (event.results[i].isFinal) {
-          voiceTranscriptRef.current = `${voiceTranscriptRef.current} ${t}`.trim()
+          if (t && voiceFinalsRef.current[voiceFinalsRef.current.length - 1] !== t) {
+            voiceFinalsRef.current.push(t)
+          }
         } else {
-          interim += t
+          interim += event.results[i][0].transcript
         }
       }
-      setVoiceTranscript(`${voiceTranscriptRef.current} ${interim}`.trim())
+      setVoiceTranscript(`${voiceFinalsRef.current.join(' ')} ${interim}`.trim())
     }
     recognition.onerror = (e) => {
       if (e.error === 'no-speech' || e.error === 'aborted') return
@@ -502,9 +530,11 @@ export default function App() {
     recognition.start()
   }
   function finishVoiceListening() {
+    // Fully stop recognition, then analyze the accumulated final transcript
+    // exactly once (never inside onresult).
     voiceListeningRef.current = false
     recognitionRef.current?.stop()
-    const text = voiceTranscriptRef.current.trim()
+    const text = dedupeTranscript(voiceFinalsRef.current.join(' ').trim())
     if (!text) {
       setVoiceError('음성을 인식하지 못했어요')
       setVoicePhase('failed')
