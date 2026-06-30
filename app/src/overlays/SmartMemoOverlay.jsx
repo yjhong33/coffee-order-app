@@ -145,7 +145,7 @@ export default function SmartMemoOverlay({
                       </div>
                       <span style={{ fontSize: 15, fontWeight: 800, minWidth: 16, textAlign: 'center' }}>{o.qty}</span>
                       <div onClick={() => onChangeQty(o.id, 1)} style={{ width: 26, height: 26, borderRadius: '50%', background: '#fff', border: '1px solid var(--cc-line)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                        <PlusIcon />
+                        <PlusIcon color="#1F6E50" size={16} strokeWidth="2.6" />
                       </div>
                     </div>
                     <div onClick={() => onRemoveOrder(o.id)} style={{ width: 24, height: 24, flex: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--cc-ink3)', fontSize: 18 }}>×</div>
