@@ -867,6 +867,7 @@ export default function App() {
               onOpenVoice={openVoice}
               onOpenCapture={openCapture}
               onOpenManual={openManual}
+              onOpenSmartMemo={openSmartMemo}
               onChangeQty={changeQty}
               onRemoveItem={removeItem}
               onChangeNote={changeNote}

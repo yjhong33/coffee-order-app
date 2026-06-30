@@ -13,6 +13,7 @@ export default function Collect({
   onOpenVoice,
   onOpenCapture,
   onOpenManual,
+  onOpenSmartMemo,
   onChangeQty,
   onRemoveItem,
   onChangeNote,
@@ -100,10 +101,17 @@ export default function Collect({
           </>
         )}
         <div style={{ display: 'flex', gap: 8, marginBottom: 14 }}>
-          <div onClick={onOpenManual} style={{ flex: 1, background: 'var(--cc-green)', borderRadius: 13, padding: 11, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7, cursor: 'pointer', boxShadow: '0 6px 14px rgba(31,110,80,.24)' }}>
-            <PlusIcon size={18} />
-            <span style={{ fontSize: 13.5, fontWeight: 700, color: '#fff' }}>직접 입력</span>
-          </div>
+          {memoMode ? (
+            <div onClick={onOpenSmartMemo} style={{ flex: 1, background: 'var(--cc-green)', borderRadius: 13, padding: 11, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, cursor: 'pointer', boxShadow: '0 6px 14px rgba(31,110,80,.24)' }}>
+              <span style={{ fontSize: 15 }}>✨</span>
+              <span style={{ fontSize: 13.5, fontWeight: 700, color: '#fff' }}>메모 입력</span>
+            </div>
+          ) : (
+            <div onClick={onOpenManual} style={{ flex: 1, background: 'var(--cc-green)', borderRadius: 13, padding: 11, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7, cursor: 'pointer', boxShadow: '0 6px 14px rgba(31,110,80,.24)' }}>
+              <PlusIcon size={18} />
+              <span style={{ fontSize: 13.5, fontWeight: 700, color: '#fff' }}>직접 입력</span>
+            </div>
+          )}
           <div onClick={onOpenVoice} style={{ flex: 1, background: 'var(--cc-green-soft)', borderRadius: 13, padding: 11, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7, cursor: 'pointer' }}>
             <MicIcon size={18} />
             <span style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--cc-green-strong)' }}>음성</span>
@@ -194,7 +202,7 @@ export default function Collect({
             </div>
             <div style={{ fontSize: 16, fontWeight: 700, marginTop: 16 }}>아직 기록된 주문이 없어요</div>
             <div style={{ fontSize: 14, color: 'var(--cc-ink2)', marginTop: 6, lineHeight: 1.5 }}>
-              직접 입력·음성·캡처로 메뉴를 기록해 보세요.
+              {memoMode ? '메모·음성·캡처로 메뉴를 기록해 보세요.' : '직접 입력·음성·캡처로 메뉴를 기록해 보세요.'}
             </div>
           </div>
         )}
