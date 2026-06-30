@@ -4,11 +4,9 @@ import {
   MAP_POS,
   CATS,
   MENUS,
-  ANALYZE_STEPS,
   PREFS,
   INITIAL_PEOPLE,
   RECENT_ORDERS,
-  CAP_PEOPLE,
   HISTORY_SEED,
   CAFE_SIZE_OPTIONS,
 } from './data'
@@ -85,14 +83,6 @@ function mergeItemIntoPeople(people, personInfo, item) {
   return [...people.slice(0, idx), updated, ...people.slice(idx + 1)]
 }
 
-function capturePersonToItem(p) {
-  const ice = p.temp === 'ICE'
-  const qty = p.menu.includes('2잔') ? 2 : 1
-  const name = p.menu.replace(' 2잔', '')
-  const price = name.includes('돌체') ? 6300 : name.includes('바닐라') ? 5500 : 4500
-  return { name, temp: ice ? 'ICE' : 'HOT', qty, price }
-}
-
 export default function App() {
   const [joinId] = useState(() => {
     const m = typeof window !== 'undefined' ? window.location.pathname.match(/^\/join\/([A-Za-z0-9]{4,})/) : null
@@ -107,9 +97,6 @@ export default function App() {
   const [voiceTranscript, setVoiceTranscript] = useState('')
   const [voiceOrders, setVoiceOrders] = useState([])
   const [voiceError, setVoiceError] = useState('')
-  const [capStep, setCapStep] = useState('upload')
-  const [analyzeIdx, setAnalyzeIdx] = useState(0)
-  const [capFlagTemp, setCapFlagTemp] = useState(null)
   const [menuCat, setMenuCat] = useState(0)
   const [menuTemp, setMenuTemp] = useState({})
   const [menuNote, setMenuNote] = useState({})
@@ -157,7 +144,6 @@ export default function App() {
   const recognitionRef = useRef(null)
   const voiceListeningRef = useRef(false)
   const voiceFinalsRef = useRef([])
-  const capTimerRef = useRef(null)
   const toastTimerRef = useRef(null)
   const loadTimerRef = useRef(null)
   const lastDeepRef = useRef(null)
@@ -284,7 +270,6 @@ export default function App() {
   useEffect(() => {
     return () => {
       clearTimeout(toastTimerRef.current)
-      clearInterval(capTimerRef.current)
       clearTimeout(loadTimerRef.current)
       recognitionRef.current?.stop()
     }
@@ -587,57 +572,34 @@ export default function App() {
     showToast(`${voiceOrders.length}건의 주문이 취합에 추가됐어요 🎉`)
   }
 
-  // ---- capture overlay ----
+  // ---- capture overlay (real OCR) ----
   function openCapture() {
-    clearInterval(capTimerRef.current)
     setOverlay('capture')
-    setCapStep('upload')
-    setAnalyzeIdx(0)
-    setCapFlagTemp(null)
   }
-  function resolveCapFlag(temp) {
-    setCapFlagTemp(temp)
-  }
-  function startCapture() {
-    setCapStep('analyzing')
-    setAnalyzeIdx(0)
-    clearInterval(capTimerRef.current)
-    capTimerRef.current = setInterval(() => {
-      setAnalyzeIdx((prev) => {
-        const next = prev + 1
-        if (next > ANALYZE_STEPS.length) {
-          clearInterval(capTimerRef.current)
-          setCapStep('result')
-          return prev
-        }
-        return next
-      })
-    }, 750)
-  }
-  function approveCapture() {
-    if (!capFlagTemp) return
+  function addCaptureOrders(orders) {
+    if (!orders || !orders.length) {
+      setOverlay(null)
+      return
+    }
     setPeople((prev) => {
       let next = prev
-      CAP_PEOPLE.forEach((p, i) => {
-        const isMe = p.name === '나'
-        const flagged = p.name === '이서연'
-        const item = capturePersonToItem(flagged ? { ...p, temp: capFlagTemp } : p)
+      orders.forEach((o, i) => {
+        const isMe = o.name === '나'
         next = mergeItemIntoPeople(
           next,
-          { id: makeId('p'), name: p.name, isMe, color: isMe ? '#1F6E50' : CAP_PEOPLE_COLORS[i % CAP_PEOPLE_COLORS.length], fg: '#fff' },
-          item,
+          { id: makeId('p'), name: o.name, isMe, color: isMe ? '#1F6E50' : CAP_PEOPLE_COLORS[i % CAP_PEOPLE_COLORS.length], fg: '#fff' },
+          { name: o.menu, temp: o.temp, qty: o.qty, price: o.price || 4500, note: (o.options || []).join(', ') },
         )
       })
       return next
     })
-    if (screen !== 'collect') go('collect')
+    if (screen !== 'collect' && screen !== 'memo') go('collect')
     else setOverlay(null)
-    showToast('4명의 주문을 취합에 추가했어요 🎉')
+    showToast(`${orders.length}건의 주문을 취합에 추가했어요 🎉`)
   }
   function closeOverlay() {
     voiceListeningRef.current = false
     recognitionRef.current?.stop()
-    clearInterval(capTimerRef.current)
     setOverlay(null)
   }
 
@@ -1002,17 +964,7 @@ export default function App() {
             error={voiceError}
           />
         )}
-        {overlay === 'capture' && (
-          <CaptureOverlay
-            step={capStep}
-            analyzeIdx={analyzeIdx}
-            onClose={closeOverlay}
-            onStart={startCapture}
-            onApprove={approveCapture}
-            capFlagTemp={capFlagTemp}
-            onResolveFlag={resolveCapFlag}
-          />
-        )}
+        {overlay === 'capture' && <CaptureOverlay onClose={closeOverlay} onApprove={addCaptureOrders} />}
         {overlay === 'manual' && (
           <ManualAddOverlay
             name={manualName}
