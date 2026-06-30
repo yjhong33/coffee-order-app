@@ -7,7 +7,7 @@ function TempToggle({ order, onUpdateOrder }) {
     )
   }
   return (
-    <div style={{ display: 'flex', gap: 4, flex: 'none', background: '#fff', borderRadius: 9, padding: 3, border: order.needsOption ? '1.5px solid #E0A53C' : '1px solid var(--cc-line)' }}>
+    <div style={{ display: 'flex', gap: 4, flex: 'none', background: 'var(--cc-surface)', borderRadius: 9, padding: 3, border: order.needsOption ? '1.5px solid var(--cc-warn-line)' : '1px solid var(--cc-line)' }}>
       {['ICE', 'HOT'].map((t) => {
         const on = order.temp === t
         return (
@@ -72,7 +72,7 @@ export default function SmartMemoOverlay({
               style={{
                 width: '100%',
                 marginTop: 14,
-                background: '#fff',
+                background: 'var(--cc-surface)',
                 border: '1px solid var(--cc-line)',
                 borderRadius: 16,
                 padding: '14px 15px',
@@ -104,7 +104,7 @@ export default function SmartMemoOverlay({
               </div>
               <div onClick={onOpenCapture} style={{ background: 'var(--cc-gold-soft)', borderRadius: 14, height: 46, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, cursor: 'pointer' }}>
                 <CaptureIcon />
-                <span style={{ fontSize: 15, fontWeight: 700, color: '#9A6F26' }}>캡처로</span>
+                <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--cc-warn-ink)' }}>캡처로</span>
               </div>
             </div>
           </>
@@ -114,7 +114,7 @@ export default function SmartMemoOverlay({
           <>
             <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--cc-ink2)', margin: '16px 0 10px' }}>이렇게 정리했어요, 한번에 확인해 주세요</div>
             {needCount > 0 && (
-              <div style={{ fontSize: 13, fontWeight: 700, color: '#9A6F26', background: 'var(--cc-gold-soft)', borderRadius: 11, padding: '10px 12px', marginBottom: 10, lineHeight: 1.45 }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--cc-warn-ink)', background: 'var(--cc-gold-soft)', borderRadius: 11, padding: '10px 12px', marginBottom: 10, lineHeight: 1.45 }}>
                 ⚠️ 온도가 정해지지 않은 메뉴 {needCount}개가 있어요. 아이스/핫을 골라주세요.
               </div>
             )}
@@ -125,8 +125,8 @@ export default function SmartMemoOverlay({
                   <div
                     key={o.id}
                     style={{
-                      background: need ? '#FFF8EC' : 'var(--cc-green-soft)',
-                      border: need ? '1px solid #EAD3A0' : '1px solid transparent',
+                      background: need ? 'var(--cc-warn-soft)' : 'var(--cc-green-soft)',
+                      border: need ? '1px solid var(--cc-warn-line)' : '1px solid transparent',
                       borderRadius: 14,
                       padding: 12,
                       display: 'flex',
@@ -137,14 +137,14 @@ export default function SmartMemoOverlay({
                     <TempToggle order={o} onUpdateOrder={onUpdateOrder} />
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ fontSize: 15.5, fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{o.menu}</div>
-                      {need && <div style={{ fontSize: 12, color: '#9A6F26', fontWeight: 600, marginTop: 2 }}>온도 선택 필요</div>}
+                      {need && <div style={{ fontSize: 12, color: 'var(--cc-warn-ink)', fontWeight: 600, marginTop: 2 }}>온도 선택 필요</div>}
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: 'none' }}>
-                      <div onClick={() => onChangeQty(o.id, -1)} style={{ width: 26, height: 26, borderRadius: '50%', background: '#fff', border: '1px solid var(--cc-line)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                      <div onClick={() => onChangeQty(o.id, -1)} style={{ width: 26, height: 26, borderRadius: '50%', background: 'var(--cc-surface)', border: '1px solid var(--cc-line)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                         <MinusIcon />
                       </div>
                       <span style={{ fontSize: 15, fontWeight: 800, minWidth: 16, textAlign: 'center' }}>{o.qty}</span>
-                      <div onClick={() => onChangeQty(o.id, 1)} style={{ width: 26, height: 26, borderRadius: '50%', background: '#fff', border: '1px solid var(--cc-line)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                      <div onClick={() => onChangeQty(o.id, 1)} style={{ width: 26, height: 26, borderRadius: '50%', background: 'var(--cc-surface)', border: '1px solid var(--cc-line)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                         <PlusIcon color="#1F6E50" size={16} strokeWidth="2.6" />
                       </div>
                     </div>

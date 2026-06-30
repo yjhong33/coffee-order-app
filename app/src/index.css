@@ -32,6 +32,15 @@
   --cc-tab-inactive: #b6ab9b;
   --cc-shadow: rgba(40, 30, 15, 0.16);
   --cc-shadow-strong: rgba(40, 30, 15, 0.22);
+  /* feature surfaces (gradients & warning cards) */
+  --cc-hero-grad: linear-gradient(160deg, #21795a 0%, #1b6249 60%, #185940 100%);
+  --cc-accent-grad: linear-gradient(135deg, #b98b3e, #a9762c);
+  --cc-accent-ink: #ffffff;
+  --cc-accent-shadow: rgba(150, 110, 40, 0.22);
+  --cc-accent-border: transparent;
+  --cc-warn-soft: #fff8ec;
+  --cc-warn-line: #ead3a0;
+  --cc-warn-ink: #9a6f26;
 }
 
 :root[data-theme='dark'] {
@@ -59,6 +68,15 @@
   --cc-tab-inactive: #7b766e;
   --cc-shadow: rgba(0, 0, 0, 0.5);
   --cc-shadow-strong: rgba(0, 0, 0, 0.6);
+  /* muted, premium feature surfaces for dark */
+  --cc-hero-grad: linear-gradient(160deg, #1d2a24 0%, #19231f 55%, #15201c 100%);
+  --cc-accent-grad: linear-gradient(135deg, #3b3328, #2c2620);
+  --cc-accent-ink: #e8c98a;
+  --cc-accent-shadow: rgba(0, 0, 0, 0.45);
+  --cc-accent-border: rgba(212, 165, 90, 0.28);
+  --cc-warn-soft: #2a2417;
+  --cc-warn-line: #4a3f27;
+  --cc-warn-ink: #d9b873;
 }
 
 /* Animated cross-fade between light and dark (enabled after first paint by

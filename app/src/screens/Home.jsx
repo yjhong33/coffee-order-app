@@ -20,7 +20,7 @@ export default function Home({
       <div
         style={{
           padding: '60px 20px 16px',
-          background: 'linear-gradient(160deg,#21795A 0%,#1B6249 60%,#185940 100%)',
+          background: 'var(--cc-hero-grad)',
           borderRadius: '0 0 26px 26px',
           position: 'relative',
           overflow: 'hidden',
@@ -65,14 +65,15 @@ export default function Home({
         <div
           onClick={onGoCafe}
           style={{
-            background: 'linear-gradient(135deg,#B98B3E,#A9762C)',
+            background: 'var(--cc-accent-grad)',
+            border: '1px solid var(--cc-accent-border)',
             borderRadius: 20,
             padding: 20,
             display: 'flex',
             alignItems: 'center',
             gap: 16,
             cursor: 'pointer',
-            boxShadow: '0 10px 24px rgba(150,110,40,.22)',
+            boxShadow: '0 10px 24px var(--cc-accent-shadow)',
             position: 'relative',
             overflow: 'hidden',
           }}
@@ -82,10 +83,10 @@ export default function Home({
             <PinIcon />
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontSize: 18, fontWeight: 700, color: '#fff', letterSpacing: '-.4px' }}>주변 카페 찾기</div>
-            <div style={{ fontSize: 14, color: 'rgba(255,255,255,.85)', marginTop: 3, lineHeight: 1.4 }}>카페를 정하고 메뉴까지 골라 주문해요</div>
+            <div style={{ fontSize: 18, fontWeight: 700, color: 'var(--cc-accent-ink)', letterSpacing: '-.4px' }}>주변 카페 찾기</div>
+            <div style={{ fontSize: 14, color: 'var(--cc-accent-ink)', opacity: 0.85, marginTop: 3, lineHeight: 1.4 }}>카페를 정하고 메뉴까지 골라 주문해요</div>
           </div>
-          <ChevronRight />
+          <ChevronRight color="var(--cc-accent-ink)" />
         </div>
       </div>
 

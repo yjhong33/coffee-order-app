@@ -6,7 +6,7 @@ import { analyzeOrders, aggregateOrders, menuDisplay, tempLabel } from '../order
 
 function TempToggle({ temp, need, onPick }) {
   return (
-    <div style={{ display: 'flex', gap: 4, flex: 'none', background: '#fff', borderRadius: 9, padding: 3, border: need ? '1.5px solid #E0A53C' : '1px solid var(--cc-line)' }}>
+    <div style={{ display: 'flex', gap: 4, flex: 'none', background: 'var(--cc-surface)', borderRadius: 9, padding: 3, border: need ? '1.5px solid var(--cc-warn-line)' : '1px solid var(--cc-line)' }}>
       {['ICE', 'HOT'].map((t) => {
         const on = temp === t
         return (
@@ -159,7 +159,7 @@ export default function CaptureOverlay({ onClose, onApprove }) {
             </div>
 
             {needCount > 0 && (
-              <div style={{ fontSize: 13, fontWeight: 700, color: '#9A6F26', background: 'var(--cc-gold-soft)', borderRadius: 11, padding: '10px 12px', marginTop: 12, lineHeight: 1.45 }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--cc-warn-ink)', background: 'var(--cc-gold-soft)', borderRadius: 11, padding: '10px 12px', marginTop: 12, lineHeight: 1.45 }}>
                 ⚠️ 온도가 정해지지 않은 메뉴가 있어요. 아이스/핫을 골라주세요.
               </div>
             )}
@@ -168,7 +168,7 @@ export default function CaptureOverlay({ onClose, onApprove }) {
             <div style={{ fontSize: 14, fontWeight: 800, margin: '16px 0 10px' }}>사람별 주문</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
               {orders.map((o) => (
-                <div key={o.id} style={{ background: !o.temp ? '#FFF8EC' : '#fff', border: `1px solid ${!o.temp ? '#EAD3A0' : 'var(--cc-line)'}`, borderRadius: 13, padding: 11, display: 'flex', alignItems: 'center', gap: 9 }}>
+                <div key={o.id} style={{ background: !o.temp ? 'var(--cc-warn-soft)' : '#fff', border: `1px solid ${!o.temp ? 'var(--cc-warn-line)' : 'var(--cc-line)'}`, borderRadius: 13, padding: 11, display: 'flex', alignItems: 'center', gap: 9 }}>
                   <TempToggle temp={o.temp} need={!o.temp} onPick={(t) => setOrderTemp(o.id, t)} />
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ fontSize: 14.5, fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{o.menu}</div>
@@ -178,9 +178,9 @@ export default function CaptureOverlay({ onClose, onApprove }) {
                     </div>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 7, flex: 'none' }}>
-                    <div onClick={() => changeOrderQty(o.id, -1)} style={{ width: 24, height: 24, borderRadius: '50%', background: '#fff', border: '1px solid var(--cc-line)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}><MinusIcon /></div>
+                    <div onClick={() => changeOrderQty(o.id, -1)} style={{ width: 24, height: 24, borderRadius: '50%', background: 'var(--cc-surface)', border: '1px solid var(--cc-line)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}><MinusIcon /></div>
                     <span style={{ fontSize: 14, fontWeight: 800, minWidth: 14, textAlign: 'center' }}>{o.qty}</span>
-                    <div onClick={() => changeOrderQty(o.id, 1)} style={{ width: 24, height: 24, borderRadius: '50%', background: '#fff', border: '1px solid var(--cc-line)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}><PlusIcon color="#1F6E50" size={15} strokeWidth="2.6" /></div>
+                    <div onClick={() => changeOrderQty(o.id, 1)} style={{ width: 24, height: 24, borderRadius: '50%', background: 'var(--cc-surface)', border: '1px solid var(--cc-line)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}><PlusIcon color="#1F6E50" size={15} strokeWidth="2.6" /></div>
                   </div>
                   <div onClick={() => removeOrder(o.id)} style={{ width: 22, flex: 'none', textAlign: 'center', cursor: 'pointer', color: 'var(--cc-ink3)', fontSize: 18 }}>×</div>
                 </div>
@@ -192,7 +192,7 @@ export default function CaptureOverlay({ onClose, onApprove }) {
             {aggregate.length > 0 && (
               <>
                 <div style={{ fontSize: 14, fontWeight: 800, margin: '18px 0 10px' }}>메뉴별 집계</div>
-                <div style={{ background: '#fff', border: '1px solid var(--cc-line)', borderRadius: 13, padding: '4px 14px' }}>
+                <div style={{ background: 'var(--cc-surface)', border: '1px solid var(--cc-line)', borderRadius: 13, padding: '4px 14px' }}>
                   {aggregate.map((a) => (
                     <div key={a.label} style={{ display: 'flex', justifyContent: 'space-between', padding: '9px 0', borderBottom: '1px solid var(--cc-line)' }}>
                       <span style={{ fontSize: 14, fontWeight: 600 }}>{a.label}</span>
@@ -206,10 +206,10 @@ export default function CaptureOverlay({ onClose, onApprove }) {
             {/* review / 확인 필요 */}
             {review.length > 0 && (
               <>
-                <div style={{ fontSize: 14, fontWeight: 800, margin: '18px 0 10px', color: '#9A6F26' }}>확인 필요 ({review.length})</div>
+                <div style={{ fontSize: 14, fontWeight: 800, margin: '18px 0 10px', color: 'var(--cc-warn-ink)' }}>확인 필요 ({review.length})</div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
                   {review.map((r) => (
-                    <div key={r.id} style={{ background: '#FFF8EC', border: '1px solid #EAD3A0', borderRadius: 13, padding: 11 }}>
+                    <div key={r.id} style={{ background: 'var(--cc-warn-soft)', border: '1px solid var(--cc-warn-line)', borderRadius: 13, padding: 11 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                         <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--cc-ink2)', flex: 'none' }}>{r.name}</span>
                         <span style={{ fontSize: 12, color: 'var(--cc-ink3)', flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>“{r.message}”</span>
@@ -227,12 +227,12 @@ export default function CaptureOverlay({ onClose, onApprove }) {
                             value={r.menu}
                             onChange={(e) => updateReview(r.id, { menu: e.target.value })}
                             placeholder="메뉴명 입력"
-                            style={{ flex: 1, minWidth: 0, fontSize: 13.5, fontWeight: 600, border: '1px solid var(--cc-line)', borderRadius: 9, padding: '7px 10px', outline: 'none', background: '#fff' }}
+                            style={{ flex: 1, minWidth: 0, fontSize: 13.5, fontWeight: 600, border: '1px solid var(--cc-line)', borderRadius: 9, padding: '7px 10px', outline: 'none', background: 'var(--cc-surface)' }}
                           />
                           <div style={{ display: 'flex', alignItems: 'center', gap: 6, flex: 'none' }}>
-                            <div onClick={() => updateReview(r.id, { qty: Math.max(1, r.qty - 1) })} style={{ width: 24, height: 24, borderRadius: '50%', background: '#fff', border: '1px solid var(--cc-line)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}><MinusIcon /></div>
+                            <div onClick={() => updateReview(r.id, { qty: Math.max(1, r.qty - 1) })} style={{ width: 24, height: 24, borderRadius: '50%', background: 'var(--cc-surface)', border: '1px solid var(--cc-line)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}><MinusIcon /></div>
                             <span style={{ fontSize: 14, fontWeight: 800, minWidth: 12, textAlign: 'center' }}>{r.qty}</span>
-                            <div onClick={() => updateReview(r.id, { qty: r.qty + 1 })} style={{ width: 24, height: 24, borderRadius: '50%', background: '#fff', border: '1px solid var(--cc-line)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}><PlusIcon color="#1F6E50" size={15} strokeWidth="2.6" /></div>
+                            <div onClick={() => updateReview(r.id, { qty: r.qty + 1 })} style={{ width: 24, height: 24, borderRadius: '50%', background: 'var(--cc-surface)', border: '1px solid var(--cc-line)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}><PlusIcon color="#1F6E50" size={15} strokeWidth="2.6" /></div>
                           </div>
                         </div>
                       )}
